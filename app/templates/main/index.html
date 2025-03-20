@@ -1,0 +1,65 @@
+{% extends "base.html" %}
+
+{% block title %}Dashboard - Mind Stoke AI{% endblock %}
+
+{% block content %}
+<h1 class="mb-4">Dashboard</h1>
+
+<div class="row mb-4">
+    <div class="col-md-4">
+        <div class="card">
+            <div class="card-body">
+                <h5 class="card-title">Total Clients</h5>
+                <p class="card-text display-4">{{ total_clients }}</p>
+                <a href="{{ url_for('clients.index') }}" class="btn btn-primary">View Clients</a>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="card">
+            <div class="card-body">
+                <h5 class="card-title">Total Lab Results</h5>
+                <p class="card-text display-4">{{ total_labs }}</p>
+                <a href="{{ url_for('reports.index') }}" class="btn btn-primary">View Reports</a>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="card">
+            <div class="card-body">
+                <h5 class="card-title">Total HHQ Responses</h5>
+                <p class="card-text display-4">{{ total_hhq }}</p>
+                <a href="{{ url_for('reports.index') }}" class="btn btn-primary">View Reports</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="card">
+    <div class="card-body">
+        <h5 class="card-title">Recent Clients</h5>
+        <div class="table-responsive">
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>DOB</th>
+                        <th>Phone</th>
+                        <th>Added</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for client in recent_clients %}
+                    <tr>
+                        <td>{{ client.first_name }} {{ client.last_name }}</td>
+                        <td>{{ client.date_of_birth.strftime('%Y-%m-%d') if client.date_of_birth else 'N/A' }}</td>
+                        <td>{{ client.phone or 'N/A' }}</td>
+                        <td>{{ client.created_at.strftime('%Y-%m-%d') }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+{% endblock %} 

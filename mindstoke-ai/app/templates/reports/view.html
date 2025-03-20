@@ -1,0 +1,75 @@
+{% extends "base.html" %}
+
+{% block title %}View Report{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-md-12">
+        <div class="card mb-4">
+            <div class="card-header">
+                <h4 class="mb-0">Report for {{ report.client.first_name }} {{ report.client.last_name }}</h4>
+            </div>
+            <div class="card-body">
+                <h5>Lab Results</h5>
+                {% if report.lab_data %}
+                <div class="table-responsive">
+                    <table class="table table-striped">
+                        <thead>
+                            <tr>
+                                <th>Test</th>
+                                <th>Value</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for test, value in report.lab_data.items() %}
+                            <tr>
+                                <td>{{ test }}</td>
+                                <td>{{ value }}</td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+                {% else %}
+                <p>No lab data available.</p>
+                {% endif %}
+
+                <h5 class="mt-4">Health History Questionnaire</h5>
+                {% if report.hhq_data %}
+                <div class="table-responsive">
+                    <table class="table table-striped">
+                        <thead>
+                            <tr>
+                                <th>Category</th>
+                                <th>Score</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for category, score in report.hhq_data.items() %}
+                            <tr>
+                                <td>{{ category }}</td>
+                                <td>{{ score }}</td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+                {% else %}
+                <p>No HHQ data available.</p>
+                {% endif %}
+
+                <h5 class="mt-4">Recommendations</h5>
+                <p>{{ report.recommendations or 'No recommendations available.' }}</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% if report.status == 'draft' %}
+<div class="text-end mt-4">
+    <form method="post" action="{{ url_for('reports.finalize', report_id=report.id) }}" style="display: inline;">
+        <button type="submit" class="btn btn-success">Finalize Report</button>
+    </form>
+</div>
+{% endif %}
+{% endblock %} 

@@ -1,0 +1,58 @@
+{% extends "base.html" %}
+
+{% block title %}Reports - Mind Stoke AI{% endblock %}
+
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h1>Reports</h1>
+</div>
+
+<div class="card">
+    <div class="card-body">
+        <div class="table-responsive">
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>Client</th>
+                        <th>Created</th>
+                        <th>Type</th>
+                        <th>Status</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for report in reports %}
+                    <tr>
+                        <td>{{ report.client.first_name }} {{ report.client.last_name }}</td>
+                        <td>{{ report.created_at.strftime('%Y-%m-%d') }}</td>
+                        <td>
+                            {% if report.lab_data %}Lab Results{% endif %}
+                            {% if report.hhq_data %}HHQ Response{% endif %}
+                        </td>
+                        <td>
+                            <span class="badge {% if report.status == 'draft' %}bg-warning{% else %}bg-success{% endif %}">
+                                {{ report.status }}
+                            </span>
+                        </td>
+                        <td>
+                            <div class="btn-group">
+                                <a href="{{ url_for('reports.view', report_id=report.id) }}" class="btn btn-sm btn-outline-primary">View</a>
+                                {% if report.status == 'draft' %}
+                                <form method="post" action="{{ url_for('reports.finalize', report_id=report.id) }}" class="d-inline">
+                                    <button type="submit" class="btn btn-sm btn-outline-success">Finalize</button>
+                                </form>
+                                {% endif %}
+                            </div>
+                        </td>
+                    </tr>
+                    {% else %}
+                    <tr>
+                        <td colspan="5" class="text-center">No reports found.</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+{% endblock %} 

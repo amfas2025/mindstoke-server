@@ -1,0 +1,108 @@
+{% extends "base.html" %}
+
+{% block title %}New Report{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-10">
+        <div class="card">
+            <div class="card-header">
+                <h4 class="mb-0">New Report for {{ client.first_name }} {{ client.last_name }}</h4>
+            </div>
+            <div class="card-body">
+                <form method="post" enctype="multipart/form-data" id="reportForm">
+                    <div class="mb-4">
+                        <h5>Lab Results</h5>
+                        <div class="mb-3">
+                            <label for="lab_file" class="form-label">Upload Lab Results PDF</label>
+                            <input type="file" class="form-control" id="lab_file" name="lab_file" accept=".pdf">
+                        </div>
+                    </div>
+
+                    <div class="mb-4">
+                        <h5>Health History Questionnaire</h5>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label for="sleep" class="form-label">Sleep (1-10)</label>
+                                    <input type="number" class="form-control" id="sleep" name="sleep" min="1" max="10" value="5">
+                                </div>
+                                <div class="mb-3">
+                                    <label for="nutrition" class="form-label">Nutrition (1-10)</label>
+                                    <input type="number" class="form-control" id="nutrition" name="nutrition" min="1" max="10" value="5">
+                                </div>
+                                <div class="mb-3">
+                                    <label for="exercise" class="form-label">Exercise (1-10)</label>
+                                    <input type="number" class="form-control" id="exercise" name="exercise" min="1" max="10" value="5">
+                                </div>
+                                <div class="mb-3">
+                                    <label for="stress" class="form-label">Stress Management (1-10)</label>
+                                    <input type="number" class="form-control" id="stress" name="stress" min="1" max="10" value="5">
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label for="social" class="form-label">Social Connection (1-10)</label>
+                                    <input type="number" class="form-control" id="social" name="social" min="1" max="10" value="5">
+                                </div>
+                                <div class="mb-3">
+                                    <label for="mental" class="form-label">Mental Health (1-10)</label>
+                                    <input type="number" class="form-control" id="mental" name="mental" min="1" max="10" value="5">
+                                </div>
+                                <div class="mb-3">
+                                    <label for="physical" class="form-label">Physical Health (1-10)</label>
+                                    <input type="number" class="form-control" id="physical" name="physical" min="1" max="10" value="5">
+                                </div>
+                                <div class="mb-3">
+                                    <label for="spiritual" class="form-label">Spiritual Well-being (1-10)</label>
+                                    <input type="number" class="form-control" id="spiritual" name="spiritual" min="1" max="10" value="5">
+                                </div>
+                            </div>
+                        </div>
+                        <input type="hidden" id="hhq_data" name="hhq_data">
+                    </div>
+
+                    <div class="mb-4">
+                        <h5>Recommendations</h5>
+                        <div class="mb-3">
+                            <label for="recommendations" class="form-label">Professional Recommendations</label>
+                            <textarea class="form-control" id="recommendations" name="recommendations" rows="5"></textarea>
+                        </div>
+                    </div>
+
+                    <div class="text-end">
+                        <a href="{{ url_for('reports.index') }}" class="btn btn-secondary">Cancel</a>
+                        <button type="submit" class="btn btn-primary">Save Report</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% block scripts %}
+<script>
+document.getElementById('reportForm').addEventListener('submit', function(e) {
+    e.preventDefault();
+    
+    // Collect HHQ data
+    const hhqData = {
+        'Sleep': parseInt(document.getElementById('sleep').value),
+        'Nutrition': parseInt(document.getElementById('nutrition').value),
+        'Exercise': parseInt(document.getElementById('exercise').value),
+        'Stress': parseInt(document.getElementById('stress').value),
+        'Social': parseInt(document.getElementById('social').value),
+        'Mental': parseInt(document.getElementById('mental').value),
+        'Physical': parseInt(document.getElementById('physical').value),
+        'Spiritual': parseInt(document.getElementById('spiritual').value)
+    };
+    
+    // Set the hidden input with JSON data
+    document.getElementById('hhq_data').value = JSON.stringify(hhqData);
+    
+    // Submit the form
+    this.submit();
+});
+</script>
+{% endblock %}
+{% endblock %} 

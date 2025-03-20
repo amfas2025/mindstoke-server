@@ -1,0 +1,91 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container mt-5">
+    <div class="row">
+        <div class="col-md-8 offset-md-2">
+            <div class="card">
+                <div class="card-header">
+                    <h2>Upload Lab Results</h2>
+                </div>
+                <div class="card-body">
+                    <form id="uploadForm" class="mb-4">
+                        <div class="mb-3">
+                            <label for="labFile" class="form-label">Select Lab PDF File</label>
+                            <input type="file" class="form-control" id="labFile" name="file" accept=".pdf" required>
+                        </div>
+                        <button type="submit" class="btn btn-primary">Upload and Process</button>
+                    </form>
+
+                    <div id="results" class="d-none">
+                        <h3>Extracted Results</h3>
+                        <div class="table-responsive">
+                            <table class="table table-striped">
+                                <thead>
+                                    <tr>
+                                        <th>Test</th>
+                                        <th>Value</th>
+                                        <th>Units</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="resultsTable">
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <div id="error" class="alert alert-danger d-none"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+document.getElementById('uploadForm').addEventListener('submit', async (e) => {
+    e.preventDefault();
+    
+    const formData = new FormData();
+    const fileInput = document.getElementById('labFile');
+    formData.append('file', fileInput.files[0]);
+    
+    try {
+        const response = await fetch('/labs/upload', {
+            method: 'POST',
+            body: formData
+        });
+        
+        const data = await response.json();
+        
+        if (response.ok) {
+            // Show results
+            document.getElementById('results').classList.remove('d-none');
+            document.getElementById('error').classList.add('d-none');
+            
+            const resultsTable = document.getElementById('resultsTable');
+            resultsTable.innerHTML = '';
+            
+            // Display the results in the table
+            Object.entries(data.results).forEach(([test, value]) => {
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td>${test}</td>
+                    <td>${value}</td>
+                    <td></td>
+                `;
+                resultsTable.appendChild(row);
+            });
+        } else {
+            // Show error
+            document.getElementById('error').textContent = data.error;
+            document.getElementById('error').classList.remove('d-none');
+            document.getElementById('results').classList.add('d-none');
+        }
+    } catch (error) {
+        document.getElementById('error').textContent = 'An error occurred while processing the file';
+        document.getElementById('error').classList.remove('d-none');
+        document.getElementById('results').classList.add('d-none');
+    }
+});
+</script>
+{% endblock %} 
