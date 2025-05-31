@@ -1,0 +1,24 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="container mt-4">
+  <h2>HHQ Attempt from {{ format_mt(taken_at) }}</h2>
+  <h5>Client: {{ client.first_name }} {{ client.last_name }}</h5>
+  <table class="table table-bordered mt-3">
+    <thead>
+      <tr>
+        <th>Question</th>
+        <th>Answer</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for question, answer in display_answers %}
+      <tr>
+        <td>{{ question }}</td>
+        <td>{{ 'Yes' if answer in [true, 'True', 'true', 'on', 1] else 'No' }}</td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+  <a href="{{ url_for('clients.hhq_history', client_id=client.id) }}" class="btn btn-secondary mt-3">Back to History</a>
+</div>
+{% endblock %} 

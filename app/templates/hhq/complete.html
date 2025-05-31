@@ -1,0 +1,44 @@
+{% extends "client_base.html" %}
+
+{% block title %}HHQ Complete - A Mind For All Seasons{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card">
+                <div class="card-body text-center">
+                    <h2 class="card-title mb-4">Health History Questionnaire Complete</h2>
+                    
+                    <div class="alert alert-success mb-4">
+                        <i class="fas fa-check-circle me-2"></i>
+                        Your Health History Questionnaire has been submitted successfully.
+                    </div>
+
+                    {% if client %}
+                    <p class="mb-4">
+                        Thank you, <strong>{{ client.first_name }} {{ client.last_name }}</strong>, for completing the Health History Questionnaire. Your responses have been recorded and will be reviewed by your healthcare provider.
+                    </p>
+                    {% else %}
+                    <p class="mb-4">
+                        Thank you for completing the Health History Questionnaire. Your responses have been recorded and will be reviewed by your healthcare provider.
+                    </p>
+                    {% endif %}
+
+                    <div class="d-grid gap-3">
+                        <a href="{{ url_for('hhq.view_client_responses', client_id=client_id) }}" class="btn btn-primary">
+                            <i class="fas fa-eye me-2"></i>
+                            View Your Responses
+                        </a>
+                        
+                        <a href="{{ url_for('main.index') }}" class="btn btn-outline-secondary">
+                            <i class="fas fa-home me-2"></i>
+                            Return to Dashboard
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

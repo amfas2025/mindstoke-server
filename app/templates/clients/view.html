@@ -5,38 +5,49 @@
 {% block content %}
 <div class="d-flex justify-content-between align-items-center mb-4">
     <h1>{{ client.first_name }} {{ client.last_name }}</h1>
-    <div class="btn-group">
-        <a href="{{ url_for('clients.edit', id=client.id) }}" class="btn btn-primary">Edit Client</a>
-        <a href="{{ url_for('reports.new', client_id=client.id) }}" class="btn btn-success">Upload Labs</a>
-    </div>
 </div>
 
 <div class="row">
     <div class="col-md-4">
         <div class="card mb-4">
             <div class="card-body">
-                <h5 class="card-title">Client Information</h5>
+                <div class="d-flex justify-content-between align-items-center mb-3">
+                    <h5 class="card-title mb-0">Client Information</h5>
+                    <a href="{{ url_for('clients.edit', id=client.id) }}" class="btn btn-primary btn-sm">Edit Client</a>
+                </div>
                 <dl class="row mb-0">
                     <dt class="col-sm-4">DOB</dt>
-                    <dd class="col-sm-8">{{ client.date_of_birth.strftime('%Y-%m-%d') if client.date_of_birth else 'N/A' }}</dd>
-                    
+                    <dd class="col-sm-8">
+                        {% if client.date_of_birth %}
+                            {{ client.date_of_birth[:10] }}
+                        {% else %}
+                            N/A
+                        {% endif %}
+                    </dd>
+                    <dt class="col-sm-4">Sex</dt>
+                    <dd class="col-sm-8">{{ client.sex or 'N/A' }}</dd>
                     <dt class="col-sm-4">Phone</dt>
                     <dd class="col-sm-8">{{ client.phone or 'N/A' }}</dd>
-                    
                     <dt class="col-sm-4">Email</dt>
                     <dd class="col-sm-8">{{ client.email or 'N/A' }}</dd>
-                    
                     <dt class="col-sm-4">Added</dt>
-                    <dd class="col-sm-8">{{ client.created_at.strftime('%Y-%m-%d') }}</dd>
+                    <dd class="col-sm-8">{{ client.created_at[:10] if client.created_at else 'N/A' }}</dd>
                 </dl>
             </div>
         </div>
     </div>
-    
+
     <div class="col-md-8">
+        <!-- Lab Reports -->
         <div class="card mb-4">
             <div class="card-body">
-                <h5 class="card-title">Recent Reports</h5>
+                <div class="d-flex justify-content-between align-items-center mb-3">
+                    <h5 class="card-title mb-0">Lab Reports</h5>
+                    <button class="btn btn-success btn-sm" data-bs-toggle="modal" data-bs-target="#uploadLabModal">
+                        <i class="fas fa-upload me-1"></i>
+                        Upload Labs
+                    </button>
+                </div>
                 {% if client.reports %}
                 <div class="table-responsive">
                     <table class="table">
@@ -51,7 +62,7 @@
                         <tbody>
                             {% for report in client.reports %}
                             <tr>
-                                <td>{{ report.created_at.strftime('%Y-%m-%d') }}</td>
+                                <td>{{ report.created_at[:10] if report.created_at else 'N/A' }}</td>
                                 <td>
                                     {% if report.lab_data %}Lab Results{% endif %}
                                     {% if report.hhq_data %}HHQ Response{% endif %}
@@ -63,6 +74,9 @@
                                 </td>
                                 <td>
                                     <a href="{{ url_for('reports.view', report_id=report.id) }}" class="btn btn-sm btn-outline-primary">View</a>
+                                    {% if report.status == 'draft' %}
+                                    <a href="{{ url_for('reports.view', report_id=report.id) }}" class="btn btn-sm btn-outline-warning">Edit</a>
+                                    {% endif %}
                                 </td>
                             </tr>
                             {% endfor %}
@@ -70,11 +84,102 @@
                     </table>
                 </div>
                 {% else %}
-                <p class="text-muted">No reports available.</p>
-                <a href="{{ url_for('reports.new', client_id=client.id) }}" class="btn btn-primary">Upload First Lab Report</a>
+                <p class="text-muted">No lab reports available.</p>
                 {% endif %}
+            </div>
+        </div>
+
+        <!-- HHQ Responses -->
+        <div class="card mb-4">
+            <div class="card-body">
+                <div class="d-flex justify-content-between align-items-center mb-3">
+                    <h5 class="card-title mb-0">Health History Questionnaire</h5>
+                    <div>
+                        <a href="{{ url_for('hhq.generate_hhq', client_id=client.id) }}" class="btn btn-info btn-sm">Generate HHQ Link</a>
+                        {% if client.hhq_responses|length > 0 %}
+                        <a href="{{ url_for('hhq.view_client_responses', client_id=client.id) }}" class="btn btn-success btn-sm">View Responses</a>
+                        {% endif %}
+                    </div>
+                </div>
+                
+                {% if client.hhq_responses|length > 0 %}
+                    <div class="alert alert-success">
+                        <i class="fas fa-check-circle me-2"></i>
+                        <strong>{{ client.hhq_responses|length }}</strong> HHQ responses recorded.
+                        <small class="text-muted d-block mt-1">
+                            Last updated: {{ client.hhq_responses[0].created_at[:10] if client.hhq_responses[0].created_at else 'Unknown' }}
+                        </small>
+                    </div>
+                    <div class="d-flex gap-2">
+                        <a href="{{ url_for('hhq.view_client_responses', client_id=client.id) }}" class="btn btn-outline-primary btn-sm">
+                            <i class="fas fa-eye me-1"></i> View All Responses
+                        </a>
+                    </div>
+                {% else %}
+                    <div class="alert alert-warning">
+                        <i class="fas fa-info-circle me-2"></i>
+                        No HHQ responses available. Use the button above to generate a link to send to the client.
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+
+        <!-- Roadmaps -->
+        <div class="card mb-4">
+            <div class="card-body">
+                <div class="d-flex justify-content-between align-items-center mb-3">
+                    <h5 class="card-title mb-0">Roadmaps</h5>
+                    <a href="{{ url_for('roadmap.generate', client_id=client.id) }}" class="btn btn-warning btn-sm">Generate Roadmap</a>
+                </div>
+                <p class="text-muted">Roadmap generation coming soon.</p>
+            </div>
+        </div>
+
+        <!-- Telemedicine Notes -->
+        <div class="card mb-4">
+            <div class="card-body">
+                <div class="d-flex justify-content-between align-items-center mb-3">
+                    <h5 class="card-title mb-0">Telemedicine Notes</h5>
+                    <button class="btn btn-secondary btn-sm" disabled>Add Note</button>
+                </div>
+                <p class="text-muted">Telemedicine notes functionality coming soon.</p>
             </div>
         </div>
     </div>
 </div>
-{% endblock %} 
+
+<!-- Lab Upload Modal -->
+<div class="modal fade" id="uploadLabModal" tabindex="-1" aria-labelledby="uploadLabModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="uploadLabModalLabel">Upload Lab Results</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <form action="{{ url_for('clients.upload_lab', client_id=client.id) }}" method="post" enctype="multipart/form-data">
+                <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
+                <div class="modal-body">
+                    <div class="mb-3">
+                        <label for="labFile" class="form-label">Lab Results PDF</label>
+                        <input type="file" class="form-control" id="labFile" name="file" accept=".pdf" required>
+                        <div class="form-text">Please upload a PDF file from LabCorp. The system will automatically extract and process the lab values.</div>
+                    </div>
+                    <div class="alert alert-info">
+                        <i class="fas fa-info-circle me-2"></i>
+                        <strong>Supported formats:</strong> PDF files from LabCorp
+                        <br><small>The system will automatically extract lab values and save them to this client's profile.</small>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                    <button type="submit" class="btn btn-success">
+                        <i class="fas fa-upload me-1"></i>
+                        Upload and Process
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

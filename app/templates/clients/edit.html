@@ -11,6 +11,7 @@
             </div>
             <div class="card-body">
                 <form method="post">
+                    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
                     <div class="row">
                         <div class="col-md-6 mb-3">
                             <label for="first_name" class="form-label">First Name</label>
@@ -22,9 +23,19 @@
                         </div>
                     </div>
 
-                    <div class="mb-3">
-                        <label for="date_of_birth" class="form-label">Date of Birth</label>
-                        <input type="date" class="form-control" id="date_of_birth" name="date_of_birth" value="{{ client.date_of_birth.strftime('%Y-%m-%d') if client.date_of_birth }}">
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label for="date_of_birth" class="form-label">Date of Birth</label>
+                            <input type="date" class="form-control" id="date_of_birth" name="date_of_birth" value="{{ client.date_of_birth[:10] if client.date_of_birth }}">
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label for="sex" class="form-label">Sex</label>
+                            <select class="form-control" id="sex" name="sex" required>
+                                <option value="">Select sex...</option>
+                                <option value="Male" {% if client.sex == 'Male' %}selected{% endif %}>Male</option>
+                                <option value="Female" {% if client.sex == 'Female' %}selected{% endif %}>Female</option>
+                            </select>
+                        </div>
                     </div>
 
                     <div class="mb-3">

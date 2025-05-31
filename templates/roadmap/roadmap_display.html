@@ -1,0 +1,376 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Roadmap Report - {{ client.name }} | Mind Stoke</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <style>
+        .roadmap-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        .roadmap-header {
+            background: linear-gradient(135deg, #1e3a8a 0%, #3b82f6 100%);
+            color: white;
+            padding: 30px;
+            border-radius: 10px;
+            margin-bottom: 30px;
+            text-align: center;
+        }
+        
+        .roadmap-title {
+            font-size: 2.5rem;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+        
+        .roadmap-subtitle {
+            font-size: 1.2rem;
+            opacity: 0.9;
+        }
+        
+        .roadmap-actions {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 30px;
+            flex-wrap: wrap;
+        }
+        
+        .action-btn {
+            padding: 12px 24px;
+            border: none;
+            border-radius: 8px;
+            font-weight: 600;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            transition: all 0.3s ease;
+        }
+        
+        .btn-primary {
+            background: #1e3a8a;
+            color: white;
+        }
+        
+        .btn-primary:hover {
+            background: #1e40af;
+            color: white;
+        }
+        
+        .btn-secondary {
+            background: #f3f4f6;
+            color: #374151;
+            border: 1px solid #d1d5db;
+        }
+        
+        .btn-secondary:hover {
+            background: #e5e7eb;
+            color: #374151;
+        }
+        
+        .roadmap-content {
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+        }
+        
+        .content-tabs {
+            display: flex;
+            background: #f9fafb;
+            border-bottom: 1px solid #e5e7eb;
+        }
+        
+        .tab-btn {
+            padding: 15px 25px;
+            background: none;
+            border: none;
+            font-weight: 600;
+            color: #6b7280;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .tab-btn.active {
+            color: #1e3a8a;
+            background: white;
+            border-bottom: 3px solid #1e3a8a;
+        }
+        
+        .tab-content {
+            padding: 30px;
+            min-height: 600px;
+        }
+        
+        .tab-pane {
+            display: none;
+        }
+        
+        .tab-pane.active {
+            display: block;
+        }
+        
+        .roadmap-text {
+            font-size: 1rem;
+            line-height: 1.7;
+            color: #374151;
+            white-space: pre-wrap;
+        }
+        
+        .supplement-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+        }
+        
+        .supplement-card {
+            background: #f8fafc;
+            border: 1px solid #e2e8f0;
+            border-radius: 8px;
+            padding: 20px;
+        }
+        
+        .supplement-title {
+            font-weight: 600;
+            color: #1e3a8a;
+            margin-bottom: 10px;
+            font-size: 1.1rem;
+        }
+        
+        .supplement-description {
+            color: #64748b;
+            font-size: 0.9rem;
+        }
+        
+        .section-header {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: #1e3a8a;
+            border-bottom: 2px solid #e5e7eb;
+            padding-bottom: 10px;
+            margin: 30px 0 20px 0;
+        }
+        
+        .highlight-box {
+            background: #fef3c7;
+            border-left: 4px solid #f59e0b;
+            padding: 15px;
+            margin: 20px 0;
+            border-radius: 0 8px 8px 0;
+        }
+        
+        .warning-box {
+            background: #fef2f2;
+            border-left: 4px solid #ef4444;
+            padding: 15px;
+            margin: 20px 0;
+            border-radius: 0 8px 8px 0;
+        }
+        
+        .info-box {
+            background: #eff6ff;
+            border-left: 4px solid #3b82f6;
+            padding: 15px;
+            margin: 20px 0;
+            border-radius: 0 8px 8px 0;
+        }
+        
+        @media print {
+            .roadmap-actions, .content-tabs {
+                display: none;
+            }
+            .roadmap-content {
+                box-shadow: none;
+            }
+            .tab-pane {
+                display: block !important;
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .roadmap-container {
+                padding: 10px;
+            }
+            .roadmap-title {
+                font-size: 1.8rem;
+            }
+            .content-tabs {
+                overflow-x: auto;
+            }
+            .tab-btn {
+                white-space: nowrap;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="roadmap-container">
+        <!-- Header -->
+        <div class="roadmap-header">
+            <h1 class="roadmap-title">The Enhance Roadmap Report</h1>
+            <p class="roadmap-subtitle">Personalized Brain Health Protocol for {{ client.name }}</p>
+            <p style="opacity: 0.8;">Generated on {{ generated_date }}</p>
+        </div>
+        
+        <!-- Action Buttons -->
+        <div class="roadmap-actions">
+            <a href="{{ url_for('roadmap.download_roadmap_pdf', client_id=client.id) }}" 
+               class="action-btn btn-primary">
+                📄 Download PDF
+            </a>
+            <a href="{{ url_for('roadmap.roadmap_summary', client_id=client.id) }}" 
+               class="action-btn btn-secondary">
+                📋 View Summary
+            </a>
+            <button onclick="window.print()" class="action-btn btn-secondary">
+                🖨️ Print Report
+            </button>
+            <a href="{{ url_for('main.client_detail', client_id=client.id) }}" 
+               class="action-btn btn-secondary">
+                ← Back to Client
+            </a>
+        </div>
+        
+        <!-- Content Tabs -->
+        <div class="roadmap-content">
+            <div class="content-tabs">
+                <button class="tab-btn active" onclick="showTab('full-roadmap')">
+                    Full Roadmap
+                </button>
+                <button class="tab-btn" onclick="showTab('supplements')">
+                    Supplements ({{ supplements|length }})
+                </button>
+                <button class="tab-btn" onclick="showTab('highlights')">
+                    Key Highlights
+                </button>
+            </div>
+            
+            <!-- Full Roadmap Tab -->
+            <div id="full-roadmap" class="tab-pane active">
+                <div class="tab-content">
+                    <div class="roadmap-text">{{ roadmap_content }}</div>
+                </div>
+            </div>
+            
+            <!-- Supplements Tab -->
+            <div id="supplements" class="tab-pane">
+                <div class="tab-content">
+                    <h2 class="section-header">Recommended Supplements</h2>
+                    {% if supplements %}
+                        <div class="supplement-grid">
+                            {% for supplement in supplements %}
+                                <div class="supplement-card">
+                                    <div class="supplement-title">{{ supplement }}</div>
+                                    <div class="supplement-description">
+                                        Personalized recommendation based on your lab results and health profile.
+                                    </div>
+                                </div>
+                            {% endfor %}
+                        </div>
+                        
+                        <div class="info-box">
+                            <strong>Important:</strong> These supplement recommendations are based on your current lab results. 
+                            Please consult with your healthcare provider before starting any new supplements. 
+                            Quality matters - consider using the Fullscript platform for high-quality, professional-grade supplements.
+                        </div>
+                    {% else %}
+                        <div class="info-box">
+                            No specific supplement recommendations generated. This may indicate optimal lab values 
+                            or insufficient data for personalized recommendations.
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+            
+            <!-- Highlights Tab -->
+            <div id="highlights" class="tab-pane">
+                <div class="tab-content">
+                    <h2 class="section-header">Key Highlights from Your Roadmap</h2>
+                    
+                    <div class="highlight-box">
+                        <h3>🎯 Priority Focus Areas</h3>
+                        <ul>
+                            <li><strong>Diet:</strong> Implement anti-inflammatory eating plan</li>
+                            <li><strong>Exercise:</strong> Daily movement and brain training</li>
+                            <li><strong>Sleep:</strong> Optimize sleep quality and duration</li>
+                            <li><strong>Supplements:</strong> Targeted nutritional support</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="info-box">
+                        <h3>📊 Your Lab Profile</h3>
+                        <p>Your roadmap is based on comprehensive lab testing including genetics (APO E, MTHFR), 
+                        vitamin levels, inflammatory markers, and metabolic health indicators. Each recommendation 
+                        is tailored to your specific results.</p>
+                    </div>
+                    
+                    <div class="warning-box">
+                        <h3>⚠️ Important Reminders</h3>
+                        <ul>
+                            <li>This roadmap is meant to complement, not replace, medical care</li>
+                            <li>Share this report with your primary healthcare provider</li>
+                            <li>Plan to retest lab values in 3-6 months to track progress</li>
+                            <li>Attend AMFAS Office Hours for ongoing support and questions</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="highlight-box">
+                        <h3>📞 Next Steps</h3>
+                        <ol>
+                            <li>Schedule your 1:1 Roadmap Review consultation</li>
+                            <li>Join Office Hours to ask questions and get guidance</li>
+                            <li>Set up your Fullscript account for supplements</li>
+                            <li>Begin implementing dietary and lifestyle recommendations</li>
+                            <li>Schedule follow-up testing in 90 days</li>
+                        </ol>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        function showTab(tabName) {
+            // Hide all tab panes
+            const panes = document.querySelectorAll('.tab-pane');
+            panes.forEach(pane => pane.classList.remove('active'));
+            
+            // Remove active class from all tab buttons
+            const buttons = document.querySelectorAll('.tab-btn');
+            buttons.forEach(btn => btn.classList.remove('active'));
+            
+            // Show selected tab pane
+            document.getElementById(tabName).classList.add('active');
+            
+            // Activate clicked button
+            event.target.classList.add('active');
+        }
+        
+        // Format roadmap content with better styling
+        document.addEventListener('DOMContentLoaded', function() {
+            const roadmapText = document.querySelector('.roadmap-text');
+            if (roadmapText) {
+                let content = roadmapText.innerHTML;
+                
+                // Add section headers styling
+                content = content.replace(/(^|\n)([A-Z][A-Za-z\s]+:)\s/gm, 
+                    '$1<h3 class="section-header">$2</h3>\n');
+                
+                // Highlight supplement recommendations in green
+                content = content.replace(/Consider starting ([^.]+\.)(\s|$)/g, 
+                    '<div class="highlight-box">💊 <strong>Supplement Recommendation:</strong> $1</div>$2');
+                
+                // Highlight warnings and important notes
+                content = content.replace(/(contraindicated|caution|warning|important)/gi, 
+                    '<strong style="color: #ef4444;">$1</strong>');
+                
+                roadmapText.innerHTML = content;
+            }
+        });
+    </script>
+</body>
+</html> 

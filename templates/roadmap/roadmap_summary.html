@@ -1,0 +1,322 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Roadmap Summary - {{ client.name }} | Mind Stoke</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <style>
+        .summary-container {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        .summary-header {
+            background: linear-gradient(135deg, #059669 0%, #10b981 100%);
+            color: white;
+            padding: 25px;
+            border-radius: 10px;
+            margin-bottom: 30px;
+            text-align: center;
+        }
+        
+        .summary-title {
+            font-size: 2rem;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+        
+        .summary-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(450px, 1fr));
+            gap: 25px;
+            margin-bottom: 30px;
+        }
+        
+        .summary-card {
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+        }
+        
+        .card-header {
+            padding: 20px;
+            font-size: 1.3rem;
+            font-weight: bold;
+            color: white;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .card-header.supplements {
+            background: #1e3a8a;
+        }
+        
+        .card-header.findings {
+            background: #dc2626;
+        }
+        
+        .card-header.interventions {
+            background: #059669;
+        }
+        
+        .card-content {
+            padding: 20px;
+        }
+        
+        .supplement-list {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+        
+        .supplement-item {
+            background: #f8fafc;
+            border-left: 4px solid #1e3a8a;
+            padding: 15px;
+            margin-bottom: 10px;
+            border-radius: 0 8px 8px 0;
+            font-weight: 500;
+        }
+        
+        .finding-item {
+            border-bottom: 1px solid #e5e7eb;
+            padding: 15px 0;
+        }
+        
+        .finding-item:last-child {
+            border-bottom: none;
+        }
+        
+        .finding-category {
+            display: inline-block;
+            background: #374151;
+            color: white;
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+        
+        .finding-title {
+            font-weight: 600;
+            color: #1f2937;
+            margin-bottom: 5px;
+        }
+        
+        .finding-significance {
+            color: #6b7280;
+            font-size: 0.9rem;
+        }
+        
+        .priority-high {
+            border-left-color: #dc2626;
+        }
+        
+        .priority-medium {
+            border-left-color: #f59e0b;
+        }
+        
+        .priority-low {
+            border-left-color: #10b981;
+        }
+        
+        .intervention-item {
+            background: #f0fdf4;
+            border: 1px solid #bbf7d0;
+            border-radius: 8px;
+            padding: 15px;
+            margin-bottom: 15px;
+        }
+        
+        .intervention-category {
+            font-weight: 600;
+            color: #059669;
+            font-size: 1.1rem;
+        }
+        
+        .intervention-title {
+            font-weight: 500;
+            color: #1f2937;
+            margin: 5px 0;
+        }
+        
+        .intervention-description {
+            color: #6b7280;
+            font-size: 0.9rem;
+        }
+        
+        .action-buttons {
+            text-align: center;
+            margin-top: 30px;
+        }
+        
+        .action-btn {
+            display: inline-block;
+            padding: 12px 24px;
+            margin: 0 10px;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+        
+        .btn-primary {
+            background: #1e3a8a;
+            color: white;
+        }
+        
+        .btn-secondary {
+            background: #f3f4f6;
+            color: #374151;
+            border: 1px solid #d1d5db;
+        }
+        
+        .empty-state {
+            text-align: center;
+            color: #6b7280;
+            font-style: italic;
+            padding: 20px;
+        }
+        
+        @media (max-width: 768px) {
+            .summary-grid {
+                grid-template-columns: 1fr;
+            }
+            .summary-container {
+                padding: 10px;
+            }
+            .summary-title {
+                font-size: 1.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="summary-container">
+        <!-- Header -->
+        <div class="summary-header">
+            <h1 class="summary-title">📋 Roadmap Summary</h1>
+            <p style="opacity: 0.9;">Key recommendations for {{ client.name }}</p>
+        </div>
+        
+        <!-- Summary Grid -->
+        <div class="summary-grid">
+            <!-- Supplements Card -->
+            <div class="summary-card">
+                <div class="card-header supplements">
+                    💊 Supplement Recommendations
+                </div>
+                <div class="card-content">
+                    {% if supplements %}
+                        <ul class="supplement-list">
+                            {% for supplement in supplements %}
+                                <li class="supplement-item">{{ supplement }}</li>
+                            {% endfor %}
+                        </ul>
+                    {% else %}
+                        <div class="empty-state">No specific supplements recommended at this time</div>
+                    {% endif %}
+                </div>
+            </div>
+            
+            <!-- Key Findings Card -->
+            <div class="summary-card">
+                <div class="card-header findings">
+                    🔍 Key Lab Findings
+                </div>
+                <div class="card-content">
+                    {% if key_findings %}
+                        {% for finding in key_findings %}
+                            <div class="finding-item priority-{{ finding.priority }}">
+                                <div class="finding-category">{{ finding.category }}</div>
+                                <div class="finding-title">{{ finding.finding }}</div>
+                                <div class="finding-significance">{{ finding.significance }}</div>
+                            </div>
+                        {% endfor %}
+                    {% else %}
+                        <div class="empty-state">All lab values appear within optimal ranges</div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+        
+        <!-- Priority Interventions -->
+        <div class="summary-card">
+            <div class="card-header interventions">
+                🎯 Priority Interventions
+            </div>
+            <div class="card-content">
+                {% if priority_interventions %}
+                    {% for intervention in priority_interventions %}
+                        <div class="intervention-item">
+                            <div class="intervention-category">
+                                {{ intervention.priority }}. {{ intervention.category }}
+                            </div>
+                            <div class="intervention-title">{{ intervention.intervention }}</div>
+                            <div class="intervention-description">{{ intervention.description }}</div>
+                        </div>
+                    {% endfor %}
+                {% else %}
+                    <div class="empty-state">Continue current wellness protocol</div>
+                {% endif %}
+            </div>
+        </div>
+        
+        <!-- Action Buttons -->
+        <div class="action-buttons">
+            <a href="{{ url_for('roadmap.generate_roadmap', client_id=client.id) }}" 
+               class="action-btn btn-primary">
+               📄 View Full Roadmap
+            </a>
+            <a href="{{ url_for('roadmap.download_roadmap_pdf', client_id=client.id) }}" 
+               class="action-btn btn-secondary">
+               ⬇️ Download PDF
+            </a>
+            <a href="{{ url_for('main.client_detail', client_id=client.id) }}" 
+               class="action-btn btn-secondary">
+               ← Back to Client
+            </a>
+        </div>
+        
+        <!-- Next Steps Section -->
+        <div class="summary-card" style="margin-top: 30px;">
+            <div class="card-header" style="background: #7c3aed;">
+                📞 Next Steps
+            </div>
+            <div class="card-content">
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 20px;">
+                    <div>
+                        <h4 style="color: #7c3aed; margin-bottom: 10px;">📅 Schedule</h4>
+                        <ul style="color: #6b7280; font-size: 0.9rem;">
+                            <li>1:1 Roadmap Review consultation</li>
+                            <li>Follow-up testing in 90 days</li>
+                            <li>Regular Office Hours attendance</li>
+                        </ul>
+                    </div>
+                    <div>
+                        <h4 style="color: #7c3aed; margin-bottom: 10px;">🛒 Setup</h4>
+                        <ul style="color: #6b7280; font-size: 0.9rem;">
+                            <li>Create Fullscript account</li>
+                            <li>Order recommended supplements</li>
+                            <li>Plan grocery list for new diet</li>
+                        </ul>
+                    </div>
+                    <div>
+                        <h4 style="color: #7c3aed; margin-bottom: 10px;">📚 Learn</h4>
+                        <ul style="color: #6b7280; font-size: 0.9rem;">
+                            <li>Review AMFAS Masterclass videos</li>
+                            <li>Join community discussions</li>
+                            <li>Share report with primary doctor</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html> 

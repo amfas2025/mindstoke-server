@@ -1,0 +1,193 @@
+{% extends "client_base.html" %}
+
+{% block title %}Progress Saved - A Mind For All Seasons{% endblock %}
+
+{% block page_header %}Progress Saved{% endblock %}
+
+{% block styles %}
+<style>
+.progress-card {
+    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 1rem;
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+}
+
+.continue-link {
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    border-radius: 0.5rem;
+    padding: 0.75rem;
+    margin: 1rem 0;
+    font-family: 'Courier New', monospace;
+    font-size: 0.85rem;
+    color: rgba(255, 255, 255, 0.8);
+    word-break: break-all;
+}
+
+.btn-continue {
+    background: linear-gradient(135deg, var(--amfas-teal) 0%, var(--amfas-teal-light) 100%);
+    border: none;
+    color: white;
+    font-weight: 500;
+    border-radius: 0.5rem;
+    padding: 1rem 2rem;
+    font-size: 1.1rem;
+    transition: all 0.3s ease;
+    text-decoration: none;
+    display: inline-block;
+}
+
+.btn-continue:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(32, 178, 170, 0.3);
+    color: white;
+    text-decoration: none;
+}
+
+.btn-exit {
+    background: transparent;
+    border: 2px solid rgba(255, 255, 255, 0.3);
+    color: rgba(255, 255, 255, 0.8);
+    font-weight: 400;
+    border-radius: 0.5rem;
+    padding: 0.75rem 1.5rem;
+    transition: all 0.3s ease;
+    text-decoration: none;
+    display: inline-block;
+}
+
+.btn-exit:hover {
+    background: rgba(255, 255, 255, 0.1);
+    border-color: rgba(255, 255, 255, 0.5);
+    color: white;
+    text-decoration: none;
+}
+
+.copy-btn {
+    background: var(--amfas-teal);
+    border: none;
+    color: white;
+    padding: 0.5rem 1rem;
+    border-radius: 0.25rem;
+    font-size: 0.875rem;
+    cursor: pointer;
+    transition: background 0.3s ease;
+}
+
+.copy-btn:hover {
+    background: var(--amfas-teal-dark);
+}
+
+.copy-btn.copied {
+    background: #28a745;
+}
+
+.icon-large {
+    font-size: 4rem;
+    color: var(--amfas-teal);
+    margin-bottom: 1rem;
+}
+
+@media (max-width: 768px) {
+    .btn-continue, .btn-exit {
+        width: 100%;
+        margin: 0.5rem 0;
+        text-align: center;
+    }
+    
+    .continue-link {
+        font-size: 0.75rem;
+        padding: 0.5rem;
+    }
+}
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="progress-card p-5 text-center">
+                <div class="icon-large">
+                    <i class="fas fa-save"></i>
+                </div>
+                
+                <h2 class="text-white mb-3">Your Progress Has Been Saved!</h2>
+                
+                <p class="text-light mb-4">
+                    Your responses have been automatically saved. You can return to complete the questionnaire at any time.
+                </p>
+                
+                <div class="mb-4">
+                    <h5 class="text-white mb-3">Continue Where You Left Off</h5>
+                    <p class="text-muted mb-3">Save this link to continue your questionnaire later:</p>
+                    
+                    <div class="continue-link">
+                        <span id="continue-url">{{ continue_link }}</span>
+                    </div>
+                    
+                    <button class="copy-btn" onclick="copyLink()">
+                        <i class="fas fa-copy me-1"></i>
+                        <span id="copy-text">Copy Link</span>
+                    </button>
+                </div>
+                
+                <div class="d-flex flex-column flex-md-row justify-content-center gap-3 mt-4">
+                    <a href="{{ continue_link }}" class="btn-continue">
+                        <i class="fas fa-arrow-right me-2"></i>
+                        Continue Now
+                    </a>
+                    
+                    <a href="{{ url_for('main.index') }}" class="btn-exit">
+                        <i class="fas fa-sign-out-alt me-2"></i>
+                        Exit for Now
+                    </a>
+                </div>
+                
+                <div class="mt-4 pt-3 border-top" style="border-color: rgba(255, 255, 255, 0.2) !important;">
+                    <small class="text-muted">
+                        <i class="fas fa-info-circle me-1"></i>
+                        Your responses are automatically saved as you progress through the questionnaire.
+                    </small>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+function copyLink() {
+    const url = document.getElementById('continue-url').textContent;
+    const copyBtn = document.querySelector('.copy-btn');
+    const copyText = document.getElementById('copy-text');
+    
+    navigator.clipboard.writeText(url).then(() => {
+        copyBtn.classList.add('copied');
+        copyText.textContent = 'Copied!';
+        
+        setTimeout(() => {
+            copyBtn.classList.remove('copied');
+            copyText.textContent = 'Copy Link';
+        }, 2000);
+    }).catch(() => {
+        // Fallback for older browsers
+        const textArea = document.createElement('textarea');
+        textArea.value = url;
+        document.body.appendChild(textArea);
+        textArea.select();
+        document.execCommand('copy');
+        document.body.removeChild(textArea);
+        
+        copyBtn.classList.add('copied');
+        copyText.textContent = 'Copied!';
+        
+        setTimeout(() => {
+            copyBtn.classList.remove('copied');
+            copyText.textContent = 'Copy Link';
+        }, 2000);
+    });
+}
+</script>
+{% endblock %} 

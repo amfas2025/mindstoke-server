@@ -8,6 +8,18 @@
     <a href="{{ url_for('clients.new') }}" class="btn btn-primary">Add New Client</a>
 </div>
 
+<!-- Search Form -->
+<form method="POST" class="mb-4">
+    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+    <div class="input-group">
+        <input type="text" class="form-control" name="search" placeholder="Search by name or email..." value="{{ search_query or '' }}">
+        <button type="submit" class="btn btn-primary">Search</button>
+        {% if search_query %}
+        <a href="{{ url_for('clients.index') }}" class="btn btn-secondary">Clear</a>
+        {% endif %}
+    </div>
+</form>
+
 <div class="card">
     <div class="card-body">
         <div class="table-responsive">
@@ -24,7 +36,13 @@
                     {% for client in clients %}
                     <tr>
                         <td>{{ client.first_name }} {{ client.last_name }}</td>
-                        <td>{{ client.date_of_birth.strftime('%Y-%m-%d') if client.date_of_birth else 'N/A' }}</td>
+                        <td>
+                            {% if client.date_of_birth %}
+                                {{ client.date_of_birth[:10] }}
+                            {% else %}
+                                N/A
+                            {% endif %}
+                        </td>
                         <td>
                             {% if client.phone %}
                             <div>📞 {{ client.phone }}</div>
@@ -48,14 +66,15 @@
                                 <div class="modal-dialog">
                                     <div class="modal-content">
                                         <div class="modal-header">
-                                            <h5 class="modal-title">Confirm Delete</h5>
+                                            <h5 class="modal-title text-danger">Confirm Delete</h5>
                                             <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                                         </div>
                                         <div class="modal-body">
-                                            Are you sure you want to delete {{ client.first_name }} {{ client.last_name }}?
+                                            <p class="text-danger fw-bold">Are you sure you want to delete <strong>{{ client.first_name }} {{ client.last_name }}</strong>? This action cannot be undone.</p>
                                         </div>
                                         <div class="modal-footer">
                                             <form action="{{ url_for('clients.delete', id=client.id) }}" method="POST" class="d-inline">
+                                                <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
                                                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
                                                 <button type="submit" class="btn btn-danger">Delete</button>
                                             </form>
@@ -71,4 +90,4 @@
         </div>
     </div>
 </div>
-{% endblock %} 
+{% endblock %}

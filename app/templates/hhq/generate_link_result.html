@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card">
+                <div class="card-header">
+                    <h4 class="mb-0">New HHQ Link Generated</h4>
+                </div>
+                <div class="card-body">
+                    <p>Share this link with <strong>{{ client.first_name }} {{ client.last_name }}</strong> to complete their Health History Questionnaire:</p>
+                    <div class="input-group mb-3">
+                        <input type="text" class="form-control" value="{{ hhq_link }}" readonly>
+                        <button class="btn btn-outline-secondary" type="button" onclick="navigator.clipboard.writeText('{{ hhq_link }}')">Copy</button>
+                    </div>
+                    <a href="{{ url_for('clients.view', id=client.id) }}" class="btn btn-primary">Back to Client Profile</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %} 

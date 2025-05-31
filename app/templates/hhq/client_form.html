@@ -1,0 +1,317 @@
+{% extends "client_base.html" %}
+
+{% block title %}Health History Questionnaire - A Mind For All Seasons{% endblock %}
+
+{% block page_header %}Health History Questionnaire{% endblock %}
+
+{% block styles %}
+<style>
+.section {
+    transition: opacity 0.3s ease-in-out;
+}
+.section.disabled {
+    opacity: 0.5;
+    pointer-events: none;
+}
+.progress {
+    height: 20px;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 1rem;
+}
+.progress-bar {
+    transition: width 0.3s ease;
+}
+.save-indicator {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    padding: 10px 20px;
+    border-radius: 5px;
+    display: none;
+    z-index: 1000;
+}
+.save-indicator.success {
+    background-color: #28a745;
+    color: white;
+}
+.save-indicator.error {
+    background-color: #dc3545;
+    color: white;
+}
+.hhq-card {
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    border: none;
+    border-radius: 10px;
+}
+
+/* Override section title styling */
+.section h4 {
+    color: white !important;
+    font-weight: 600 !important;
+    margin-bottom: 1.5rem !important;
+    font-size: 1.5rem !important;
+}
+
+/* Question box styling with checkboxes inside */
+.form-check {
+    background: rgba(255, 255, 255, 0.08) !important;
+    border: 1px solid rgba(255, 255, 255, 0.15) !important;
+    border-radius: 0.75rem !important;
+    padding: 1rem 1.25rem !important;
+    margin-bottom: 0.75rem !important;
+    transition: all 0.3s ease !important;
+    display: flex !important;
+    align-items: flex-start !important;
+    gap: 0.75rem !important;
+}
+
+.form-check:hover {
+    background: rgba(255, 255, 255, 0.12) !important;
+    border-color: var(--amfas-teal) !important;
+}
+
+.form-check-input {
+    background-color: white !important;
+    border: 2px solid #ddd !important;
+    border-radius: 0.25rem !important;
+    width: 1.2rem !important;
+    height: 1.2rem !important;
+    margin: 0 !important;
+    flex-shrink: 0 !important;
+}
+
+.form-check-input:checked {
+    background-color: var(--amfas-teal) !important;
+    border-color: var(--amfas-teal) !important;
+}
+
+.form-check-input:focus {
+    border-color: var(--amfas-teal) !important;
+    box-shadow: 0 0 0 0.2rem rgba(32, 178, 170, 0.25) !important;
+}
+
+.form-check-label {
+    color: white !important;
+    font-weight: 400 !important;
+    font-size: 0.95rem !important;
+    line-height: 1.4 !important;
+    cursor: pointer !important;
+    margin: 0 !important;
+    flex: 1 !important;
+}
+
+/* Mobile Responsive Improvements */
+@media (max-width: 768px) {
+    .form-check {
+        padding: 1.25rem 1rem !important;
+        margin-bottom: 1rem !important;
+        gap: 1rem !important;
+    }
+    
+    .form-check-input {
+        width: 1.4rem !important;
+        height: 1.4rem !important;
+        border-width: 3px !important;
+    }
+    
+    .form-check-label {
+        font-size: 1rem !important;
+        line-height: 1.5 !important;
+    }
+    
+    .section h4 {
+        font-size: 1.3rem !important;
+    }
+    
+    .progress {
+        height: 30px !important;
+    }
+    
+    .card {
+        border-radius: 0.5rem !important;
+        margin: 0.5rem !important;
+    }
+    
+    .container {
+        padding-left: 0.75rem !important;
+        padding-right: 0.75rem !important;
+    }
+    
+    .btn {
+        padding: 0.75rem 1.25rem !important;
+        font-size: 1rem !important;
+    }
+}
+
+@media (max-width: 480px) {
+    .form-check {
+        padding: 1rem 0.75rem !important;
+        margin-bottom: 0.75rem !important;
+    }
+    
+    .form-check-input {
+        width: 1.5rem !important;
+        height: 1.5rem !important;
+    }
+    
+    .d-flex.justify-content-between {
+        flex-direction: column !important;
+        align-items: flex-start !important;
+        gap: 0.5rem !important;
+    }
+}
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-md-10">
+            <div class="card hhq-card">
+                <div class="card-body p-5">
+                    <p class="text-center text-muted mb-4">Please answer the following questions to help us provide you with personalized recommendations.</p>
+                    
+                    <form method="POST" id="hhq-form">
+                        {{ form.hidden_tag() }}
+                        <input type="hidden" name="step" value="{{ current_step }}">
+                        <input type="hidden" name="attempt_id" value="{{ attempt_id }}">
+                        
+                        <div class="progress mb-2">
+                            {% set progress_percent = ((current_step / total_sections) * 100)|round|int %}
+                            <div class="progress-bar" role="progressbar" style="width: {{ progress_percent }}%" 
+                                 aria-valuenow="{{ progress_percent }}" aria-valuemin="0" aria-valuemax="100">
+                            </div>
+                        </div>
+                        <div class="text-center mb-4">
+                            <strong class="text-light">Section {{ current_step + 1 }} of {{ total_sections }} ({{ progress_percent }}%)</strong>
+                        </div>
+
+                        {% with messages = get_flashed_messages(with_categories=true) %}
+                            {% if messages %}
+                                {% for category, message in messages %}
+                                    <div class="alert alert-{{ category }} alert-dismissible fade show" role="alert">
+                                        {{ message }}
+                                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                                    </div>
+                                {% endfor %}
+                            {% endif %}
+                        {% endwith %}
+
+                        <div class="section">
+                            {% set fields_in_section = [] %}
+                            {% for field in form %}
+                                {% if field.name in current_section_fields %}
+                                    {% set _ = fields_in_section.append(field) %}
+                                {% endif %}
+                            {% endfor %}
+                            
+                            <div class="d-flex justify-content-between align-items-center mb-4">
+                                <h4 class="mb-0">{{ current_section }}</h4>
+                                <small class="text-muted">{{ fields_in_section|length }} questions in this section</small>
+                            </div>
+                            
+                            {% for field in form %}
+                                {% if field.name in current_section_fields %}
+                                    <div class="form-check">
+                                        {{ field(class="form-check-input", id=field.name) }}
+                                        {{ field.label(class="form-check-label", for=field.name) }}
+                                    </div>
+                                {% endif %}
+                            {% endfor %}
+                            
+                            {% if fields_in_section|length == 0 %}
+                                <div class="alert alert-warning">
+                                    <strong>No questions found for this section!</strong><br>
+                                    <small>This section may not have any questions configured yet.</small>
+                                </div>
+                            {% endif %}
+                        </div>
+
+                        {% if current_step == total_sections - 1 %}
+                        <div class="mb-4">
+                            <label for="{{ form.additional_notes.id }}" class="form-label fw-bold">{{ form.additional_notes.label.text }}</label>
+                            {{ form.additional_notes(class="form-control", rows=5, placeholder="Please share any additional health information you think might be relevant...") }}
+                        </div>
+                        {% endif %}
+
+                        <div class="d-flex justify-content-between mt-5">
+                            {% if current_step > 0 %}
+                                {{ form.prev_step(class="btn btn-outline-secondary btn-lg") }}
+                            {% else %}
+                                <div></div>
+                            {% endif %}
+                            
+                            <div>
+                                {{ form.save_exit(class="btn btn-outline-primary me-3") }}
+                                {% if current_step < total_sections - 1 %}
+                                    {{ form.next_step(class="btn btn-primary btn-lg") }}
+                                {% else %}
+                                    {{ form.submit_form(class="btn btn-success btn-lg") }}
+                                {% endif %}
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="save-indicator" class="save-indicator"></div>
+
+{% block scripts %}
+<script>
+let autoSaveTimeout;
+const saveIndicator = document.getElementById('save-indicator');
+
+function showSaveIndicator(message, type = '') {
+    saveIndicator.textContent = message;
+    saveIndicator.className = 'save-indicator ' + type;
+    saveIndicator.style.display = 'block';
+    setTimeout(() => {
+        saveIndicator.style.display = 'none';
+    }, 3000);
+}
+
+function autoSave() {
+    const form = document.getElementById('hhq-form');
+    const formData = new FormData(form);
+    
+    showSaveIndicator('Saving...');
+    
+    fetch(window.location.href, {
+        method: 'POST',
+        body: formData,
+        headers: {
+            'X-Requested-With': 'XMLHttpRequest'
+        }
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            showSaveIndicator('Saved successfully!', 'success');
+        } else {
+            showSaveIndicator('Error saving: ' + data.error, 'error');
+        }
+    })
+    .catch(error => {
+        showSaveIndicator('Error saving: ' + error.message, 'error');
+    });
+}
+
+// Auto-save on field change
+document.querySelectorAll('#hhq-form input, #hhq-form textarea').forEach(field => {
+    field.addEventListener('change', () => {
+        clearTimeout(autoSaveTimeout);
+        autoSaveTimeout = setTimeout(autoSave, 1000);
+    });
+});
+
+// Handle form submission
+document.getElementById('hhq-form').addEventListener('submit', function(e) {
+    showSaveIndicator('Saving...');
+});
+</script>
+{% endblock %}
+
+{% endblock %} 

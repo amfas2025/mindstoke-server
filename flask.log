@@ -1,0 +1,4 @@
+DEBUG: SUPABASE_URL = https://hcwvicevzsnvrcfwpgcx.supabase.co
+DEBUG: SUPABASE_KEY = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imhjd3ZpY2V2enNudnJjZndwZ2N4Iiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc0NzEwNTc5OSwiZXhwIjoyMDYyNjgxNzk5fQ.PP74yGsKJpFVXyZ8kWoTpIbCYOCWQgE9L0RQlYWfZVg
+ * Serving Flask app 'run.py'
+ * Debug mode: off

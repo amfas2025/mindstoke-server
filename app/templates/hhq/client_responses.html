@@ -1,0 +1,67 @@
+{% extends "base.html" %}
+
+{% block title %}HHQ Responses - {{ client.first_name }} {{ client.last_name }} - Mind Stoke AI{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h1>HHQ Responses - {{ client.first_name }} {{ client.last_name }}</h1>
+        <div>
+            <a href="{{ url_for('clients.view', id=client.id) }}" class="btn btn-secondary">Back to Client</a>
+            <a href="{{ url_for('hhq.hhq_form', client_id=client.id) }}" class="btn btn-primary">Edit Responses</a>
+        </div>
+    </div>
+
+    {% if response_count > 0 %}
+        <div class="alert alert-info">
+            <strong>{{ response_count }}</strong> responses recorded.
+        </div>
+
+        {% for section_name, questions in sections.items() %}
+        <div class="card mb-4">
+            <div class="card-header">
+                <h5 class="mb-0">{{ section_name }}</h5>
+            </div>
+            <div class="card-body">
+                {% if questions %}
+                    <div class="row">
+                        {% for question in questions %}
+                        <div class="col-12 mb-3">
+                            <div class="d-flex align-items-start">
+                                <div class="me-3">
+                                    {% if question.response %}
+                                        <i class="fas fa-check-circle text-success"></i>
+                                    {% else %}
+                                        <i class="fas fa-times-circle text-muted"></i>
+                                    {% endif %}
+                                </div>
+                                <div class="flex-grow-1">
+                                    <p class="mb-1">{{ question.question_text }}</p>
+                                    <small class="text-muted">
+                                        Response: 
+                                        {% if question.response %}
+                                            <span class="text-success"><strong>Yes</strong></span>
+                                        {% else %}
+                                            <span class="text-muted">No</span>
+                                        {% endif %}
+                                    </small>
+                                </div>
+                            </div>
+                        </div>
+                        {% endfor %}
+                    </div>
+                {% else %}
+                    <p class="text-muted">No responses in this section.</p>
+                {% endif %}
+            </div>
+        </div>
+        {% endfor %}
+    {% else %}
+        <div class="alert alert-warning">
+            <h4>No HHQ Responses</h4>
+            <p>This client has not completed the Health History Questionnaire yet.</p>
+            <a href="{{ url_for('hhq.hhq_form', client_id=client.id) }}" class="btn btn-primary">Start HHQ</a>
+        </div>
+    {% endif %}
+</div>
+{% endblock %} 

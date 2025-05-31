@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+
+{% block title %}Progress Saved - Mind Stoke AI{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card">
+                <div class="card-body text-center">
+                    <h1 class="card-title mb-4">Progress Saved</h1>
+                    <p class="lead">Your progress has been saved successfully. You can return to complete the questionnaire using the same link at any time.</p>
+                    <p class="text-muted">The link will expire in 30 days.</p>
+                    <div class="mt-4">
+                        <a href="{{ url_for('main.index') }}" class="btn btn-primary">Return to Home</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %} 

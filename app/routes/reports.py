@@ -2,6 +2,7 @@ from flask import Blueprint, render_template, request, redirect, url_for, flash,
 from flask_login import login_required, current_user
 from ..models import Report, Client, LabResult, db
 from ..utils.lab_extractor import process_pdf, save_results
+from flask_wtf import FlaskForm
 import os
 import json
 from werkzeug.utils import secure_filename
@@ -17,20 +18,31 @@ def index():
 @bp.route('/new', methods=['GET', 'POST'])
 @login_required
 def new():
+    # Create a basic form for CSRF protection
+    form = FlaskForm()
+    
+    # Get client_id from query parameters for direct uploads
+    client_id = request.args.get('client_id')
+    client = None
+    # Only check for presence, do not fetch from DB
+    if not client_id:
+        flash('Client ID is required', 'error')
+        return redirect(url_for('clients.index'))
+
     if request.method == 'POST':
-        client_id = request.form.get('client_id')
+        if not form.validate_on_submit():
+            flash('Form validation failed. Please try again.', 'error')
+            return redirect(url_for('reports.new'))
+            
+        # Get client_id from form data if not already set
+        client_id = client_id or request.form.get('client_id')
         lab_file = request.files.get('lab_file')
         
         if not client_id:
             flash('Client ID is required', 'error')
             return redirect(url_for('reports.new'))
-        
-        client = Client.query.get(client_id)
-        if not client:
-            flash('Invalid client ID', 'error')
-            return redirect(url_for('reports.new'))
-        
-        # Create a new report
+        # Do not fetch client from DB, just use the ID
+        # Create a new report (if you want to keep using SQLAlchemy for reports, you can leave this as is)
         report = Report(
             client_id=client_id,
             created_by=current_user.id,
@@ -89,7 +101,7 @@ def new():
                 print(f"Saved result: {result.test_name} = {result.value} {result.unit}")  # Debug print
             
             flash('Report created successfully', 'success')
-            return redirect(url_for('reports.view', report_id=report.id))
+            return redirect(url_for('clients.view', id=client_id))
         except Exception as e:
             print(f"Database error: {str(e)}")  # Debug print
             db.session.rollback()
@@ -98,7 +110,7 @@ def new():
     
     # GET request - show form
     clients = Client.query.all()
-    return render_template('reports/new.html', clients=clients)
+    return render_template('reports/new.html', clients=clients, client=client, form=form)
 
 @bp.route('/<int:report_id>')
 @login_required

@@ -1,0 +1,127 @@
+---
+description: 
+globs: 
+alwaysApply: true
+---
+
+# Mind Stoke – Phase 1 Product Requirements Document (PRD)
+**Version**: 0.1  
+**Created by**: Jeff Stoker  
+**Last updated**: May 24, 2025  
+**Target Completion**: Late July 2025  
+
+---
+
+## 1. Overview
+
+Mind Stoke is an internal-use platform designed for AMFAS staff to intake client data (labs, health history, and cognitive assessments), extract key information, and generate a personalized PDF Roadmap for brain and body health optimization.
+
+---
+
+## 2. Phase 1 Goals
+
+- Allow AMFAS staff to upload labs and auto-extract data
+- Store structured HHQ responses from clients via dynamic links
+- Upload and extract cognitive assessment data (CNS or MoCA)
+- Generate a personalized Roadmap PDF once all three inputs are complete
+- Save all client data historically in Supabase
+- No client or practitioner access required at this stage
+
+---
+
+## 3. Users
+
+**Internal AMFAS staff only**
+
+All logged-in staff can:
+- View and manage client records
+- Upload labs
+- Upload cognitive assessments
+- Confirm HHQ completion
+- Trigger/download Roadmaps
+
+---
+
+## 4. Client Record Creation
+
+Client records are created automatically via Zapier when a protocol is purchased via the AMFAS website. Fields to capture in Supabase:
+
+- Full name
+- Email
+- Phone number
+- Date of birth
+- Address
+- Assessment status
+- Assessment type
+- Cognitive test uploads (CNS or MoCA)
+
+---
+
+## 5. Lab Upload
+
+- PDF upload via drag-and-drop or file selector
+- Data extracted from LabCorp reports using existing extraction logic
+- Extracted values stored in Supabase, tied to client ID
+- Triggers: No Roadmap generation until HHQ and cognitive test are also completed
+
+---
+
+## 6. Health History Questionnaire (HHQ)
+
+- Clients receive a dynamic link to complete their HHQ
+- No login required
+- Responses stored as structured tags in Supabase (e.g., `hh-brain_fog`)
+- Roadmap logic uses tags; no admin override or summary required in Phase 1
+
+---
+
+## 7. Cognitive Assessment
+
+### CNS Vital Signs:
+- PDF uploaded by staff
+- Extract domains: Patient Score, Standard Score, Percentile, Validity Indicator, Category
+- 15 domains stored per test
+- Stored historically in Supabase
+
+### MoCA:
+- PDF uploaded by staff
+- Store MoCA score (e.g. 24/30)
+- Store date and uploaded_by
+- No special Roadmap logic differences from CNS
+
+---
+
+## 8. Roadmap Generation
+
+- Automatically or manually triggered **only when labs + HHQ + cognitive test are present**
+- Output: Downloadable PDF stored in Supabase under the client record
+- Staff manually sends PDF to client via email or Circle
+- Roadmap includes optional screenshot (manually added) of cognitive test
+
+---
+
+## 9. Authentication
+
+- Internal user login for AMFAS staff only
+- No client or external practitioner logins required in Phase 1
+
+---
+
+## 10. Data Storage & History
+
+- All assessments (labs, HHQ, cognitive) stored historically in Supabase
+- Roadmap PDF also saved to Supabase for future reference
+- No overwriting of past assessments
+
+---
+
+## 11. Out of Scope (Future Phases)
+
+- Client login portal
+- Emailing Roadmap directly from system
+- Practitioner dashboards
+- AI explanation of Roadmaps
+- Trends tracking
+- CNS API integration
+- Automated SMS/email reminders
+

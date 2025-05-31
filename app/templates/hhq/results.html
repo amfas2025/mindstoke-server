@@ -1,0 +1,119 @@
+{% extends "base.html" %}
+
+{% block title %}HHQ Results - {{ client.first_name }} {{ client.last_name }}{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h1>Health History Questionnaire Results</h1>
+        <div class="btn-group">
+            <a href="{{ url_for('clients.view', id=client.id) }}" class="btn btn-outline-primary">Back to Client</a>
+            <a href="{{ url_for('hhq.download_hhq', token=hhq_response.unique_token) }}" class="btn btn-success">Download PDF</a>
+        </div>
+    </div>
+
+    <div class="card mb-4">
+        <div class="card-body">
+            <h5 class="card-title">Client Information</h5>
+            <dl class="row mb-0">
+                <dt class="col-sm-3">Name</dt>
+                <dd class="col-sm-9">{{ client.first_name }} {{ client.last_name }}</dd>
+                <dt class="col-sm-3">Date of Birth</dt>
+                <dd class="col-sm-9">
+                  {% if client.date_of_birth %}
+                    {% if client.date_of_birth is string %}
+                      {{ client.date_of_birth[:10] }}
+                    {% else %}
+                      {{ client.date_of_birth.strftime('%Y-%m-%d') }}
+                    {% endif %}
+                  {% else %}
+                    N/A
+                  {% endif %}
+                </dd>
+                <dt class="col-sm-3">Sex</dt>
+                <dd class="col-sm-9">{{ client.sex or 'N/A' }}</dd>
+                <dt class="col-sm-3">Completed</dt>
+                <dd class="col-sm-9">
+                  {% if hhq_response.completed_at %}
+                    {% if hhq_response.completed_at is string %}
+                      {{ hhq_response.completed_at[:19].replace('T', ' ') }}
+                    {% else %}
+                      {{ hhq_response.completed_at.strftime('%Y-%m-%d %H:%M:%S') }}
+                    {% endif %}
+                  {% else %}
+                    N/A
+                  {% endif %}
+                </dd>
+            </dl>
+        </div>
+    </div>
+
+    {% for section_num in range(24) %}
+    {% set section_fields = form_fields|selectattr('section', 'equalto', section_num)|list %}
+    {% if section_fields %}
+    <div class="card mb-4">
+        <div class="card-header d-flex justify-content-between align-items-center">
+            <h5 class="card-title mb-0">{{ SECTION_TITLES[section_num] }}</h5>
+            <small class="text-muted">Section {{ section_num }}</small>
+        </div>
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="table table-hover">
+                    <thead>
+                        <tr>
+                            <th style="width: 80%">Question</th>
+                            <th style="width: 20%">Response</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {# First show answered questions #}
+                        {% for field in section_fields %}
+                            {% if field.name in hhq_response.responses and (hhq_response.responses[field.name] is true or hhq_response.responses[field.name] == 'on') %}
+                                <tr>
+                                    <td>{{ field.label.text }}</td>
+                                    <td><span class="badge bg-success">Yes</span></td>
+                                </tr>
+                            {% endif %}
+                        {% endfor %}
+                        
+                        {# Then show unanswered questions in muted text #}
+                        {% for field in section_fields %}
+                            {% if field.name not in hhq_response.responses or (hhq_response.responses[field.name] is not true and hhq_response.responses[field.name] != 'on') %}
+                                <tr class="text-muted">
+                                    <td>{{ field.label.text }}</td>
+                                    <td><span class="badge bg-secondary">No</span></td>
+                                </tr>
+                            {% endif %}
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    {% endif %}
+    {% endfor %}
+
+    {% if hhq_response.responses.get('additional_notes') %}
+    <div class="card mb-4">
+        <div class="card-header">
+            <h5 class="card-title mb-0">Additional Notes</h5>
+        </div>
+        <div class="card-body">
+            <p class="card-text">{{ hhq_response.responses.get('additional_notes')|nl2br }}</p>
+        </div>
+    </div>
+    {% endif %}
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Initialize all tooltips
+    var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'))
+    var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
+        return new bootstrap.Tooltip(tooltipTriggerEl)
+    })
+});
+</script>
+{% endblock %} 

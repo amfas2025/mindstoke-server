@@ -1,0 +1,180 @@
+{% extends "client_base.html" %}
+
+{% block title %}Health History Questionnaire{% endblock %}
+
+{% block page_header %}Health History Questionnaire{% endblock %}
+
+{% block styles %}
+<style>
+.section {
+    transition: opacity 0.3s ease-in-out;
+}
+.section.disabled {
+    opacity: 0.5;
+    pointer-events: none;
+}
+.progress {
+    height: 25px;
+}
+.progress-bar {
+    transition: width 0.3s ease;
+}
+.save-indicator {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    padding: 10px 20px;
+    border-radius: 5px;
+    display: none;
+    z-index: 1000;
+}
+.save-indicator.success {
+    background-color: #28a745;
+    color: white;
+}
+.save-indicator.error {
+    background-color: #dc3545;
+    color: white;
+}
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-10">
+            <div class="card">
+                <div class="card-body">
+                    <form method="POST" id="hhq-form">
+                        {{ form.hidden_tag() }}
+                        <input type="hidden" name="step" value="{{ current_step }}">
+                        <input type="hidden" name="attempt_id" value="{{ attempt_id }}">
+                        
+                        <div class="progress mb-4">
+                            <div class="progress-bar" role="progressbar" style="width: {{ (current_step / total_sections) * 100 }}%" 
+                                 aria-valuenow="{{ (current_step / total_sections) * 100 }}" aria-valuemin="0" aria-valuemax="100">
+                                Section {{ current_step + 1 }} of {{ total_sections }}
+                            </div>
+                        </div>
+
+                        {% with messages = get_flashed_messages(with_categories=true) %}
+                            {% if messages %}
+                                {% for category, message in messages %}
+                                    <div class="alert alert-{{ category }} alert-dismissible fade show" role="alert">
+                                        {{ message }}
+                                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                                    </div>
+                                {% endfor %}
+                            {% endif %}
+                        {% endwith %}
+
+                        <div class="section">
+                            <h3 class="mb-4">{{ current_section }}</h3>
+                            
+                            {% set fields_in_section = [] %}
+                            {% for field in form %}
+                                {% if field.name in current_section_fields %}
+                                    {% set _ = fields_in_section.append(field) %}
+                                    <div class="form-check mb-3">
+                                        {{ field(class="form-check-input", id=field.name) }}
+                                        {{ field.label(class="form-check-label", for=field.name) }}
+                                    </div>
+                                {% endif %}
+                            {% endfor %}
+                            
+                            {% if fields_in_section|length == 0 %}
+                                <div class="alert alert-warning">
+                                    <strong>No questions found for this section!</strong><br>
+                                    <small>This section may not have any questions configured yet.</small>
+                                </div>
+                            {% endif %}
+                        </div>
+
+                        {% if current_step == total_sections - 1 %}
+                        <div class="mb-4">
+                            <label for="{{ form.additional_notes.id }}" class="form-label">{{ form.additional_notes.label.text }}</label>
+                            {{ form.additional_notes(class="form-control", rows=5) }}
+                        </div>
+                        {% endif %}
+
+                        <div class="d-flex justify-content-between mt-4">
+                            {% if current_step > 0 %}
+                                {{ form.prev_step(class="btn btn-secondary") }}
+                            {% else %}
+                                <div></div>
+                            {% endif %}
+                            
+                            <div>
+                                {{ form.save_exit(class="btn btn-outline-primary me-2") }}
+                                {% if current_step < total_sections - 1 %}
+                                    {{ form.next_step(class="btn btn-primary") }}
+                                {% else %}
+                                    {{ form.submit_form(class="btn btn-success") }}
+                                {% endif %}
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="save-indicator" class="save-indicator"></div>
+
+{% block scripts %}
+<script>
+let autoSaveTimeout;
+const saveIndicator = document.getElementById('save-indicator');
+
+function showSaveIndicator(message, type = '') {
+    saveIndicator.textContent = message;
+    saveIndicator.className = 'save-indicator ' + type;
+    saveIndicator.style.display = 'block';
+    setTimeout(() => {
+        saveIndicator.style.display = 'none';
+    }, 3000);
+}
+
+function autoSave() {
+    const form = document.getElementById('hhq-form');
+    const formData = new FormData(form);
+    
+    showSaveIndicator('Saving...');
+    
+    fetch(window.location.href, {
+        method: 'POST',
+        body: formData,
+        headers: {
+            'X-Requested-With': 'XMLHttpRequest'
+        }
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            showSaveIndicator('Saved successfully!', 'success');
+        } else {
+            showSaveIndicator('Error saving: ' + data.error, 'error');
+        }
+    })
+    .catch(error => {
+        showSaveIndicator('Error saving: ' + error.message, 'error');
+    });
+}
+
+// Auto-save on field change
+document.querySelectorAll('#hhq-form input, #hhq-form textarea').forEach(field => {
+    field.addEventListener('change', () => {
+        clearTimeout(autoSaveTimeout);
+        autoSaveTimeout = setTimeout(autoSave, 1000);
+    });
+});
+
+// Handle form submission
+document.getElementById('hhq-form').addEventListener('submit', function(e) {
+    showSaveIndicator('Saving...');
+});
+</script>
+{% endblock %}
+
+{% endblock %} 
