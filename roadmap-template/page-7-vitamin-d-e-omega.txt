@@ -1,0 +1,47 @@
+{{vitamin_d_range_protocols}}
+{{if_d_50_59_range}}
+{{d_50_59_protocol}} This level is close to the optimal parameters and though no additional intervention is recommended, you may want to check your {{vitamin_d_monitoring}} level a few times per year to make sure that it does not drop. {{d_50_59_maintenance}}
+
+{{if_quick_vitd_row_suboptimal}}
+{{quick_vitd_suboptimal_protocol}} Your {{vitamin_d_level_status}} level is suboptimal, and supplementation is recommended. Please note the section in your guidebook about the importance of, and dosing recommendation to optimize {{vitamin_d_optimization}}. {{vitd_dosing_recommendations}}
+
+{{vitamin_d_dosing_ranges}}
+{{if_d_30_39_range}}
+{{d_30_39_protocol}} Since your {{vitamin_d_actual_level}} was 30-39, you are encouraged to supplement with {{vitamin_d_dose_30_39}} of {{vitamin_d_supplement_type}} per day, and then recheck your levels in 90 days. {{d_30_39_recheck}}
+
+{{if_d_40_49_range}}
+{{d_40_49_protocol}} Since your {{vitamin_d_actual_level}} was 40-49, you are encouraged to supplement with {{vitamin_d_dose_40_49}} and then recheck your levels in 90 days. {{d_40_49_recheck}}
+
+{{if_d_50_59_range}}
+{{d_50_59_optimization}} Since your {{vitamin_d_actual_level}} was 50-59, you are encouraged to supplement with {{vitamin_d_dose_50_59}} and then recheck your levels in 90 days. {{d_50_59_recheck}}
+
+{{vitamin_d_existing_supplement_check}}
+{{if_quick_vitd_taking}}
+{{vitd_taking_assessment}} In your health history, you indicated that you are taking a {{vitamin_d_current_supplement}}. However, your serum levels remain {{vitamin_d_serum_status}}. Please look to the section in your guidebook about the importance of, and dosing recommendation to optimize your {{vitamin_d_levels_guidance}}. {{vitd_dose_adjustment}}
+
+{{vitamin_d_additional_protocols}}
+{{if_d_less_30}}
+{{d_less_30_urgent}} Since your {{vitamin_d_actual_level}} was < 30, {{vitamin_d_urgent_intervention}} to your current dosing for 90 days and then recheck 90 days. {{d_less_30_followup}}
+
+{{if_d_40_49_additional}}
+{{d_40_49_additional_protocol}} Since your {{vitamin_d_level_40_49}} was 40-49, {{vitamin_d_40_49_additional}} to your current dosing for 90 days and then recheck in 90 days. {{d_40_49_additional_followup}}
+
+{{vitamin_e_optimization_section}}
+Your combined {{vitamin_e_level_interpretation}} level is {{vitamin_e_actual_value}}. The optimal level is suggested to be {{vitamin_e_target_range}} mg/L.
+
+{{if_vite12_suboptimal}}
+{{vite12_intervention}} This level falls within the optimal parameters and no additional intervention is recommended. {{vite12_maintenance}}
+
+{{if_quick_vite_optimization}}
+{{quick_vite_protocol}} Consider starting a supplement called {{vitamin_e_supplement_green}}. This supplement is a comprehensive formula that provides all eight naturally occurring forms of {{vitamin_e_types}}. This supplement includes both {{tocopherol_forms}} and {{tocotrienol_forms}} forms of {{vitamin_e_complete}}.
+
+{{vitamin_e_blood_thinner_warning}}
+{{if_quick_thinner_vite}}
+{{blood_thinner_vite_warning}} {{vitamin_e_blood_thinner_interaction}} can thin the blood, and you have been prescribed a prescription {{blood_thinner_medication}}. If you choose to start {{vitamin_e_with_thinner}}, you need to recheck this level after 90 days of supplementation. {{blood_thinner_monitoring}}
+
+{{vitamin_e_elevated_warning}}
+{{if_quick_vite_row_elevated}}
+{{vite_elevated_warning}} Your {{vitamin_e_elevated_status}} level is starting to trend quite elevated. {{vitamin_e_elevated_concern}} may not be helpful for this level to continue to increase. If you are taking a {{vitamin_e_current_supplement}}, you may want to speak with your primary care provider about this level. {{vitamin_e_adverse_outcomes}} can be associated with adverse outcomes if it gets too elevated. {{vite_elevated_action}}
+
+{{omegacheck_analysis_section}}
+Your baseline {{omegacheck_results}} value was {{omegacheck_actual_value}} % and {{omegacheck_risk_reduction}} begins when your value is > {{omegacheck_target_threshold}} by weight. Your {{omega_6_3_ratio_status}} ratio was {{omega_6_3_actual_ratio}} to {{omega_6_3_comparison}}. This means that your {{omega_6_levels}} levels were found to be {{omega_6_assessment}} more prevalent than your {{omega_3_comparison}} fatty acid levels. We recommend striving for a ratio as close to {{omega_optimal_ratio}} [or lower]. In fact, a 1:1 ratio is considered amazing, but it is difficult to achieve with the {{standard_american_diet}}. 

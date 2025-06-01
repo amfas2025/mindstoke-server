@@ -26,11 +26,13 @@ SUPABASE_KEY = os.getenv("SUPABASE_KEY")
 if not SUPABASE_URL or not SUPABASE_KEY:
     raise ValueError("Missing Supabase credentials. Please check your .env file.")
 
-# Create a connection pool
-supabase_pool = []
-MAX_POOL_SIZE = 10  # Increased from 5 to handle more concurrent requests
+# Connection pool settings
+MAX_POOL_SIZE = 5
 POOL_TIMEOUT = 30  # seconds
-CONNECTION_TIMEOUT = 10  # seconds for individual operations
+CONNECTION_TIMEOUT = 10  # seconds
+
+# Global pool for connection reuse
+supabase_pool = []
 
 def get_supabase_client():
     """Get a Supabase client from the pool or create a new one."""
@@ -50,44 +52,39 @@ def get_supabase_client():
     
     # Create a new client if pool is empty or all clients are invalid
     try:
+        # Simple client creation for version 1.0.3
         return supabase_create_client(SUPABASE_URL, SUPABASE_KEY)
     except Exception as e:
-        logger.error("Failed to create new Supabase client: %s", str(e))
+        logger.error("Failed to create Supabase client: %s", str(e))
         raise
 
-def release_supabase_client(client):
-    """Return a client to the pool."""
+def return_supabase_client(client):
+    """Return a client to the pool for reuse."""
     global supabase_pool
     if len(supabase_pool) < MAX_POOL_SIZE:
-        try:
-            # Test the connection before returning to pool
-            client.table("clients").select("count").limit(1).execute()
-            supabase_pool.append(client)
-        except Exception as e:
-            logger.warning("Failed to return client to pool: %s", str(e))
+        supabase_pool.append(client)
 
-def with_retry(max_retries=3, delay=1):
-    """Decorator to retry operations with exponential backoff."""
+def retry_on_failure(max_retries=3, delay=1):
+    """Decorator to retry database operations on failure."""
     def decorator(func):
         @wraps(func)
         def wrapper(*args, **kwargs):
-            last_error = None
             for attempt in range(max_retries):
                 try:
                     return func(*args, **kwargs)
                 except Exception as e:
-                    last_error = e
-                    logger.warning("Attempt %d failed: %s", attempt + 1, str(e))
-                    if attempt < max_retries - 1:
-                        sleep_time = delay * (2 ** attempt)
-                        logger.info("Retrying in %d seconds...", sleep_time)
-                        time.sleep(sleep_time)
-            logger.error("All retry attempts failed: %s", str(last_error))
-            raise last_error
+                    if attempt == max_retries - 1:
+                        logger.error("Function %s failed after %d retries: %s", func.__name__, max_retries, str(e))
+                        raise
+                    else:
+                        logger.warning("Function %s attempt %d failed: %s. Retrying in %d seconds...", 
+                                     func.__name__, attempt + 1, str(e), delay)
+                        time.sleep(delay)
+            return None
         return wrapper
     return decorator
 
-@with_retry()
+@retry_on_failure()
 def fetch_clients():
     """Fetch all clients with retry logic."""
     client = get_supabase_client()
@@ -98,9 +95,9 @@ def fetch_clients():
         logger.error("Error fetching clients from Supabase: %s", str(e))
         return []
     finally:
-        release_supabase_client(client)
+        return_supabase_client(client)
 
-@with_retry()
+@retry_on_failure()
 def create_client(client_data):
     """Create a new client with retry logic."""
     client = get_supabase_client()
@@ -111,9 +108,9 @@ def create_client(client_data):
         print(f"Error creating client in Supabase: {e}")
         return None
     finally:
-        release_supabase_client(client)
+        return_supabase_client(client)
 
-@with_retry()
+@retry_on_failure()
 def update_client(client_id, client_data):
     """Update a client with retry logic."""
     client = get_supabase_client()
@@ -124,9 +121,9 @@ def update_client(client_id, client_data):
         print(f"Error updating client in Supabase: {e}")
         return None
     finally:
-        release_supabase_client(client)
+        return_supabase_client(client)
 
-@with_retry()
+@retry_on_failure()
 def delete_client(client_id):
     """Delete a client with retry logic."""
     client = get_supabase_client()
@@ -137,9 +134,9 @@ def delete_client(client_id):
         print(f"Error deleting client from Supabase: {e}")
         return False
     finally:
-        release_supabase_client(client)
+        return_supabase_client(client)
 
-@with_retry()
+@retry_on_failure()
 def insert_lab_results_to_supabase(client_id, collected_at, lab_values):
     """Insert lab results with retry logic."""
     client = get_supabase_client()
@@ -160,9 +157,9 @@ def insert_lab_results_to_supabase(client_id, collected_at, lab_values):
         print(f"Error inserting lab results into Supabase: {e}")
         return None
     finally:
-        release_supabase_client(client)
+        return_supabase_client(client)
 
-@with_retry()
+@retry_on_failure()
 def fetch_hhq_responses_for_client(client_id):
     """Fetch HHQ responses with retry logic."""
     client = get_supabase_client()
@@ -173,9 +170,9 @@ def fetch_hhq_responses_for_client(client_id):
         print(f"Error fetching HHQ responses from Supabase: {e}")
         return []
     finally:
-        release_supabase_client(client)
+        return_supabase_client(client)
 
-@with_retry()
+@retry_on_failure()
 def fetch_hhq_by_token(token):
     """Fetch HHQ by token with retry logic."""
     client = get_supabase_client()
@@ -186,9 +183,9 @@ def fetch_hhq_by_token(token):
         print(f"Error fetching HHQ by token: {e}")
         return None
     finally:
-        release_supabase_client(client)
+        return_supabase_client(client)
 
-@with_retry()
+@retry_on_failure()
 def fetch_client_by_id(client_id):
     """Fetch client by ID with retry logic."""
     client = get_supabase_client()
@@ -199,9 +196,9 @@ def fetch_client_by_id(client_id):
         print(f"Error fetching client by id from Supabase: {e}")
         return None
     finally:
-        release_supabase_client(client)
+        return_supabase_client(client)
 
-@with_retry()
+@retry_on_failure()
 def fetch_health_history_questions():
     """Fetch health history questions with retry logic."""
     client = get_supabase_client()
@@ -219,9 +216,9 @@ def fetch_health_history_questions():
         print(f"Error fetching health history questions: {e}")
         return []
     finally:
-        release_supabase_client(client)
+        return_supabase_client(client)
 
-@with_retry()
+@retry_on_failure()
 def upsert_individual_hhq_answers(client_id, answers_dict, attempt_id):
     """Upsert HHQ answers for a specific attempt_id (do not create a new attempt_id unless a new link is generated)."""
     if not attempt_id:
@@ -251,13 +248,13 @@ def upsert_individual_hhq_answers(client_id, answers_dict, attempt_id):
                 batch = payloads[i:i + batch_size]
                 client.table('hhq_responses').insert(batch).execute()
                 print(f"[DEBUG] Inserted batch {i//batch_size + 1}/{(len(payloads) + batch_size - 1)//batch_size}")
-        release_supabase_client(client)
+        return_supabase_client(client)
     except Exception as e:
         print(f"Error upserting answers for client {client_id}: {e}")
-        release_supabase_client(client)
+        return_supabase_client(client)
         raise
 
-@with_retry()
+@retry_on_failure()
 def fetch_hhq_responses_dict(client_id):
     """Fetch HHQ responses as dictionary with retry logic."""
     client = get_supabase_client()
@@ -284,9 +281,9 @@ def fetch_hhq_responses_dict(client_id):
         print(f"Error fetching HHQ responses: {e}")
         return {}
     finally:
-        release_supabase_client(client)
+        return_supabase_client(client)
 
-@with_retry()
+@retry_on_failure()
 def create_hhq_attempt(client_id):
     """Create a new HHQ attempt for a client, pre-filling from the most recent finalized attempt if available."""
     client = get_supabase_client()
@@ -319,13 +316,13 @@ def create_hhq_attempt(client_id):
             'created_at': now,
             'finalized_at': None
         }).execute()
-        release_supabase_client(client)
+        return_supabase_client(client)
         return attempt_id, prefill_answers
     except Exception as e:
-        release_supabase_client(client)
+        return_supabase_client(client)
         raise
 
-@with_retry()
+@retry_on_failure()
 def fetch_hhq_responses_dict_for_attempt(client_id, attempt_id):
     """Fetch HHQ responses as dictionary for a specific attempt."""
     client = get_supabase_client()
@@ -353,9 +350,9 @@ def fetch_hhq_responses_dict_for_attempt(client_id, attempt_id):
         print(f"Error fetching HHQ responses for attempt: {e}")
         return {}
     finally:
-        release_supabase_client(client)
+        return_supabase_client(client)
 
-@with_retry()
+@retry_on_failure()
 def upsert_hhq_answers_partial(client_id, answers_dict, attempt_id):
     """Upsert only the provided HHQ answers without overwriting existing ones."""
     if not attempt_id:
@@ -394,13 +391,13 @@ def upsert_hhq_answers_partial(client_id, answers_dict, attempt_id):
                 client.table('hhq_responses').insert(batch).execute()
                 print(f"[DEBUG] Inserted batch {i//batch_size + 1}/{(len(payloads) + batch_size - 1)//batch_size}")
         
-        release_supabase_client(client)
+        return_supabase_client(client)
     except Exception as e:
         print(f"Error partial upserting answers for client {client_id}: {e}")
-        release_supabase_client(client)
+        return_supabase_client(client)
         raise
 
-@with_retry()
+@retry_on_failure()
 def save_lab_results(client_id, lab_results):
     """Save extracted lab results to Supabase with Armgasys mapping."""
     client = get_supabase_client()
@@ -450,7 +447,40 @@ def save_lab_results(client_id, lab_results):
         print(f"Error saving lab results: {str(e)}")
         raise e
     finally:
-        release_supabase_client(client)
+        return_supabase_client(client)
+
+@retry_on_failure()
+def fetch_lab_results_for_client(client_id):
+    """Fetch all lab results for a specific client."""
+    client = get_supabase_client()
+    try:
+        result = client.table('lab_results') \
+            .select('*') \
+            .eq('client_id', client_id) \
+            .execute()
+        
+        # Convert to expected format for roadmap generation
+        lab_results = []
+        for row in result.data:
+            lab_result = {
+                'test_name': row.get('original_test_name', ''),
+                'value': row.get('original_value', ''),
+                'unit': row.get('unit', ''),
+                'reference_range': row.get('reference_range', ''),
+                'armgasys_variable': row.get('armgasys_variable_name', ''),
+                'armgasys_value': row.get('armgasys_value', ''),
+                'date_collected': row.get('date_collected', ''),
+                'uploaded_at': row.get('uploaded_at', '')
+            }
+            lab_results.append(lab_result)
+        
+        return lab_results
+        
+    except Exception as e:
+        print(f"Error fetching lab results for client {client_id}: {e}")
+        return []
+    finally:
+        return_supabase_client(client)
 
 # Optional: one-time manual test block
 if __name__ == "__main__":

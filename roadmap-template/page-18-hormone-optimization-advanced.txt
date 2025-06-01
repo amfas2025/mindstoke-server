@@ -1,0 +1,34 @@
+{{reverse_t3_elevation_protocols}}
+level was {{reverse_t3_free_t3_value}} pg/mL. The optimal range is > {{reverse_t3_optimal_range}} pg/mL. Your {{reverse_t3_level_elevated}} level is elevated at {{reverse_t3_actual_elevated_value}}. {{reverse_t3_thyroid_function_optimization}} These values fall outside of the {{optimal_parameters_thyroid_function}}, and you may be a candidate for a trial of a {{prescription_medicine_thyroid_optimization}}. {{prescription_medicine_telemedicine_consultation}} 
+
+{{autoimmune_thyroid_interventions}}
+**{{quick_reverse_t3_elevated_consideration}}** An elevated {{reverse_t3_may_suggest}} level may be suggestive of a {{process_impairs_functional_thyroid}} that impairs {{functional_thyroid_free_t3}}. REVERSE T3 is a {{functionally_aerodynamic_t3}} version of T3. This has the potential of {{blocking_free_t3_receptors}} and {{diminishing_effectiveness_free_t3}}. Though the precise reason your body makes {{reverse_t3_unknown}} is unknown, it can be related to {{low_levels_vitamin_b12}} {{ferritin_elevated_cortisol_levels}}. You may consider asking for a {{cortisol_blood_draw_fasting_reverse_t3}}
+
+**{{quick_hashimotos_autoimmune_consideration}}** You may have some symptoms of {{autoimmune_thyroiditis_additional}} and {{additional_autoimmunity_testing}} may be helpful. For those with laboratory markers of {{autoimmune_thyroiditis_naltrexone_research}}, you may choose to {{research_compounded_medication_ldn}} called {{low_dose_naltrexone_ldn}}. Information about {{ldn_provided_guidebook}} is provided in your {{guidebook_ldn_information}}. Your {{ldn_attention_providers_amfas}} will need to provide detailed information if you {{think_intervention_ldn}} this may be an intervention for you to implement. {{additional_family_physician_inflammation}} with {{ldn_autoimmune_disease}} you should consider an {{ldn_supplement_advanced_amfas}} or {{telemedicine_consultation_providers}} consultation with a {{provider_amfas_fees}}. {{additional_fees_may_apply_ldn}}
+
+{{autoimmune_paleo_protocols}}
+You are also encouraged to begin learning about the {{autoimmune_paleo_diet_learning}}. You can learn more about this {{dietary_approach_office_hours}} by attending {{office_hours_amfas_sessions}}.
+
+---
+
+**{{quick_female_hormones_section}}** {{female_hormone_levels_brain_health}}
+
+{{quick_female_hormones_optimization}}
+**{{female_hormones_baseline_fsh}}** Your baseline {{fsh_level_status}} level was {{lab_fsh_result_value}} mIU/mL. Optimal ranges of {{fsh_dependent_age}} are dependent on {{age_menstrual_menopausal_status}} and {{brain_health_menstrual_status}}. If you are not {{menopausal_fsh_tends_11}}, the {{fsh_level_closer_20}} level tends to be < 11. If you are {{menopausal_fsh_level_closer}} we may consider attempting to {{bring_fsh_level_20_miu_but_goals}} level closer to 20 mIU/mL, {{specific_goals_hormone_optimization}}.
+
+**{{baseline_progesterone_female_optimization}}** Your baseline {{estradiol_e2_status}} was {{lab_progesterone_female_value}} pg/mL. {{optimal_ranges_e2_dependent}} In women who are still {{menstruating_e2_ranges_vary}} E2 ranges {{vary_50_500_depending}} from 50-500 pg/mL, depending on {{when_lab_checked_context}} in the context of the {{menstrual_cycle_menopausal}}. In {{menopausal_women_researchers}} women, many researchers suggest {{optimal_ranges_50_150}} may be from {{optimal_range_50_150_women}}.
+
+**{{baseline_total_testosterone_female}}** Your baseline {{total_testosterone_status}} was {{lab_testosterone_female_value}} ng/dL. Many women feel best when {{testosterone_ranges_40_70}}.
+
+**{{baseline_fh1_e1_optimization}}** Your baseline {{estrone_e1_level_status}} level was {{fh1_e1_lab_value}} and we believe the {{optimal_range_e1_less_200}}.
+
+**{{baseline_prolactin_optimization}}** Your baseline {{prolactin_level_status}} level was {{fh1_prola_lab_value}} and we believe the {{optimal_value_prolactin_13_75}}.
+
+**{{baseline_luteinizing_hormone_optimization}}** Your baseline {{luteinizing_hormone_lh_status}} level was {{fh1_lh_lab_value}} and we believe the {{optimal_level_lh_22}}.
+
+**{{sex_hormone_binding_optimization}}** Your baseline {{sex_hormone_binding_globulin}} level was {{fh1_shbg_lab_value}} and we believe the {{optimal_range_shbg_75}}.
+
+**{{baseline_dhea_sulfate_optimization}}** Your baseline {{dhea_sulfate_dheas_status}} level was {{fh1_dht_lab_value}} and we believe the {{optimal_range_dheas_less_30}} ng/dL. {{quick_female_hormones_conclusion}}
+
+{{male_hormone_optimization_protocols}}
+**{{quick_male_hormones_considerations}}** Your baseline {{male_hormone_levels_total_testosterone}} levels may need specific consideration for {{hormone_optimization_men_total_testosterone}} for {{optimization_men_testosterone_levels}}. {{testosterone_levels_age_menstrual}} per your {{age_menstrual_status_men}}. 

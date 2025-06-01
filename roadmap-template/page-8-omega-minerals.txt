@@ -1,0 +1,51 @@
+{{arachidonic_acid_analysis}}
+Your {{arachidonic_acid_level_status}} level was {{arachidonic_acid_actual_value}} and we'd like to see this value < {{arachidonic_acid_target}}. This value often becomes optimized when your {{omega_3_optimization_correlation}} ratios are optimized.
+
+{{omega_3_supplementation_protocols}}
+{{if_quick_crp_09_omega_less_5}}
+{{omega_3_crp_protocol}} If you are not taking an {{omega_3_current_status}}, consider starting a high quality, {{triglyceride_based_omega_3}} supplement. {{omega_3_anti_inflammatory}} is a combination of many {{omega_3_fatty_acids}} and often help to calm systemic inflammation. You are encouraged to continue a high potency, high quality {{omega_3_quality_standards}} supplements. Recommended brands include {{omega_3_recommended_brands_list}}.
+
+{{omega_3_maintenance_protocols}}
+{{if_quick_krill_oil}}
+{{krill_oil_assessment}} Your history identifies you are taking a {{krill_oil_current}}. Though considered healthy, {{krill_oil_limitations}} is extremely low in EPA and {{omega_fatty_acids}} when {{krill_oil_comparison}} to fish oil support. Verify that your {{omega_3_verification}} supplement is a {{triglyceride_derived_requirement}} and not an {{ethyl_ester_warning}}. There is a substantial {{absorption_difference}} between these two types of {{omega_3_supplement_types}}. Recommended brands include {{triple_strength_brands_list}}.
+
+{{omega_3_dosing_protocols}}
+{{if_quick_krill_supplementation}}
+{{omega_3_dosing_guidance}} Your history identifies you are taking a {{current_omega_supplement}}, a {{triglyceride_form_verification}}, or a very low {{omega_3_index_status}} justifies taking the {{omega_3_challenge_protocol}} as outlined by {{dr_michael_lewis_protocol}}. {{omega_3_challenge_description}} includes taking {{omega_challenge_dose}} of combined {{epa_dha_combination}} for {{challenge_duration}}.
+
+{{omega_3_index_optimization}}
+{{if_omega_3_suboptimal}}
+{{omega_3_suboptimal_protocol}} Your {{omega_3_levels_current}} levels are quite suboptimal for proper brain functioning, and you are encouraged to {{omega_3_improvement_protocol}}. {{omega_3_brands_recommended}} Recommended brands include {{triple_strength_omega_3_brands}}.
+
+{{omega_3_liquid_alternatives}}
+{{if_omega_3_liquid_preference}}
+{{liquid_omega_3_options}} If you prefer a liquid {{omega_3_supplement_form}}, consider {{phyto_brain_e_recommendation}}. The recommended dose is {{liquid_omega_dosing}}. This supplement has a very low concentration amount of {{dha_concentration}} and is recommended to those with a history of {{head_trauma_history}} or {{neurodegenerative_disease_history}}.
+
+{{omega_3_evidence_based_goals}}
+{{if_omega_supplementing_not_goal}}
+{{omega_3_goal_achievement}} Though you are currently supplementing, you are not yet at the evidence-based goal for the {{omega_6_3_ratio_current}}. You are encouraged to look at the label of your {{omega_3_current_supplement}} to make sure you are taking a high {{omega_3_potency_verification}}. {{omega_3_maintenance_increase}} Recommended brands include {{triple_strength_maintenance_brands}}.
+
+{{magnesium_optimization_section}}
+Your baseline {{magnesium_rbc_level_status}} level is {{magnesium_actual_value}}. The optimal level is suggested to be > {{magnesium_target_level}} mg/dL.
+
+{{if_magnesium_suboptimal}}
+{{magnesium_intervention_protocol}} This level falls within the optimal parameters and no additional intervention is recommended. {{magnesium_maintenance_plan}}
+
+{{if_quick_magrbc_supplementation}}
+{{magnesium_supplementation_protocol}} Consider starting {{magnesium_supplement_type}} {{magnesium_dose_recommendation}} mg at {{magnesium_timing}}. {{magnesium_benefits_explanation}}
+
+{{copper_zinc_optimization_section}}
+Your baseline {{copper_level_status}} level is {{copper_actual_value}}. The optimal level is debatable, but if looked at in the context of {{copper_zinc_ratio_context}}, the goal level is near {{copper_target_level}} ug/dL.
+
+{{zinc_level_assessment}}
+Your baseline {{zinc_level_status}} level is {{zinc_actual_value}}. The optimal level is debatable, but if looked at in the context of {{copper_zinc_ratio_assessment}}, the goal level is near {{zinc_target_level}} ug/dL.
+
+{{copper_zinc_ratio_analysis}}
+Your {{copper_zinc_ratio_status}} RATIO is {{copper_zinc_actual_ratio}}. The optimal {{copper_zinc_ratio_interpretation}} is {{copper_zinc_optimal_ratio}}, and not greater than {{copper_zinc_maximum_ratio}}. This ratio falls within the optimal parameters and no additional intervention is recommended.
+
+{{if_zinc_supplementation_needed}}
+{{zinc_supplementation_protocol}} Your {{cz_ratio_trending}} is trending elevated. Consider starting {{zinc_picolinate_supplement_green}} {{zinc_dose_recommendation}} & {{vitamin_c_coadministration}} per day. {{zinc_cz_ratio_benefits}}
+
+{{zinc_liposomal_protocol}}
+{{if_zinc_liposomal_consideration}}
+{{zinc_liposomal_benefits}} Your {{cz_ratio_elevated_status}} is trending elevated. Consider starting {{zinc_picolinate_liposomal_green}} & {{liposomal_vitamin_c_green}} {{liposomal_dosing}} per day. {{zinc_liposomal_action}} 

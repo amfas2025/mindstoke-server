@@ -91,6 +91,7 @@ def create_app(config_class=Config):
     with app.app_context():
         # Import routes
         from .routes import main, auth, clients, reports, hhq, roadmap
+        from .routes.client_images import client_images_bp
         
         # Register blueprints
         app.register_blueprint(main.main)
@@ -99,6 +100,7 @@ def create_app(config_class=Config):
         app.register_blueprint(reports.bp)
         app.register_blueprint(hhq.bp)
         app.register_blueprint(roadmap.bp)
+        app.register_blueprint(client_images_bp)
         
         # Create database tables
         db.create_all()

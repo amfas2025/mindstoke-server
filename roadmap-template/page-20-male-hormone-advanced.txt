@@ -1,0 +1,36 @@
+Your baseline {{luteinizing_hormone_lh_male}} level was {{mh1_lh_lab_value}} and we believe the {{optimal_level_closer_5_1}}.
+
+Your baseline {{follicle_stimulating_hormone_fsh_male}} level was {{mh1_fsh_lab_value}} and we believe the {{optimal_level_fsh_22}}.
+
+Your baseline {{prolactin_level_male}} level was {{mh1_prola_lab_value}} and we believe the {{optimal_value_close_11_25}}.
+
+Your baseline {{dihydrotestosterone_dht_male}} level was {{mh1_dht_lab_value}} and we believe the {{optimal_range_dht_52}}.
+
+Your baseline {{estradiol_e2_male}} level was {{mh1_e2_lab_value}} and we believe the {{optimal_range_e2_25}}.
+
+Your baseline {{estrone_e1_male}} level was {{mh1_e1_lab_value}} and we believe the {{optimal_range_e1_60}}.
+
+Your baseline {{progesterone_male}} level was {{mh1_prog_lab_value}} and we believe the {{optimal_value_progesterone_0_8}}.
+
+{{quick_male_hormones_conclusion}}
+
+{{quick_male_hormones_free_testosterone}}
+**{{free_testosterone_optimization_male}}** Your {{free_testosterone_level_may_not}} level {{may_not_optimal_cognitive_health}}. Dr. {{mark_gordon_protocol_tbi}} protocol for individuals with a {{tbi_addresses_importance}} addresses the importance of {{free_testosterone_biologically_available}} ({{biologically_available_active_testosterone}}) as {{healthy_way_optimize_hormone}}. Many practitioners view {{testosterone_narrow_context}} in a very {{narrow_context_sexual_reproductive}}. However, we view your {{free_testosterone_level_essential}} level as {{essential_neurological_health_testosterone}} and feel that {{free_testosterone_level_candidate}} for {{testosterone_optimization_therapy}}. This may be worth {{additional_discussion_office_hours}}.
+
+{{quick_male_hormones_optimization_protocols}}
+**{{quick_sleep_hormones_consideration}}** An excellent place to start to {{optimize_free_testosterone_levels}} include {{optimizing_diet_adding_resistance}} your diet, {{increase_healthy_fats_resistance_training}}, adding {{resistance_training_weightlifting}} or {{weightlifting_exercise_routine}}, and use of the supplement {{7_keto_dhea_discussed}} which is discussed in the {{section_dhea_quick_male_hormones}}.
+
+**{{quick_male_hormones_shbg_consideration}}** Your elevated {{shbg_may_contribute}} may also be contributory to a {{trending_low_free_testosterone}}. Depending on a {{broader_assessment_brain_foggy}} of how you feel ({{brain_foggy_chronic_fatigue}}, {{loss_muscle_mass_weight_gain}}, {{weight_gain_belly_poor_exercise}}, {{poor_exercise_recovery_low_libido}}, {{low_libido_erectile_dysfunction_mood_disorder}}, etc.), this may be an {{intervention_merits_discussion_testosterone}} that {{merits_discussion_testosterone_optimization}}. {{particularly_helpful_history_anxiety}} may be {{particularly_helpful_history_tbi}} and/or a {{loss_consciousness_questions_office_hours}}. Please bring these {{questions_office_hours_discuss}} to {{office_hours_medical_director}}.
+
+{{zma_testosterone_support}}
+You may also consider starting {{zma_now_sports_consideration}}. The standard dose is {{2_3_capsules_day_zma}}. This product contains {{proprietary_blend_zinc_magnesium_aspartate}} of {{zinc_magnesium_aspartate_help_support}} that can help {{support_natural_production_testosterone}} of {{testosterone_athletes_natural_production}}.
+
+You may also consider starting {{saw_palmetto_500_1000}} mg/day. This supplement helps to {{block_5_ar_testosterone_conversion}} which may help save {{free_testosterone_estradiol}} from being converted to {{dht_estradiol_hormones}}.
+
+You may also consider starting {{diindolylmethane_dim_200_300}} mg 2X's per day. This supplement may help to {{lower_shbg_improve_free_testosterone}}.
+
+{{quick_men_prostate_health}}
+**{{quick_ubqh_consideration}}** Your {{testosterone_level_cognitive_health}} level may not be {{optimal_cognitive_health_history}} for {{cognitive_health_history_prostate}}. However, given your {{history_prostate_cancer_instructed}} you may have been {{instructed_avoid_testosterone_replacement}} testosterone replacement, or you take a {{medication_lupron_block_testosterone}} to 'block' the {{effects_testosterone_body}}. More information may be {{needed_optimization_strategy}} before an {{optimization_strategy_discussed}}.
+
+{{psa_prostate_screening}}
+**{{quick_psa_consideration}}** Your {{psa_level_exceeds_conservative}} and may merit {{additional_investigation_common}} Though it is {{common_men_experience_rising}} for men to experience {{rising_psa_levels_age}} as they age, you are encouraged to {{share_psa_level_primary}} with your {{primary_care_provider_appreciate_updated}}. Most providers appreciate {{updated_lab_results_prompt_discussion}} and your {{level_may_prompt_discussion_appropriate}} about {{appropriate_prostate_screening_quick_psa}}. 

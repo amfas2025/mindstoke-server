@@ -1,0 +1,148 @@
+{% extends "base.html" %}
+
+{% block title %}Roadmap Summary for {{ client.first_name }} {{ client.last_name }} - A MIND{% endblock %}
+
+{% block content %}
+<div class="container-fluid px-0" style="max-width: 800px; margin: 0 auto;">
+    <!-- A MIND Header -->
+    <div class="text-center mb-4 p-4" style="background-color: #4A90A4; color: white;">
+        <div class="d-flex justify-content-between align-items-center mb-3">
+            <div style="background-color: #2c3e50; color: white; padding: 8px 16px; font-weight: bold;">
+                AMFAS LOGO
+            </div>
+            <div class="btn-group">
+                <a href="{{ url_for('clients.view', id=client.id) }}" class="btn btn-light btn-sm">
+                    <i class="fas fa-arrow-left me-1"></i>Back to Client
+                </a>
+                <a href="{{ url_for('roadmap.download_visual_roadmap_pdf', client_id=client.id) }}" class="btn btn-success btn-sm">
+                    <i class="fas fa-download me-1"></i>Download PDF
+                </a>
+            </div>
+        </div>
+        <h2 class="mb-2">Roadmap Summary for {{ client.first_name }} {{ client.last_name }}</h2>
+        <h4 class="mb-0">The Enhance Protocol®</h4>
+    </div>
+
+    <!-- Report Info Table -->
+    <div class="mb-4">
+        <table class="table table-bordered" style="margin-bottom: 20px;">
+            <tr>
+                <td style="padding: 10px;"><strong>Report Date:</strong> {{ generated_date.split(' at ')[0] if generated_date else 'Today' }}</td>
+                <td style="padding: 10px;"><strong>Labs Drawn:</strong> Recent</td>
+            </tr>
+        </table>
+    </div>
+
+    <!-- Your Test Results Section -->
+    <div class="mb-4">
+        <div class="text-center p-3 mb-3" style="background-color: black; color: white;">
+            <h4 class="mb-0">Your Test Results</h4>
+        </div>
+        <div style="padding: 0 15px;">
+            <p style="margin-bottom: 10px;">The next few pages include the results of your cognitive and blood tests. They include a short explanation of the importance of the test, along with your results. The test results are in RED on a gray background. To help you understand your next steps, follow the colored clues below.</p>
+            
+            <div class="p-2 mb-2" style="background-color: #90EE90; color: black;">
+                Supplement or Medication Recommendations are highlighted in Green
+            </div>
+            
+            <p style="margin-bottom: 20px;">Recommended homework, additional research, and opportunities to ask questions during office hours from the AMFAS Coaches or medical staff during Office Hours are highlighted in Yellow.</p>
+        </div>
+    </div>
+
+    <!-- Cognitive Test Results Section -->
+    <div class="mb-4">
+        <div class="text-center p-3 mb-3" style="background-color: black; color: white;">
+            <h4 class="mb-0">Your Baseline Cognitive Test Results</h4>
+        </div>
+        <div style="padding: 0 15px;">
+            <p style="margin-bottom: 10px;">Each participant in The Enhance Protocol® completes a baseline cognitive test. Depending on your age and your current cognitive health, you have been asked to complete a MoCA test or a computer-based CNS VITAL SIGNS test. Your test results and summarized below, and if you would like a copy of your complete results, please email info@amindforallseasons.com and we will send you the full report.</p>
+            
+            <p style="margin-bottom: 15px;">The Enhance Protocol® is designed to help you improve brain functioning starting from your baseline. We look forward to helping you complete a retest once you have applied the recommendations in your Roadmap Report for at least a few months. Please attend one of our online Office Hours sessions and ask for guidance regarding how to understand your specific test results.</p>
+            
+            <div style="color: red; margin-bottom: 20px;">
+                <strong>These are the results from your recent cognitive test.</strong><br/>
+                <strong>or</strong><br/>
+                <strong>We did not have any results from cognitive testing when we prepared this roadmap. You are encouraged to do a baseline cognitive test so we can measure your progress.</strong>
+            </div>
+        </div>
+    </div>
+
+    <!-- Supplements Section -->
+    <div class="mb-4">
+        <h3 style="margin-bottom: 15px; margin-top: 20px;">A Targeted Supplements Approach Can Improve Your Brain Health</h3>
+        <div style="padding: 0 15px;">
+            <p style="margin-bottom: 10px;">Many individuals are using supplements on a regular basis. You may be using supplements because your healthcare provider recommended it. You may be using supplements because you saw a commercial or read an article about the benefits of one supplement over another.</p>
+        </div>
+    </div>
+
+    <!-- APO E Genetics Section -->
+    <div class="mb-4">
+        <div class="text-center p-3 mb-3" style="background-color: black; color: white;">
+            <h4 class="mb-0">APO E Genetic Profile and Your Risk for Oxidative Stress</h4>
+        </div>
+        <div style="padding: 0 15px;">
+            <p style="margin-bottom: 10px;">Your APO E Genotype is {{ processed_content.get('genome-type', '[genome-type]') }}. Your APO E genetics has some predictive value for increased risk of cardiovascular and neurodegenerative disease. Your GLUTATHIONE level was {{ processed_content.get('GLUT_VALUE', '[GLUT_VALUE]') }} and many neurologists suggest the optimal range may exceed 300 μg/mL. GLUTATHIONE reflects your ability to calm oxidative stress.</p>
+            
+            {% if processed_content.get('has_E4') %}
+                {% if processed_content.get('quick-E4') %}
+                    <p style="margin-bottom: 20px;">You have both of the APO E4 genes that may convey greater risk of Alzheimer's. However, genetics convey susceptibility, but they are not determinative... you can influence their expression! You will want to be particularly thoughtful about embracing a healthy lifestyle, using high quality supplements, hormone optimization, and toxicity. Details about each of these interventions will follow.</p>
+                {% elif processed_content.get('quick-E4E3') %}
+                    <p style="margin-bottom: 20px;">You have one of the APO E4 genes that may convey greater risk of Alzheimer's. However, genetics convey susceptibility, but they are not determinative... you can influence their expression! You will want to be particularly thoughtful about embracing a healthy lifestyle, using high quality supplements, hormone optimization, and toxicity. Details about each of these interventions will follow.</p>
+                {% endif %}
+            {% else %}
+                <p style="margin-bottom: 20px;">You do not have the APO E genetic risk for Alzheimer's Dementia. You should consider ADDITIONAL IMMUNE SYSTEM TESTING and/or TOXICITY TESTING to clarify your risk for TOXIC CONTRIBUTORS of neurodegenerative disease.</p>
+            {% endif %}
+        </div>
+    </div>
+
+    <!-- Dynamic Lab Results Content -->
+    <div class="roadmap-content" style="padding: 0 15px;">
+        {% for line in roadmap_content.split('\n') %}
+            {% if line.strip() %}
+                {% if 'supplement' in line.lower() or 'recommend' in line.lower() or 'consider' in line.lower() %}
+                    <!-- Supplement recommendations in green -->
+                    <div class="p-2 mb-2" style="background-color: #90EE90; color: black;">
+                        {{ line.strip() }}
+                    </div>
+                {% elif line.strip().endswith(':') and line.strip()|length < 100 %}
+                    <!-- Section heading -->
+                    <div class="text-center p-2 mb-3 mt-4" style="background-color: black; color: white;">
+                        <h5 class="mb-0">{{ line.strip() }}</h5>
+                    </div>
+                {% else %}
+                    <!-- Regular content -->
+                    <p style="margin-bottom: 8px;">{{ line.strip() }}</p>
+                {% endif %}
+            {% else %}
+                <br>
+            {% endif %}
+        {% endfor %}
+    </div>
+
+    <!-- Footer Actions -->
+    <div class="text-center mt-5 mb-4">
+        <div class="btn-group">
+            <a href="{{ url_for('roadmap.download_visual_roadmap_pdf', client_id=client.id) }}" class="btn btn-success btn-lg">
+                <i class="fas fa-download me-1"></i>Download PDF Report
+            </a>
+            <a href="{{ url_for('clients.view', id=client.id) }}" class="btn btn-outline-secondary btn-lg">
+                <i class="fas fa-arrow-left me-1"></i>Back to Client
+            </a>
+        </div>
+    </div>
+</div>
+
+<!-- Print Styles -->
+<style>
+@media print {
+    .btn, .btn-group, .navbar {
+        display: none !important;
+    }
+    .container-fluid {
+        max-width: 100% !important;
+        margin: 0 !important;
+        padding: 0 !important;
+    }
+}
+</style>
+{% endblock %} 

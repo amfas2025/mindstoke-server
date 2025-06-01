@@ -1,0 +1,41 @@
+{{sugar_reduction_protocols}}
+{{if_quick_likes_sugar}}
+{{sugar_elimination_protocol}} Please consider dramatically reducing or eliminating {{sugars_from_daily_meals}} from your daily meal plans.
+
+{{if_quick_sugars_apoe4}}
+{{sugars_genetics_risk}} Your genetics suggest that you may be at elevated risk for {{insulin_resistance_brain}}. {{quick_likes_sugar_action}}
+
+{{ketone_optimization_section}}
+The correlation between serum {{ketone_levels_cognitive_health}} and cognitive health is so interrelated. {{ketones_brain_fuel_green}} Research suggests {{ketones_readily_pass_bbb}} and they can be anti-inflammatory. There are many commercially available products. Some products offer very helpful {{ketone_esters_products}}. You may consider dedicating one of your {{ketone_tracking_goals}} to learn more about how {{ketone_supplement_support}} may support your goals.
+
+{{celiac_gluten_protocols}}
+{{if_celiac_disease_risk}}
+{{celiac_intervention_protocol}} Since some interventions may prove very beneficial. Because of {{celiac_disease_factors}}, you are likely to eat a {{gluten_free_diet_requirement}}. Did you know that {{celiac_dairy_intolerance_stats}}% of individuals with {{celiac_condition}} also have an intolerance to {{dairy_sensitivity}}? You may also benefit from a {{dairy_free_grain_free_autoimmune_paleo}} diet. Your coach can provide some additional guidance. {{celiac_dietary_guidance}}
+
+{{gluten_sensitivity_considerations}}
+{{if_strict_dietary_interventions}}
+{{gluten_elimination_benefits}} Strict dietary interventions may prove very beneficial. If you have not considered a {{gluten_free_dairy_free_autoimmune_paleo}} diet, this needs to be one area of exploration. Your coach can provide some additional guidance. {{quick_likes_soda_reduction}}
+
+{{soda_reduction_protocol}}
+{{if_quick_likes_soda}}
+{{soda_elimination_urgent}} Please consider dramatically reducing or eliminating {{soda_from_daily_meals}} from your daily meal plans. Most {{soda_health_impacts}} in the United States is made with {{high_fructose_corn_syrup_dangers}} and there is growing evidence that {{hfcs_inflammation_evidence}} ATP production (energy production in the cell) and leads to increases in {{systemic_inflammation_uric_acid}} formation. {{quick_likes_soda_action}}
+
+{{allergies_dietary_relationship}}
+{{if_quick_allergies}}
+{{allergies_diet_modification}} There may be a relationship between {{allergies_and_diet}}. We have found that when individuals modify their diet and become very intentional about how they eat, many of their {{bothersome_allergies_settle}}. Consider dietary interventions as a very helpful way of reducing your {{allergy_symptoms}}. Please join {{office_hours_allergies}} to learn more about the relationship of {{food_allergies_sinus_congestion}}. {{quick_allergies_action}}
+
+{{histamine_diet_protocols}}
+{{if_quick_histamine_diet}}
+{{histamine_diet_intervention}} Individuals who experience {{chronic_allergies_alcohol}} and who consume {{alcohol_histamine_trigger}}, may have a {{histamine_intolerance_response}}. Consider a {{low_histamine_diet}} to help settle your allergies. Avoid common foods that are fermented ({{fermented_foods_list}}), kombucha, and all forms of {{alcohol_avoidance}}. This is especially good reason to eliminate alcohol from your routine. {{quick_histamine_diet_action}}
+
+{{mast_cell_activation_protocols}}
+{{if_quick_mcas}}
+{{mcas_intervention_protocol}} Individuals who experience {{gi_headaches_chronic_allergies}} should learn more about {{mast_cell_activation_definition}}, and consider a series of interventions to calm the {{immune_system_overactivation}} to see if these symptoms improve. {{quick_mcas_action}}
+
+{{mast_cell_comprehensive_protocol}}
+{{if_mast_cell_triggers}}
+{{mast_cell_trigger_avoidance}} You have enough triggers in your {{personal_history}} to introduce you to {{mast_cell_activation_overview}}. Overactivation of {{mast_cells_multiple_sensitivities}} may be triggers for {{food_chemical_sensitivities}}, rashes, {{irritable_bowels_insomnia}}, and a host of {{additional_mast_cell_challenges}}. Please review the section on {{mast_cell_activation_section}} and consider if you have symptoms such that it merits {{additional_investigation_primary_care}}. You may choose to {{schedule_telemedicine_consultation}} to review your symptoms. {{additional_fees_apply}}
+
+**The Enhance Protocol® Eating Plan**
+
+Research shows that very intentional changes in your diet followed over a period of several weeks and months can help to {{improve_cognitive_health_alternative_symptoms}}. The Enhance Protocol® was designed to help individuals improve cognitive health, but it has shown to effectively support {{weight_loss_joint_pain_gi_health_autoimmune_mental_health}}. We recommend you follow diet recommendations for a {{full_90_days_response_period}} to see how well you respond. 

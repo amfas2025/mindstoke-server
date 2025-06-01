@@ -1,0 +1,33 @@
+[AMFAS LOGO PLACEHOLDER]
+
+Roadmap Summary for {{fullname}}
+The Enhance Protocol®
+
+Report Date: {{today}}     Labs Drawn: {{lab-date}}
+
+Your Test Results
+
+The next few pages include the results of your cognitive and blood tests. They include a short explanation of the importance of the test, along with your results. The test results are in RED on a gray background. To help you understand your test results, follow the directions below:
+
+{{supplement_recommendations_highlighted_green}}
+Supplement or Medication Recommendations are highlighted in Green.
+
+{{homework_research_highlighted_yellow}}  
+Recommended homework, additional research, and opportunities to ask questions during office hours from the AMFAS 
+Coaches or medical staff during office hours are highlighted in Yellow.
+
+Your Baseline Cognitive Test Results
+
+Each participant in The Enhance Protocol™ completes at least one baseline cognitive test. Depending on your age and your current cognitive health, you have been asked to complete a {{cognitive_test_type}} test or a computer-based {{cognitive_test_alternative}} test. Your test results will summarize below, and we will use a copy of your complete results. Please email info@amindforallseasons.com and we will send you the full report.
+
+The Enhance Protocol® is designed to help improve brain functioning from your baseline. We look forward to helping you complete a retest once you have applied the recommendations in your Roadmap Report for a few months. Please attend one of our online {{office_hours_link}} sessions and ask for guidance regarding how to understand your specific test results.
+
+{{cognitive_test_results_section}}
+{{if_cognitive_test_completed}}
+These are the results from your recent cognitive test.
+
+{{if_no_cognitive_test}}
+OR
+
+We did not have any results from cognitive testing when we prepared this roadmap. You are encouraged to do a baseline cognitive test so we can measure your progress.
+{{end_cognitive_conditional}} 

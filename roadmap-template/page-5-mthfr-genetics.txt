@@ -1,0 +1,26 @@
+{{if_not_quick_e4}}
+{{quick_not_e4_message}} You do not have the APO E genetic risk for Alzheimer's Dementia. You should consider {{additional_immune_testing}} and/or {{toxicity_testing}} to clarify your risk for {{toxic_contributors}} of neurodegenerative disease. {{not_e4_guidance}} In your memory, you reported taking but did not reference the dosing. {{not_e4_action_plan}}
+
+{{if_quick_c677t_wo_alcohol}}
+{{c677t_alcohol_withdrawal_protocol}} Your health history reported {{alcohol_withdrawal_status}} as part of your health history. If you still consume alcohol in moderation, you are encouraged to discontinue alcohol use as it may exacerbate your ongoing risk of cognitive {{c677t_alcohol_risk_explanation}}.
+
+{{glutathione_support_protocol}}
+- To support a healthy antioxidant response, you are encouraged to use 2 supplements to support the natural production of glutathione. These supplements may help to lower the impact of {{reactive_oxygen_species}} by using a combination of {{glutathione_product_combinations}}.
+- Please start {{glutathione_supplement_1_green}} This product is inexpensive and supports {{glutathione_recycling}} by improving {{cysteine_levels}}.
+- Please start {{glutathione_supplement_2_green}} This is a product by {{glutathione_manufacturer}}. This supplement contains {{glutathione_ingredients}} and all of these have been shown in studies to boost body {{glutathione_stores}}.
+
+{{if_glutathione_challenge}}
+{{glutathione_challenge_protocol}} In addition to the interventions listed above, {{glutathione_challenge_explanation}}. The purpose of this challenge is to see how you respond {{glutathione_response_testing}} when you rapidly {{glutathione_increase_protocol}}. This is an {{glutathione_challenge_duration}} supplement from {{glutathione_challenge_manufacturer}}. If you complete the challenge and notice a significant improvement in the way you feel {{glutathione_improvement_indicators}}, it confirms that contributors of {{oxidative_stress_sources}} are important to your health. {{glutathione_challenge_next_steps}}
+{{end_glutathione_conditional}}
+
+**MTHFR GENETIC PROFILES:** There are certain genetic variants that impact a person's ability to synthesize B vitamins. This often correlates with a group of genetic conditions called {{mthfr_genetic_conditions}}. If you have one or more of these genetic variants, you may benefit from a particular form of {{methylated_b_vitamins}}. Your {{mthfr_genotype_results}} shows a {{mthfr_variant_status}}.
+
+{{if_mthfr_variants_detected}}
+{{mthfr_c677t_explanation}} The {{mthfr_c677t_details}} are variants suggestive of {{methylation_challenges}}. You may benefit from taking a supplement like {{methylpro_recommendation}} indefinitely. Given your genetic {{mthfr_profile_assessment}}, you are encouraged to verify that you are taking a {{methylated_b_complex_requirement}}.
+
+{{mthfr_specific_recommendations}}
+- The {{c677t_allele_guidance}} is a variant suggestive of {{methylation_challenges}} and you may benefit from taking a supplement like {{methylpro_specific}} indefinitely. Given your genetic {{mthfr_genetic_profile}}, you are encouraged to verify that you are taking a {{methylated_b_complex_verification}}.
+- {{psych_hospit_history_consideration}} With your history of {{debilitating_depression_history}}, this recommendation extends beyond the recommendations offered for those with elevated {{homocysteine_correlation}}.
+- The {{a1298c_allele_guidance}} is a variant suggestive of {{methylation_challenges}} and you may benefit from taking a supplement like {{methylpro_a1298c}} indefinitely. Given your genetic {{mthfr_a1298c_profile}}, you are encouraged to verify that you are taking a {{methylated_b_complex_a1298c}}.
+
+{{end_mthfr_variants_conditional}} 

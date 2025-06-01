@@ -1,0 +1,49 @@
+{{methylated_b_complex_protocols}}
+{{if_psych_hospit_methylation}}
+{{psych_hospit_methylation_protocol}} taking a methylated B complex supplement... {{psych_hospit_extended_recommendation}} With your history of {{debilitating_depression_details}}, this recommendation extends beyond the recommendations offered for those with elevated {{homocysteine_levels_context}}.
+
+{{alcohol_methylation_interaction}}
+{{if_quick_steroid_alcohol}}
+{{steroid_alcohol_methylation_warning}} Due to your {{methylated_b_complex_timing}} with {{alcohol_timing_considerations}}, you may consider complete abstinence from {{alcohol_recommendation}}. Though you may not be a heavy drinker, and you may consume very infrequently, {{alcohol_methylation_impact}} is an "inflammagen" and can exacerbate {{methylation_challenges_alcohol}} and after the detox pathways specific to the liver. {{steroid_alcohol_action_plan}}
+
+{{methylation_supplement_recommendations}}
+- {{methylated_b_complex_choice}} You can choose between 2 high quality supplements:
+- Please consider {{super_methyl_sp_green}} from {{methyl_manufacturer_1}}. The dosing is {{methyl_dosing_1}}. We also recommend {{methyl_complex_b_timing_green}} 1 tablet/day. You may choose between these two options.
+- {{mthfr_depression_consideration}} This recommendation is offered considering your history of depression and/or your {{mthfr_genetics_depression}}.
+
+{{homocysteine_brain_function_section}}
+**{{homocysteine_interpretation}} Homocysteine Levels Can Impair Brain Function**
+
+Your {{homocysteine_level_status}} level was {{homocysteine_actual_value}}. Since {{homocysteine_brain_correlation}} is linked to inflammation, we recommend a goal level < {{homocysteine_target_level}} umol/L. An elevated {{homocysteine_risk_explanation}} level correlates with both {{heart_disease_risk}} and {{cognitive_disorders_risk}}. By improving your {{homocysteine_improvement_strategy}} levels, you effectively lower your risk of both disease states.
+
+**{{homocysteine_action_plan}}**
+
+Your {{vitamin_b12_level_interpretation}} level was {{vitamin_b12_actual_value}}. The goal is > {{vitamin_b12_target_level}} pg/mL to best support brain health.
+
+Your {{folate_level_interpretation}} level (often called {{folic_acid_explanation}}) is {{folate_actual_value}}. The goal is > {{folate_target_level}} ng/mL to best support brain health.
+
+{{vitamin_supplementation_protocols}}
+{{if_b12_folate_optimization}}
+{{b12_folate_optimization_notice}} Participants often understand {{methylation_education_link}} to be {{methylation_educational_resources}}. {{supplement_selection_guidance}} You can choose between 2 high quality supplements.
+
+{{methyl_supplement_options}}
+- Please consider {{super_methyl_sp_recommendation_green}} from {{apex_energetics_brand}}. The dosing is {{super_methyl_dosing}}. We also recommend {{methylpro_b_complex_option_green}} 1 tablet/day. You may choose between these two options.
+- {{methylpro_depression_specific}} Consider starting {{methylpro_b_complex_green}} We recommend adding this supplement to a {{methylated_b_complex_regimen}}.
+
+{{creatine_monohydrate_section}}
+- {{creatine_recommendation_explanation}} Consider starting a supplement called {{creatine_monohydrate_green}} The standard dose is {{creatine_dosing}}. We recommend this supplement considering {{creatine_rationale}}.
+- {{creatine_energy_benefits}} {{creatine_energy_description}} are 15. {{creatine_mechanism}} comes in a chewable or a powder form that can be mixed in a drink. It can help improve {{energy_levels_improvement}} and help optimize {{homocysteine_levels_optimization}}.
+
+{{bariatric_surgery_considerations}}
+{{if_bariatric_surgery}}
+{{bariatric_hcl_recommendation}} Consider taking a {{betaine_hcl_supplement_green}} with your meals, and particularly when you take a {{b_complex_with_meals}}. Your history of {{bariatric_surgery_history}} may have reduced your ability to make {{hcl_production_impact}} and can lead to {{acid_reflux_connection}}, {{biotin_absorption_issues}}, {{b12_absorption_challenges}}. B can also negatively impact your ability to absorb {{essential_b_vitamins}}. {{bariatric_hcl_action_plan}}
+
+{{vitamin_d_optimization_section}}
+Your baseline {{vitamin_d_level_interpretation}} level is {{vitamin_d_actual_value}}. {{vitamin_d_optimal_explanation}} The optimal level is suggested to be {{vitamin_d_target_range}} ng/mL.
+
+{{vitamin_d_protocol}}
+{{if_vitamin_d_suboptimal}}
+{{vitamin_d_intervention_needed}} This level falls very close to the optimal parameters and no additional intervention is recommended. You are encouraged to continue your current {{vitamin_d_current_supplement}}. {{vitamin_d_maintenance_plan}}
+
+{{if_vitamin_d_optimization_needed}}
+{{vitamin_d_optimization_protocol}} Our {{vitamin_d_level_assessment}} level falls within the optimal parameters and no additional intervention is recommended. {{vitamin_d_continue_current}} 

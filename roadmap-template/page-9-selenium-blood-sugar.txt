@@ -1,0 +1,39 @@
+{{selenium_optimization_section}}
+{{selenium_level_assessment}} level is {{selenium_actual_value}}. The optimal is > {{selenium_target_level}} ug/L. {{selenium_benefits}} is a helpful antioxidant and cofactor in many biochemical reactions in the body. Researchers have identified the role of {{selenium_functions}} in optimizing immune function, and it helps to reduce the risk of {{alzheimers_parkinsons_disease_risk}}.
+
+{{if_selenium125_optimal}}
+{{selenium_optimal_status}} This level falls within the optimal parameters and no additional intervention is recommended. {{selenium_maintenance}}
+
+{{if_quick_selen_110_suboptimal}}
+{{selenium_suboptimal_protocol}} Your {{selenium_status}} level is too low for optimal neurological function. {{selenium_intervention}} Consider starting {{clear_way_cofactors_green}} to help raise your functional {{selenium_levels}}. {{quick_selen_110_action}}
+
+**Blood Sugar, Insulin Resistance and Diabetes Impact Brain Health**
+
+Your fasting {{blood_sugar_status}} was {{glucose_actual_value}}. The goal is < {{glucose_target_level}} mg/dL.
+
+Your baseline {{insulin_level_status}} was {{insulin_actual_value}}. The goal is < {{insulin_target_level}}. {{insulin_optimization}} levels should be very low when you have not eaten.
+
+Your baseline {{homa_ir_status}} calculation is {{homa_ir_actual_value}}. The goal is < {{homa_ir_target}}.
+
+Your baseline {{a1c_level_status}} was {{a1c_actual_value}}. The goal is < {{a1c_target}}. Lower is better if you have an {{apo_e4_genetic_risk}}. We encourage our clients to strive for a level {{a1c_e4_optimization}} if you have both copies of the {{apo_e4_variants}}.
+
+{{blood_sugar_cognitive_impact}}
+You will find excellent meal planning to improve your cognitive health. That guidance is summarized in the next section. However, the following considerations are offered to your {{blood_sugar_metabolic_status}} or metabolic labs:
+
+{{if_lab_a1c_126_diabetes}}
+{{diabetes_supplement_protocol}} Your {{blood_sugar_markers}} would suggest you could benefit from starting a few supplements to address {{insulin_resistance_supplements}}. Please include {{berberine_chromium_support}} and {{glucose_disposal_agents}}. These supplements contains {{insulin_sensitivity_ingredients}}, berberine, alpha-lipoic acid, burdock, rose hips, and a number of other great ingredients that can help to {{lower_insulin_resistance}} and improve blood sugars. {{lab_a1c_126_action}}
+
+{{if_quick_a1c_56_prediabetes}}
+{{prediabetes_intervention}} Alzheimer's is often referred to as "Diabetes Type 3". Since {{cognitive_dysfunction}} is often impacted by {{insulin_resistance_brain}}, focus on the interventions that will help lower your blood sugar and improve your {{insulin_sensitivity}}. A thoughtful, brain-healthy diet is rich in whole foods, colorful vegetables and loaded with vitamins, fiber, and healthy fats. Intentional meal planning that incorporates {{intermittent_fasting}}, low carb and {{keto_principles}} often promotes improved cognition. {{quick_a1c_56_protocol}}
+
+{{if_quick_a1c_56_ketogenic}}
+{{ketogenic_diet_benefits}} There are many researchers impressed that {{elevated_blood_sugars}} may have a stronger correlation than your genetics to induce {{brain_atrophy}}. A {{ketogenic_diet_recommendation}} may be extremely beneficial. You may consider purchasing {{ketosis_monitoring_tools}} to help you learn how to understand and track {{blood_sugars_ketones}} without having to stick your finger. {{quick_a1c_56_keto_action}}
+
+{{cgm_monitoring_protocol}}
+{{if_quick_a1c_56_cgm}}
+{{cgm_recommendation}} A very thoughtful tool that is rich in whole foods, colorful vegetables and loaded with vitamins, fiber, and healthy fats are a hallmark of a {{brain_healthy_diet}}. Though you do not appear to have diabetes, a diet high in sugars or starchy carbohydrates is often related to a diet low in {{micronutrients}}. {{quick_a1c_56_nutrition}}
+
+{{if_cgm_monitoring_recommendation}}
+{{cgm_protocol_detailed}} Have you ever heard of a {{continuous_glucose_monitor_cgm}}? If not, you have probably seen an individual with diabetes wearing a {{blood_sugar_sensor}} on the arm. Wearing a {{cgm_benefits}} is one of the best ways to evaluate the impact of your diet on your {{metabolic_health}}. We would love to teach you how to coach your coach for instructions on how to obtain and apply a {{cgm_application}}. We recommend that every participant of The Enhance Protocol® (including all {{non_diabetics}}) wear a {{cgm_duration}} to learn about how their diet impacts their {{metabolic_health_tracking}}. {{cgm_office_hours_guidance}}
+
+Please attend {{office_hours_cgm}} to learn how you can get access and use a {{cgm_sensor}}. 

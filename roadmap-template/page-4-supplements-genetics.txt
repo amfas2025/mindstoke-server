@@ -1,0 +1,26 @@
+A Targeted Supplements Approach Can Improve Your Brain Health
+
+Many individuals are using supplements on a regular basis. You may be using supplements because your healthcare provider recommended it. You may be using supplements because you saw a commercial or read an article about the benefits of one supplement over another.
+
+In the section below, you will be encouraged to start using some supplements. These recommendations are based on your health history, your lab results, evidence-based medicine, and our clinical experience of what can help support good cognitive function. Some of the more powerful advantages of The Enhance Protocol®: We have personalized our recommendations based on your medical history, your social history, and your laboratory test results; and we have personalized our ordering, timing, dosing, and quality control.
+
+We have also made some recommendations about the use of some {{nootropic_supplements_explanation}}. The term "nootropic" was first used to refer to a chemical or substance that met specific criteria for cognitive enhancement. Nowadays, use nootropics refers to any natural or synthetic substances that may have a positive impact on mental skills, the brain, cognitive abilities, or mood effects. A good example of a nootropic is caffeine.
+
+The quality, manufacturing, and dosing of your supplements matter! We often recommend adjusting your use of supplements based on your lab results. You can purchase your supplements from any vendor, but to help you ensure the highest standards, most quality supplements, we encourage you to establish an account to the {{fullscipt_online_store_link}}.
+
+1. You will receive a 20% discount for all supplements due to your participation in The Enhance Protocol®.
+2. You may order recommended supplements from this site with free shipping (over $50) and find our preferred brands.
+
+[DIVIDER LINE]
+
+{{apo_e_genetic_profile_section}}
+APO E Genetic Profile and Your Risk for Oxidative Stress
+
+Your {{apo_e_genotype}} is {{genome-type}}. Your {{apo_e_genetics_explanation}} has some predictive value for increased risk of cardiovascular and neurodegenerative disease. Your {{glutathione_level_interpretation}} level was {{glutathione_value}} and many neurologists suggest the optimal range may exceed 300 μg/mL. {{glutathione_meaning}} reflects your ability to calm oxidative stress. {{glutathione_action_recommendation}}
+
+{{if_quick_e4}}
+{{apo_e4_risk_explanation}} You have one of the {{apo_e4_gene_description}} genes that may convey greater risk of Alzheimer's. However, genetics convey susceptibility, but they are not determinative... you can influence their expression! You will want to be particularly thoughtful about embracing a healthy lifestyle, using high quality supplements, hormone optimization, and toxicity. Details about each of these interventions will follow. {{quick_e4_action_plan}}
+
+{{if_apo_e4e3_or_e4e4}}  
+{{apo_e4_compound_risk}} You have both {{apo_e4_genes_description}} genes that convey greater risk of Alzheimer's. However, genetics convey susceptibility, but they are not determinative... you can influence their expression! You will want to be particularly thoughtful about embracing a healthy lifestyle, using high quality supplements, hormone optimization, and toxicity. Details about each of these interventions will follow. {{quick_e4e4_enhanced_action_plan}}
+{{end_apo_e4_conditional}} 

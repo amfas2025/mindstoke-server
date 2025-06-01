@@ -1,7 +1,7 @@
 from flask import Blueprint, render_template, redirect, url_for, flash, request, jsonify
 from flask_login import login_required, current_user
 from datetime import datetime
-from ..utils.supabase_client import fetch_clients, create_client, update_client, delete_client, fetch_hhq_responses_for_client, fetch_client_by_id, fetch_health_history_questions, save_lab_results
+from ..utils.supabase_client import fetch_clients, create_client, update_client, delete_client, fetch_hhq_responses_for_client, fetch_client_by_id, fetch_health_history_questions, save_lab_results, fetch_lab_results_for_client
 from ..utils.lab_extractor import process_pdf
 import json
 import pytz
@@ -66,6 +66,10 @@ def view(id):
         return redirect(url_for('clients.index'))
     # Fetch HHQ responses for this client from Supabase
     client['hhq_responses'] = fetch_hhq_responses_for_client(client['id'])
+    # Fetch lab results for this client from Supabase
+    client['lab_results'] = fetch_lab_results_for_client(client['id'])
+    # Add empty reports list for template compatibility
+    client['reports'] = []
     return render_template('clients/view.html', client=client)
 
 @bp.route('/<id>/edit', methods=['GET', 'POST'])
@@ -194,4 +198,22 @@ def upload_lab(client_id):
         if 'file_path' in locals() and os.path.exists(file_path):
             os.remove(file_path)
         flash(f'Error processing lab results: {str(e)}', 'error')
-        return redirect(url_for('clients.view', id=client_id)) 
+        return redirect(url_for('clients.view', id=client_id))
+
+@bp.route('/<id>/lab-results')
+@login_required
+def view_all_lab_results(id):
+    """View all lab results for a client in detail."""
+    clients = fetch_clients()
+    client = next((c for c in clients if str(c['id']) == str(id)), None)
+    if not client:
+        flash('Client not found', 'danger')
+        return redirect(url_for('clients.index'))
+    
+    # Fetch all lab results for this client
+    lab_results = fetch_lab_results_for_client(client['id'])
+    
+    # Group lab results by upload date/batch if needed
+    # For now, we'll show them all in chronological order
+    
+    return render_template('clients/lab_results.html', client=client, lab_results=lab_results) 
