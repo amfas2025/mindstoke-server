@@ -1,0 +1,1352 @@
+# A MIND FOR ALL SEASONS - PERSONALIZED BRAIN HEALTH ROADMAP
+
+**Welcome {{firstname}}**
+
+This is your personalized Brain Health Roadmap generated on {{today}} based on your lab results from {{lab-date}}.
+
+---
+
+## **APO E Genetic Profile and Your Risk for Oxidative Stress**
+
+Your APO E Genotype is {{genome-type}}. Your APO E genetics has some predictive value for increased risk of cardiovascular and neurodegenerative disease. Your GLUTATHIONE level was {{glutathione-level}} and many neurologists suggest the optimal range may exceed 300 ug/mL. GLUTATHIONE reflects your ability to calm oxidative stress.
+
+{{#GSH<200}}
+Your GLUTATHIONE level is very low, which is suggestive of a high level of oxidative stress.
+{{/GSH<200}}
+
+Consider the following:
+
+{{#quick-E4}}
+You have one of the APO E4 genes that may convey greater risk of Alzheimer's. However, genetics convey susceptibility, but they are not determinative... you can influence their expression! You will want to be particularly thoughtful about embracing a healthy lifestyle, using high quality supplements, hormone optimization, and toxicity. Details about each of these interventions will follow.
+{{/quick-E4}}
+
+{{#quick-E4E3}}
+You have the APO E E4/E3 genetic variant, which DOES increase your risk for Alzheimer's. However, genetics convey susceptibility, but they are not determinative... you can influence their expression! You will want to be particularly thoughtful about embracing a healthy lifestyle, using high quality supplements, hormone optimization, and toxicity. Details about each of these interventions will follow.
+{{/quick-E4E3}}
+
+{{#quick-E4E4}}
+You have both APO E4 genes that convey greater risk of Alzheimer's. However, genetics convey susceptibility, but they are not determinative... you can influence their expression! You will want to be particularly thoughtful about embracing a healthy lifestyle, using high quality supplements, hormone optimization, and toxicity. Details about each of these interventions will follow.
+{{/quick-E4E4}}
+
+{{#quick-nonE4}}
+You do not have the APO E genetic risk for Alzheimer's Dementia. You should consider ADDITIONAL IMMUNE SYSTEM TESTING and/or TOXICITY TESTING to clarify your risk for TOXIC CONTRIBUTORS of neurodegenerative disease. {{#quick-taking-NAC}}In your history, you reported taking NAC but did not reference the dosing.{{/quick-taking-NAC}}
+{{/quick-nonE4}}
+
+{{#quick-ETOH-WD}}
+Your health history reported ALCOHOL WITHDRAWAL as part of your health history. If you still consume alcohol in moderation, you are encouraged to discontinue alcohol use as it may exacerbate your ongoing risk of cognitive dysfunction.
+{{/quick-ETOH-WD}}
+
+- To support a healthy antioxidant response, you are encouraged to use 2 supplements to support the natural production of glutathione. These supplements may help to lower the impact of Reactive Oxygen Species (ROS) by using a combination of unique products listed below.
+- Please start **NAC 600 mg 2X's per day**. This product is inexpensive and supports GLUTATHIONE recycling by improving cysteine levels.
+- Please start **GLUTATHIONE RECYCLER 1 capsule 2 X's/day**. This is a product by Apex Energetics. This supplement contains cordyceps, gotu kola, milk thistle, L-glutamine, and alpha-lipoic acid. All of these have been shown in studies to improve total body GLUTATHIONE stores.
+
+- In addition to the interventions listed above, you may consider taking the GLUTATHIONE CHALLENGE. The purpose of this challenge is to see how you respond physically and cognitively when you rapidly increase your glutathione levels within a short period of time. Please start **TRIZOMAL GLUTATHIONE and use 1 tsp (5 mL) 3-4 X's per day for 1-2 weeks**. This is a supplement from Apex Energetics. If you complete the challenge and notice a significant improvement in the way you feel (less brain fog, more energy, less sickness), then it confirms that contributors of oxidative stress are negatively impacting your health. Start learning how to reduce oxidative stress in your life. This would be a good question to bring to Office Hours.
+
+---
+
+## **MTHFR Genetics & Methylation Support**
+
+{{#has-MTHFR-variants}}
+MTHFR GENETIC PROFILES- There are certain genetic variants that impact a person's ability to synthesize B-vitamins. This often correlates with a group of genetic variants called MTHFR genetics. If you have one or more of these genetic variants, you may benefit from a particular form of methylated B-vitamins. Your MTHFR Genotype shows a {{MTHFR_C677T}} and an {{MTHFR_A1298C}} variant.
+
+The {{MTHFR_C677T}} and {{MTHFR_A1298C}} alleles are variants suggestive of methylation challenges. You may benefit from taking a supplement like METHYLPRO indefinitely. Given your genetic MTHFR profile, you are encouraged to verify that you are taking a methylated B complex supplement.{{#quick-depression-mood-disorder}} With your history of a debilitating depression, this recommendation extends beyond the recommendations offered for those with elevated HOMOCYSTEINE.{{/quick-depression-mood-disorder}}
+
+{{#quick-MTHFR1}}
+- The C677T allele is a variant suggestive of methylation challenges and you may benefit from taking a supplement like METHYLPRO indefinitely. Given your genetic MTHFR profile, you are encouraged to verify that you are taking a methylated B complex supplement.{{#quick-depression-mood-disorder}} With your history of debilitating depression, this recommendation extends beyond the recommendations offered for those with elevated HOMOCYSTEINE.{{/quick-depression-mood-disorder}}
+{{/quick-MTHFR1}}
+
+{{#quick-MTHFR1}}
+{{#needs-methyl}}
+- The C677T allele is a variant suggestive of methylation challenges and you may benefit from taking a supplement like METHYLPRO indefinitely. Given your genetic MTHFR profile, you are encouraged to verify that you are taking a methylated B complex supplement.{{#quick-depression-mood-disorder}} With your history of a debilitating depression, this recommendation extends beyond the recommendations offered for those with elevated HOMOCYSTEINE.{{/quick-depression-mood-disorder}}
+{{/needs-methyl}}
+{{/quick-MTHFR1}}
+
+{{#quick-MTHFR2}}
+- The A1298C allele is a variant suggestive of methylation challenges and you may benefit from taking a supplement like METHYLPRO indefinitely. Given your genetic MTHFR profile, you are encouraged to verify that you are taking a methylated B complex supplement.{{#quick-depression-mood-disorder}} With your history of debilitating depression, this recommendation extends beyond the recommendations offered for those with elevated HOMOCYSTEINE.{{/quick-depression-mood-disorder}}
+{{/quick-MTHFR2}}
+
+{{#quick-stopETOH}}
+- Due to your METHYLATION genetics, you may consider complete abstinence from ALCOHOL. Though you may not be a heavy drinker, and you may consume very infrequently, ALCOHOL is an 'inflammogen' and can exacerbate methylation challenges in your body and alter the detox pathways specific to the liver.
+{{/quick-stopETOH}}
+
+{{#methylpro}}
+- Consider starting methylated B complex supplement. You can choose between 2 high quality supplements. Please consider SUPER METHYL-SP from Apex Energetics. The dosing is 1 capsule/day. We also recommend METHYLPRO; B-COMPLEX + 5 mg L-METHYLFOLATE 1 tablet/day. You may choose between these two options.
+{{/methylpro}}
+
+{{#MTHFR-depression}}
+- This recommendation is offered considering your history of depression and/or your MTHFR genetics.
+{{/MTHFR-depression}}
+
+{{#Quick-Takes-B}}
+- You may choose to use SUPER METHYL-SP from Apex Energetics or METHYLPRO; B-COMPLEX + 5 mg L-METHYLFOLATE 1 tablet/day in place of your current B-COMPLEX supplement because of your genetic MTHFR profile.
+{{/Quick-Takes-B}}
+
+- Given your genetic MTHFR profile, you may consider taking a methylated B-complex vitamin indefinitely.
+
+{{/has-MTHFR-variants}}
+
+{{^has-MTHFR-variants}}
+MTHFR GENETIC PROFILES- There are certain genetic variants that impact a person's ability to synthesize B-vitamins. This often correlates with a group of genetic variants called MTHFR genetics. If you have one or more of these genetic variants, you may benefit from a particular form of methylated B-vitamins. Your MTHFR Genotype shows neither of the most troublesome variants.
+{{/has-MTHFR-variants}}
+
+---
+
+## **Vitamin & Mineral Optimization**
+
+{{#quick-vitD-simple}}
+Your baseline Vitamin D level is {{quick-vitD}}. The optimal level is suggested to be 60-80 ng/mL.
+{{/quick-vitD-simple}}
+
+{{#quick-VitD-row}}
+Your VITAMIN D level is suboptimal, and supplementation is recommended. Please note the section in your Guidebook about the importance of, and dosing recommendation to optimize VITAMIN D.
+
+{{#D-less-30}}
+Since your VITAMIN D was < 30, you are encouraged to supplement with 10,000 iu of VITAMIN D3 per day and then recheck your levels in 90 days.
+{{/D-less-30}}
+
+{{#D-30-39}}
+Since your VITAMIN D was 30-39, you are encouraged to supplement with 8,000 iu of VITAMIN D3 per day, and then recheck your levels in 90 days.
+{{/D-30-39}}
+
+{{#D-40-49}}
+Since your VITAMIN D was 40-49, you are encouraged to supplement with 4,000 iu of VITAMIN D3 per day, and then recheck your levels in 90 days.
+{{/D-40-49}}
+
+{{#D-50-59}}
+Since your VITAMIN D was 50-59, you are encouraged to supplement with 2,000 iu of VITAMIN D3 per day, and then recheck your levels in 90 days.
+{{/D-50-59}}
+{{/quick-VitD-row}}
+
+{{#D-optimal}}
+**Vitamin D Optimization:** Your baseline Vitamin D level is {{D-optimal-value}}.
+
+Your VITAMIN D level falls within the optimal parameters and no additional intervention is recommended.
+
+{{#D-40-49}}
+Since your VITAMIN D was 40-49, supplement with 6,000 IU of VITAMIN D3 daily and recheck in 90 days.
+{{/D-40-49}}
+{{#D-30-39}}
+Since your VITAMIN D was 30-39, supplement with 8,000 IU of VITAMIN D3 daily and recheck in 90 days.
+{{/D-30-39}}
+{{#D-below-30}}
+Since your VITAMIN D was < 30, supplement with 10,000 IU of VITAMIN D3 daily and recheck in 90 days.
+{{/D-below-30}}
+{{/D-optimal}}
+
+{{#D-50-55}}
+This level is close to the optimal parameters and though no additional intervention is recommended, you may want to check your VITAMIN D level a few times per year to make sure that it does not drop.
+{{/D-50-55}}
+
+{{#D-55-59}}
+This level falls very close to the optimal parameters and no additional intervention is recommended. You are encouraged to continue your current VITAMIN D supplement.
+{{/D-55-59}}
+
+{{#quick-VitD-row-takingD}}
+In your health history, you indicated that you are taking a VITAMIN D supplement. However, your serum levels remain suboptimal. Please note the section in your Guidebook about the importance of, and dosing recommendation to optimize your VITAMIN D levels.
+
+{{#D-less-30}}
+Since your VITAMIN D was < 30, you are encouraged to add an additional 10,000 iu/day to your current dosing for 90 days and then recheck in 90 days.
+{{/D-less-30}}
+
+{{#D-30-39}}
+Since your VITAMIN D was 30-39, you are encouraged to add an additional 8,000 iu/day to your current dosing for 90 days and then recheck in 90 days.
+{{/D-30-39}}
+
+{{#D-40-49}}
+Since your VITAMIN D was 40-49, you are encouraged to add an additional 4,000 iu/day to your current dosing for 90 days and then recheck in 90 days.
+{{/D-40-49}}
+
+{{#D-50-59}}
+Since your VITAMIN D was 50-59, you are encouraged to add an additional 2,000 iu/day to your current dosing for 90 days and then recheck in 90 days.
+{{/D-50-59}}
+{{/quick-VitD-row-takingD}}
+
+{{#quick-vitE}}
+Your combined **Vitamin E** level is {{quick-vitE}}. The optimal level is suggested to be 12-20 mg/L.
+{{/quick-vitE}}
+
+{{#VitE12}}
+This level falls within the optimal parameters and no additional intervention is recommended.
+{{/VitE12}}
+
+{{#quick-vitE-row}}
+Consider starting a supplement called **COMPLETE E** from the company Metabolic Response Modifier. The standard dose is 1 capsule/day. This supplement is a comprehensive formula that provides all eight naturally occurring forms of VITAMIN E. This supplement includes both tocopherol and tocotrienol forms of VITAMIN E.
+{{/quick-vitE-row}}
+
+{{#Quick-Thinner}}
+VITAMIN E can thin the blood, and you have been prescribed a prescription **BLOOD THINNER**. If you choose to start VITAMIN E, you need to recheck this level after 90 days of supplementation.
+{{/Quick-Thinner}}
+
+{{#quick-vitE-row-elevated}}
+Your **VITAMIN E** level is starting to trend quite elevated. It may not be helpful for this level to continue to increase. If you are taking a **VITAMIN E** supplement, you may want to speak with your primary care provider about this level. **VITAMIN E** is a fat-soluble vitamin that can be associated with adverse outcomes if it gets too elevated.
+{{/quick-vitE-row-elevated}}
+
+{{#omega-check-display}}
+Your baseline **OMEGACHECK®** value was {{omega-check-value}} % and risk reduction begins when your value is > 5.4 % by weight.
+{{/omega-check-display}}
+
+{{#omega-63-ratio-display}}
+Your **OMEGA 6:3** ratio was {{omega-63-ratio-value}}-to-1. This means that your **OMEGA-6** fatty acid levels were found to be {{omega-63-ratio-value}} x's more prevalent than your **OMEGA-3** fatty acid levels. We recommend striving for a ratio as close to a 4:1 ratio (or lower). In fact, a 1:1 ratio is considered amazing, but it is difficult to achieve with the Standard American Diet!
+{{/omega-63-ratio-display}}
+
+{{#arachidonic-acid-epa-ratio-display}}
+Your **ARACHIDONIC ACID-to-EPA** ratio was {{aaepa-ratio-value}} and we'd like to see this ratio < 8.0. Since **ARACHIDONIC ACID** can be a marker of trending inflammation and **EPA** can help suppress or optimize inflammation, we like this ratio to trend low in chronic disease. This value often becomes optimized when your **OMEGA-3** ratios are optimized.
+{{/arachidonic-acid-epa-ratio-display}}
+
+{{#arachidonic-acid-level-display}}
+Your **ARACHIDONIC ACID** level was {{aa-level-value}} and we'd like to see this value < 10. This value often becomes optimized when your **OMEGA-3** ratios are optimized.
+{{/arachidonic-acid-level-display}}
+
+{{#omega-check-low}}
+**OmegaCheck Optimization:** Your OmegaCheck value of {{omega-check-value}}% is below the optimal threshold of 5.4%. Consider high-quality omega-3 supplementation.
+{{/omega-check-low}}
+
+{{#arachidonic-acid-epa-elevated}}
+**Arachidonic Acid:EPA Ratio:** Your ratio of {{aaepa-ratio-value}} is elevated (target <8.0). This suggests inflammatory dominance. Omega-3 supplementation should help balance this ratio.
+{{/arachidonic-acid-epa-elevated}}
+
+{{#omega-63-ratio-elevated}}
+**Omega-6:3 Ratio Optimization:** Your ratio of {{omega-63-ratio-value}}:1 indicates excess omega-6 relative to omega-3. Focus on:
+- High-quality fish oil (Nordic Naturals Pro-Omega 2000 or equivalent)
+- Reduce omega-6 oils (vegetable oils, processed foods)
+- Increase fatty fish consumption (salmon, sardines, mackerel)
+- Consider flaxseed, chia seeds, and walnuts for plant-based omega-3
+{{/omega-63-ratio-elevated}}
+
+{{#Quick-krill}}
+**Krill Oil Considerations:** Your history identifies you are taking a **KRILL OIL**. Though considered healthy, **KRILL OIL** is extremely low in DHA and EPA omega-3 fatty acids. Consider shifting to a different fish oil support. Verify that your **OMEGA-3** supplement is a **TRIGLYCERIDE-derived OMEGA-3** supplement and not an **Ethyl Ester** supplement. There is a substantial difference in absorption between these two types of fish oil supplements. Recommended brands include **Triple Strength OMEGA-3 FISH OIL** by Sports Research (Costco), **PRO-OMEGA 2000** or **ULTIMATE OMEGA 2X** by Nordic Naturals. **The maintenance dose is 3 caps per day**.
+{{/Quick-krill}}
+
+{{#checked-omega-63-ratio}}
+**OMEGA-3 CHALLENGE Protocol:** A history of concussion, a TBI, or a very low **OMEGA 6:3 INDEX** justifies taking the **OMEGA-3 CHALLENGE** as outlined by Dr. Michael Lewis. **The OMEGA CHALLENGE** includes taking **10,000 mg of combined EPA and DHA OMEGA-3 per day for 1-2 months**. This aggressive protocol is designed to rapidly optimize omega-3 status and support neurological recovery. After the challenge period, return to maintenance dosing of 3 caps per day.
+{{/checked-omega-63-ratio}}
+
+{{#omega-neurological-suboptimal}}
+**Neurological Omega-3 Optimization:** Your **OMEGA-3** levels are quite suboptimal for neurological functioning, and you are encouraged to start a high-potency, high-quality **OMEGA-3 supplement**. Recommended brands include **Triple Strength OMEGA-3 FISH OIL** by Sports Research (Costco), **PRO-OMEGA 2000** or **ULTIMATE OMEGA 2X** by Nordic Naturals. The maintenance dose is 3 capsules daily. If you prefer a liquid **OMEGA-3** supplement, consider **PHYTO BRAIN-E**. The recommended dose is 1-2 tsp, 2x's/day. This supplement has a very concentrated amount of **DHA** and is recommended to those with a history of head trauma or neurodegenerative disease.
+{{/omega-neurological-suboptimal}}
+
+{{#Taking-an-OMEGA}}
+**Taking an OMEGA:** Though you are currently supplementing, you are not yet at the evidence-based goal for the 4:1, **OMEGA 6:3 RATIO**. You are encouraged to look at the label of your **OMEGA-3** to make sure you are taking a high-potency, triglyceride-based **OMEGA-3** supplement, and you should increase your maintenance dosing to 2 capsules, 2 x's/day. Recommended brands include **Triple Strength OMEGA-3 FISH OIL** by Sports Research (Costco), **PRO-OMEGA 2000** or **ULTIMATE OMEGA 2X** by Nordic Naturals. The maintenance dose is 3 caps per day. If you prefer a liquid **OMEGA-3** supplement, consider **PHYTO BRAIN-E**. The recommended dose is 1-2 tsp, 2x's/day. This supplement has a very concentrated amount of **DHA** and is recommended to those with a history of head trauma or neurodegenerative disease.
+{{/Taking-an-OMEGA}}
+
+{{#zinc-status}}
+**Zinc Optimization:** Consider zinc supplementation for immune function and wound healing.
+{{/zinc-status}}
+
+{{#magnesium-status}}
+**Magnesium Support:** Your magnesium levels suggest supplementation. Use magnesium glycinate for better absorption.
+{{/magnesium-status}}
+
+{{#quick-MagRBC}}
+**Magnesium RBC Optimization:** Your baseline **MAGNESIUM RBC** level is {{quick-MagRBC}}. The optimal level is suggested to be > 5.2 mg/dL.
+
+{{#quick-MagRBC-low}}
+This level falls below the optimal parameters and supplementation is recommended. Consider starting **MAGNESIUM THREONATE 2000 mg at night**. This form of magnesium is specifically designed to cross the blood-brain barrier and support neurological function. Alternative forms include **MAGNESIUM GLYCINATE** or **MAGNESIUM TAURATE** for better absorption and reduced digestive side effects.
+{{/quick-MagRBC-low}}
+
+{{#quick-MagRBC-52}}
+Consider starting **MAGNESIUM THREONATE 2000 mg at night**. This form of magnesium is specifically designed to cross the blood-brain barrier and support neurological function.
+{{/quick-MagRBC-52}}
+
+{{#quick-MagRBC-optimal}}
+This level falls within the optimal parameters and no additional intervention is recommended at this time.
+{{/quick-MagRBC-optimal}}
+{{/quick-MagRBC}}
+
+{{#quick-CZratio-14}}
+## **Copper to Zinc Ratio Analysis**
+
+Your **C:Z RATIO** is {{quick-CZratio-14}}. The optimal ratio is ≤ 1.4.
+
+{{#quick-CZratio-14-elevated}}
+Your **C:Z RATIO** is trending elevated. Consider starting **ZINC PICCOLINATE 30-50 mg** & **VITAMIN C 500 mg/day**.
+
+High copper to zinc ratios can contribute to inflammation, immune dysfunction, and oxidative stress. Zinc supplementation helps balance this ratio while supporting immune function and reducing inflammation.
+
+**Masterclass:** https://community.amindforallseasons.com/c/masterclass/sections/387368/lessons/1506605
+
+{{#zinc-liposomalC}}
+
+**Enhanced Copper-Zinc Protocol:** Your **C:Z RATIO** is significantly elevated. Consider starting **ZINC PICCOLINATE 30-50 mg** & **LIPOSOMAL VITAMIN C + R-LIPOIC ACID 4 pumps daily**.
+
+The liposomal delivery system provides superior absorption and bioavailability compared to traditional vitamin C. R-lipoic acid enhances the antioxidant effects and supports optimal copper-zinc balance at the cellular level.
+{{/zinc-liposomalC}}
+{{/quick-CZratio-14-elevated}}
+
+{{#quick-CZratio-14-optimal}}
+This ratio falls within the optimal parameters and no additional intervention is recommended at this time.
+{{/quick-CZratio-14-optimal}}
+{{/quick-CZratio-14}}
+
+{{#quick-selenium}}
+## **Selenium Optimization**
+
+**Selenium** level is {{quick-selenium}}. The optimal is > 125 ug/L. **SELENIUM** is a helpful antioxidant and cofactor in many biochemical reactions in the body. Researchers have identified the role of **SELENIUM** in optimizing immune function, and it helps to reduce the risk of Alzheimer's disease and Parkinson's disease.
+
+{{#quick-selenium-low}}
+Your **SELENIUM** level is too low for optimal neurological function. {{#quick-selen-110}}Consider starting **CLEAR WAY COFACTORS 2 capsules/day** to help raise your functional **SELENIUM** level.{{/quick-selen-110}}{{^quick-selen-110}}Consider starting a selenium supplement to help raise your selenium levels. **SELENIUM** plays a crucial role in supporting glutathione peroxidase, one of the body's most important antioxidant enzymes.
+
+**Recommended dosing:** 200 mcg daily of selenium (selenomethionine form preferred for better absorption).{{/quick-selen-110}}
+{{/quick-selenium-low}}
+
+{{#quick-selenium-optimal}}
+This level falls within the optimal parameters and no additional intervention is recommended at this time.
+{{/quick-selenium-optimal}}
+
+{{#Selenium125}}
+This level falls within the optimal parameters and no additional intervention is recommended.
+{{/Selenium125}}
+{{/quick-selenium}}
+
+---
+
+## **Metabolic & Blood Sugar Management**
+
+{{#quick-glucose}}
+Your fasting **BLOOD SUGAR** was {{quick-glucose}}. The goal is < 100 mg/dL.
+{{/quick-glucose}}
+
+{{#quick-fasting-insulin}}
+baseline **INSULIN** was {{quick-fasting-insulin}}. The goal is < 7. **INSULIN** levels should be very low when you have not eaten.
+{{/quick-fasting-insulin}}
+
+{{#quick-homa-IR}}
+Your baseline **HOMA-IR** calculation is {{quick-homa-IR}}. The goal is < 1.2).
+{{/quick-homa-IR}}
+
+{{#quick-a1c}}
+Your baseline **A1c** was {{quick-a1c}}. The goal is < 5.6, lower if you have an **APO E4** gene. We encourage our clients to strive for a level <5.3 if you have both copies of the **APO E4** gene variant.
+{{/quick-a1c}}
+
+- You will find excellent guidance to help you with meal planning to improve your cognitive health. That guidance is summarized in the next section. However, the following considerations are offered to your blood sugar or metabolic labs.
+
+**Continuous Glucose Monitoring for Brain Health**
+
+- Have you ever heard of a **CONTINUOUS GLUCOSE MONITOR (CGM)**? If not, you have probably seen an individual with diabetes wearing a blood sugar sensor on the arm. Wearing a **CGM** is one of the best ways to evaluate the impact of your diet on your metabolic health. Inquire with your coach for instructions on how to obtain and apply a **CGM**. We recommend that every participant of The Enhance Protocol® (including all non-diabetics) wear a **CGM** to learn about how their diet impacts their metabolic health.
+
+- Please attend Office Hours to learn how you can get access and use a **CGM** sensor.
+
+{{#quick-likes-sugar}}
+- Please consider dramatically reducing or eliminating **SUGARS** from your daily meal plans.
+{{/quick-likes-sugar}}
+
+{{#quick-sugars-APOE4}}
+Your genetics suggest that you may be at elevated risk for insulin resistance in the brain.
+{{/quick-sugars-APOE4}}
+
+{{#ketone-supplement-support}}
+- The correlation between serum **KETONE** levels and cognitive health is so interrelated, **you may consider taking a KETONE supplement daily as an added way to provide a powerful fuel for the brain.** Research suggests ketones readily pass the blood brain barrier and they can be anti-inflammatory. There are many commercially available products. Some products offer **KETONE SALTS**, and others offer **KETONE ESTERS**. You may consider dedicating one of your upcoming Office Hours to learn more about how **KETONE** supplement may support your goals.
+{{/ketone-supplement-support}}
+
+{{#Celiac}}
+- Strict dietary interventions may prove very beneficial. Because of **CELIAC** disease, you are likely to eat a **GLUTEN-FREE** diet. Did you know that 50% of individuals with **CELIAC** also have an intolerance to **DAIRY**? You may also benefit from a **DAIRY-FREE, GRAIN FREE, AUTOIMMUNE PALEO DIET**. Your coach can provide some additional guidance.
+
+- Strict dietary interventions may prove very beneficial. If you have not considered a **GLUTEN-FREE, DAIRY-FREE, AUTOIMMUNE PALEO** diet, this needs to be one area of exploration. Your coach can provide some additional guidance.
+{{/Celiac}}
+
+{{#quick-likes-soda}}
+- Please consider dramatically reducing or eliminating **SODA** from your daily meal plans. Most **SODA** in the United States is made with **High Fructose Corn Syrup (HFCS)** and there is growing evidence that **HFCS** lowers **ATP** production (energy production in the cell) and leads to increases in systemic inflammation and uric acid formation.
+{{/quick-likes-soda}}
+
+{{#Quick-Allergies}}
+- There may be a relationship between **ALLERGIES** and **DIET**. We have found that when individuals modify their diet and become very intentional about how they eat, many of their bothersome allergies settle. Consider dietary interventions as a very functional way of reducing your allergy symptoms. **Please join Office Hours and inquire about the relationship of food allergies and sinus congestion.**
+{{/Quick-Allergies}}
+
+{{#Quick-Histamine-Diet}}
+- Individuals who experience **CHRONIC ALLERGIES** and who consume **ALCOHOL**, may have a histamine intolerance. Foods that are fermented may induce or trigger a histamine response. Consider a **LOW HISTAMINE DIET** to help settle your allergies. Avoid common foods that are fermented (yogurt, sauerkraut, kimchi, kombucha, and all forms of alcohols). This is another good reason to eliminate alcohol from your daily routine.
+{{/Quick-Histamine-Diet}}
+
+{{#quick-MCAS}}
+- Individuals who experience **GI HEADACHES** and **CHRONIC ALLERGIES**, should learn more about **MAST CELL ACTIVATION**, and consider a series of interventions to calm the immune system to see if these symptoms improve.
+
+- You have enough triggers in your personal history to introduce you to **MAST CELL ACTIVATION**. Overactivation of mast cells often leads to brain fog, multiple chemical sensitivities, allergies, rashes, irritable bowels, insomnia, and a host of additional challenges. Please review the section on **MAST CELL ACTIVATION** and consider if you have symptoms such that it merits additional investigation. You may choose to visit your primary care provider, or you may choose to schedule a **TELEMEDICINE CONSULTATION** to review your symptoms. **Additional fees may apply.**
+{{/quick-MCAS}}
+
+{{#lab-a1c-L2b}}
+- Your blood sugar markers would suggest you could benefit from starting a few supplements to address insulin resistance. These include **GLYSEN** and **GLYCOBERINE-MX** by Apex Energetics. **The recommended dose is 1 capsule of each of these supplements, 2 x's per day.** These supplements contains inositol, chromium, vanadium, berberine, alpha lipoic acid, burdock, rose hips, and a number of other great ingredients that can help to lower insulin resistance and improve blood sugars.
+{{/lab-a1c-L2b}}
+
+{{#quick-A1c>56}}
+- Alzheimer's is often referred to as 'Diabetes Type 3.' Since cognitive dysfunction is often impacted by insulin resistance in the brain, focus on the interventions that will help lower your blood sugar and improve your insulin sensitivity. A thoughtful, brain-healthy diet is rich in whole foods, colorful vegetables and loaded with vitamins, fiber, and healthy fats. Intentional meal planning that incorporates intermittent fasting, low carb and **KETO** principles often promotes improved cognition.
+{{/quick-A1c>56}}
+
+{{#quick-A1c>6}}
+- There are many researchers impressed that elevated blood sugars may have a stronger correlation than your genetics to induce brain atrophy. A **KETOGENIC DIET** may be extremely beneficial. You may consider purchasing a **KETONE METER** to help you learn how to understand the nuances of metabolic optimization. Your coach can teach you how to use a Freestyle Libre Monitor to quickly identify and track blood sugars without having to stick your finger.
+{{/quick-A1c>6}}
+
+{{#quick-A1c<56}}
+- A very thoughtful diet that is rich in whole foods, colorful vegetables and loaded with vitamins, fiber, and healthy fats are a hallmark of a brain-healthy diet. Though you do not appear to have diabetes, a diet high in sugars or starchy carbohydrates is often related to a diet low in micronutrients.
+{{/quick-A1c<56}}
+
+{{#glucose-elevated}}
+**Blood Sugar Management:** Your glucose levels indicate metabolic dysfunction requiring intervention.
+{{/glucose-elevated}}
+
+{{#insulin-elevated}}
+**Insulin Resistance Protocol:** Your insulin levels suggest insulin resistance. Implement:
+- Intermittent fasting (16:8 protocol)
+- Low glycemic index foods
+- Regular resistance training
+{{/insulin-elevated}}
+
+{{#HOMA-IR-elevated}}
+**HOMA-IR Score:** Your calculated HOMA-IR indicates insulin resistance requiring metabolic intervention.
+{{/HOMA-IR-elevated}}
+
+{{#HbA1c}}
+**Long-term Blood Sugar:** Your HbA1c requires monitoring and lifestyle modification.
+{{/HbA1c}}
+
+{{#quick-diabetes-risk}}
+**Diabetes Prevention:** Based on your metabolic markers, diabetes prevention protocols are essential.
+{{/quick-diabetes-risk}}
+
+---
+
+## **Inflammatory Markers & Management**
+
+{{#quick-hsCRP}}
+**C-Reactive Protein:** Your hsCRP level of {{quick-hsCRP-value}} indicates systemic inflammation requiring intervention.
+{{/quick-hsCRP}}
+
+{{#CRP-above-3}}
+**High Inflammation:** CRP above 3.0 mg/L indicates significant inflammatory burden.
+{{/CRP-above-3}}
+
+{{#quick-CRP-09-omega-<5}}
+**Compound Inflammation Risk:** Your combination of elevated CRP and low Omega-3 status creates compounded cardiovascular and neurological risk.
+
+If you are not taking an **OMEGA-3**, consider starting a high-quality, triglyceride-based **OMEGA-3** supplement. **OMEGA-3's** are considered very anti-inflammatory and often help to calm systemic inflammation. You are encouraged to continue a high-potency, high-quality **OMEGA-3** supplements. Recommended brands include **Triple Strength OMEGA-3 FISH OIL** by Sports Research (Costco), **PRO-OMEGA 2000** or **ULTIMATE OMEGA 2X** by Nordic Naturals. **The maintenance dose is 3 caps per day**.
+{{/quick-CRP-09-omega-<5}}
+
+{{#quick-homocysteine}}
+## **↑'d Homocysteine Levels Can Impair Brain Function**
+
+Your HOMOCYSTEINE level was {{homocysteine-value}}. Since HOMOCYSTEINE is linked to inflammation, we recommend a goal level < 7 umol/L. An elevated HOMOCYSTEINE level correlates with both heart disease and cognitive disorders. By improving your HOMOCYSTEINE levels, you effectively lower your risk of both disease states. Elevated levels are often related to sub-optimal levels of B vitamins.
+
+Your VITAMIN B12 level was {{quick-B12-value}}. The goal is > 1000 pg/mL to best support brain health.
+
+Your FOLATE level (often called folic acid) is {{quick-folic-acid-value}}. The goal is > 15 ng/mL to best support brain health.
+
+**Masterclass:** https://community.amindforallseasons.com/c/masterclass/sections/387368/lessons/1506604
+
+{{#quick-Homo12}}
+- Consider starting TRIMETHYLGLYCINE 1000 mg/day. We recommend adding this supplement to a methylated B complex when HOMOCYSTEINE levels are > 12.
+{{/quick-Homo12}}
+
+{{#quick-Homo15}}
+- Consider starting a supplement called CREATINE MONOHYDRATE. The standard dose is 5 grams per day. We recommend adding this supplement to a methylated B complex and trimethylglycine when HOMOCYSTEINE levels are > 15. CREATINE comes in a chewable or a powder form that can be mixed in a drink. It can help improve energy levels and help to support HOMOCYSTEINE recycling.
+{{/quick-Homo15}}
+
+{{/quick-homocysteine}}
+
+---
+
+## **Hormone Optimization Can Improve Your Brain Function**
+
+Many individuals do not realize that there is an optimal hormone level for brain health. When hormone levels drop, brain function is diminished. This section focuses on the importance of your hormone levels and their potential impact on brain health.
+
+---
+
+## **Thyroid Function and Brain Health**
+
+Your baseline **TSH** was {{quick-TSH}}. The goal level for optimizing cognition is 0.4 - 2.5 uIU/mL.
+
+Your baseline **FREE T3** was {{quick-FT3}}. The goal level for optimizing cognition is 3.2 – 4.2 uIU/mL.
+
+Your baseline **FREE T4** was {{quick-FT4}}. The goal level for optimizing cognition is 1.3 – 1.8 uIU/mL.
+
+{{#thyroid-row}}
+Your baseline **REVERSE T3** was {{quick-rT3}}. The goal level for optimizing cognition is < 15 uIU/mL.
+
+Your baseline **THYROID PEROXIDASE (TPO)** antibody level was {{quick-TPO}}. **TPO** is an antibody produced by your immune system targeting your thyroid gland. When the **TPO** level is >34, we begin to consider your risk for an autoimmune disorder called **HASHIMOTO'S THYROIDITIS**.
+
+Your **THYROGLOBULIN ANTIBODY (TgAb)** level was {{quick-tg-ab}}. When **TgAb** levels are >1, this is an additional sign that you have risk for a variant of **HASHIMOTOS THYROIDITIS**. When either of the thyroid antibody levels are flagged as elevated, you may be a candidate for additional diagnostic tests or interventions to help settle an overactive immune system.
+{{/thyroid-row}}
+
+{{#thyroid-optimal}}
+- Your thyroid markers fall within optimal parameters and no additional intervention is recommended.
+{{/thyroid-optimal}}
+
+{{^thyroid-optimal}}
+{{#quick-TSH>7}}
+- Your **TSH** level is reflective of obvious **HYPOTHYROIDISM**. Please check with your memory coach to verify that this level was reported accurately.
+{{/quick-TSH>7}}
+
+{{^quick-TSH>7}}
+{{#low-TSH}}
+- **Thyroid function is essential for optimal cognition and your **TSH** level suggests there is an opportunity to optimize. Please schedule a time to consult with your primary care provider about your **TSH** level. An optimal **TSH** for cognitive function is 0.4 - 2.5 uIU/mL.**
+{{/low-TSH}}
+
+{{#High-thyroid}}
+- **Your **TSH** exceeds the optimal parameters for cognitive function and your history suggests you take thyroid medicine. You may need to increase your dose.**
+{{/High-thyroid}}
+
+{{#thyroid-row}}
+- When considering the risk of cognitive dysfunction, thyroid support is essential. Though your **TSH** is not necessarily abnormal, it may not be optimal for cognitive health. Those with additional symptoms (chronically cold or those with temperature dysregulation, hair loss, dry skin, struggles to lose weight, constipation, etc.) may consider a low dose of thyroid medicine. This would require a prescription from your **PCP**, or a **TELEMEDICINE** consultation with a provider from **AMFAS**. **Additional fees may apply.**
+{{/thyroid-row}}
+{{/quick-TSH>7}}
+{{/thyroid-optimal}}
+
+{{#TSH-T3-rT3}}
+- A superficial review of your **THYROID FUNCTION** would not predict major concerns, but your **TSH** and **REVERSE T3** are trending the wrong way. They may be suggestive of a process of impaired thyroid function. Your **FREE T3** level was {{FreeT3}} pg/mL. The optimal range is > 3.6 pg/mL. **Your **REVERSE T3** level is elevated at {{ReverseT3}} ng/dL.** These values fall outside of the optimal parameters for thyroid function, and you may be a candidate for a trial of a prescription medicine that optimizes these thyroid hormone levels. **You may benefit from a prescription should you choose to optimize thyroid function. Please schedule a time to discuss this recommendation with your **PCP** or schedule a **TELEMEDICINE** consultation with the medical director at **AMFAS** to talk about your options.**
+{{/TSH-T3-rT3}}
+
+{{#quick-reverseT3}}
+- An elevated **REVERSE T3** level may be suggestive of a process that impairs functional thyroid. **REVERSE T3** is a non-functional stereoisomer of **T3**. This has the potential of blocking **FREE T3** receptors and diminishing the effectiveness of **FREE T3**. Though the precise reason your body makes more **REVERSE T3** is unknown, it can be related to low levels of **VITAMIN B12**, **IRON**, **FERRITIN**, or elevated levels of **CORTISOL**. You may consider testing **IRON** and **FERRITIN** levels at your quarterly blood draw.
+{{/quick-reverseT3}}
+
+{{#quick-fatigue}}
+**Given your history of chronic fatigue, you may be a candidate for **FREE T3** therapy. You may consider a trial with **CYTOMEL 5 mcg/day**. This is a prescription medicine and needs a consultation with your primary care provider. If you prefer to complete a telemedicine consultancy to obtain a prescription, please work with your coach. **Additional fees may apply.****
+{{/quick-fatigue}}
+
+{{#quick-hashimotos}}
+- You may have some symptoms of **AUTOIMMUNE THYROIDITIS** and additional autoimmunity testing may be helpful. Because you have laboratory markers of **AUTOIMMUNE THYROIDITIS**, you may choose to research a compounded medication called **LOW DOSE NALTREXONE (LDN)**. Information about **LDN** is provided later in your Guidebook. Your family doctor may also provide detailed information if you think this may be an intervention that you would like to implement. **If your family physician is unfamiliar with **LOW DOSE NALTREXONE**, you may benefit from a **TELEMEDICINE** consultation with one of the providers at **AMFAS**.**
+
+- You are also encouraged to begin learning about the **AUTOIMMUNE PALEO DIET**. You can learn more about this dietary approach by attending Office Hours.
+{{/quick-hashimotos}}
+
+---
+
+## **Hormone Optimization Protocols**
+
+{{#quick-male-hormones}}
+**Male Hormone Optimization:**
+
+{{#testosterone-low}}
+Your baseline total testosterone level was {{mh1-tt-lab-value}} ng/dL. Optimal levels are closer to 700 ng/dL.
+{{/testosterone-low}}
+
+{{#free-testosterone-low}}
+Your free testosterone level was {{mh1-free-t-lab-value}} ng/mL. Optimal range is 12-15 pg/mL.
+{{/free-testosterone-low}}
+
+{{#quick-male-hormones-shbg}}
+Your elevated SHBG level of {{mh1-shbg-lab-value}} may contribute to low free testosterone.
+{{/quick-male-hormones-shbg}}
+
+{{#quick-sleep-hormones}}
+Sleep optimization combined with hormone support may improve both sleep quality and hormone levels.
+{{/quick-sleep-hormones}}
+
+{{#zma-testosterone-support}}
+Consider ZMA supplementation (2-3 capsules daily) to support natural testosterone production.
+{{/zma-testosterone-support}}
+
+**Male Hormone Levels and Brain Health**
+
+Your baseline **TOTAL TESTOSTERONE** level was {{MHt_TT}} ng/dL, and optimal level is suggested to be closer to 700 ng/dL.
+
+{{#testosterone-low}}
+Your baseline **FREE TESTOSTERONE** level was reported as {{MHt_FREE_T}} pg/mL. Regardless of the "normal" values posted on your lab results, **FREE TESTOSTERONE** is the male hormone that is active. If your **TOTAL TESTOSTERONE** is normal, but your active **FREE TESTOSTERONE** is low, you will likely experience some symptoms of Low T. You want your **FREE TESTOSTERONE** level to be at the 50-75th percentile of the normal range. With most labs, the normal range is 6-18 pg/mL. Therefore, the optimal range is 12-15 pg/mL.
+{{/testosterone-low}}
+
+{{#quick-male-hormones-shbg}}
+Your baseline **SEX-HORMONE BINDING GLOBULIN (SHBG)** level was {{MHt_SHBG}}. We believe the optimal range to be <45 pg/mL.
+
+Your baseline **PSA** level was {{MHt_PSA}} and we believe the optimal range to be <4.0.
+
+Your baseline **LUTEINIZING HORMONE (LH)** level was {{MHt_LH}} and we believe the optimal level is closer to 5.1 mIU/mL.
+
+Your baseline **FOLLICLE STIMULATING HORMONE (FSH)** level was {{MHt_FSH}} and we believe the optimal level is closer to 2.2 mIU/mL.
+
+Your baseline **PROLACTIN** level was {{MHt_PROL}} and we believe the optimal value to be close to 11.25 pg/mL.
+
+Your baseline **DIHYDROTESTOSTERONE (DHT)** level was {{MHt_DHT}} and we believe the optimal range to be <52 ng/dL.
+
+Your baseline **ESTRADIOL (E2)** level was {{MHt_E2}} and we believe the optimal range to be <25 pg/mL.
+
+Your baseline **ESTRONE (E1)** level was {{MHt_E1}} and we believe the optimal value to be close to <60 pg/mL.
+
+Your baseline **PROGESTERONE** level was {{MHt_PROG}} and we believe the optimal value to be close to 0.8 ng/dL.
+{{/quick-male-hormones-shbg}}
+
+{{#quick-male-hormones-hrt}}
+**Your FREE TESTOSTERONE** level **may not** be optimal for cognitive health. Dr. Mark Gordon's protocol for individuals with a **TBI** addresses the importance of **FREE TESTOSTERONE** (biologically available and active testosterone) as a **3 mg testosterone**. Many men find their **TESTOSTERONE** levels within the very narrow context of sexual or reproductive health. However, we view your **FREE TESTOSTERONE** level as essential to your neurological health! **TESTOSTERONE** optimization may **not be optimal** for cognitive health without some additional discussion and consideration.
+
+**TESTOSTERONE OPTIMIZATION** therapy. This may be worth some additional discussion in Office Hours.
+
+An excellent place to start to optimize **FREE TESTOSTERONE** levels include optimizing your diet, increase healthy fats, adding resistance training or weightlifting to your exercise routine, and use of the supplement **7-KETO DHEA** which is discussed in the section about **DHEA**.
+{{/quick-male-hormones-hrt}}
+
+{{#Quick-Prostate-CA}}
+{{#quick-LUPRON}}
+**Your TESTOSTERONE** level is not optimal for cognitive health. However, given your history of **PROSTATE CANCER**, you may have been instructed to avoid **TESTOSTERONE** replacement, or you take a medication like **LUPRON** to 'block' the effects of **TESTOSTERONE** in the body. More information on a **TESTOSTERONE** that may be provided. 
+
+Given your need for additional strategy may be offered.
+{{/quick-LUPRON}}
+
+**Your PSA** level exceeds the conservative threshold and may merit additional investigation. Though it is common for men to experience rising **PSA** levels as they age, you are encouraged to visit your provider and have a discussion about **prostate health** and your understanding about appropriate **prostate screening** over time.
+
+Most providers appreciate updated lab results, and your lab may prompt a discussion about appropriate **prostate screening** over time.
+{{#Quick-PSA}}
+{{/Quick-PSA}}
+{{/Quick-Prostate-CA}}
+
+{{#quick-sleep-hormones}}
+Sleep optimization combined with hormone support may improve both sleep quality and hormone levels. **TESTOSTERONE** production occurs primarily during deep sleep stages.
+{{/quick-sleep-hormones}}
+
+{{#zma-testosterone-support}}
+Consider **ZMA** supplementation (2-3 capsules daily) to support natural testosterone production. ZMA contains zinc, magnesium, and vitamin B6 which are essential for hormone synthesis.
+{{/zma-testosterone-support}}
+
+{{#quick-using-TRT}}
+Though you may have used **testosterone replacement** in the past, or you may be using **testosterone replacement** currently, your current hormone levels may still not be considered optimal for cognitive health. Please refer to the section on **testosterone replacement therapy** (TRT) and schedule a consultation with your primary care provider to talk about opportunities to optimize your **testosterone replacement therapy**.
+{{/quick-using-TRT}}
+{{/quick-male-hormones}}
+
+{{#quick-female-hormones}}
+**Female Hormone Levels and Brain Health**
+
+Your baseline **FSH** level was {{lab-FSH-result}} mIU/mL. Optimal ranges of **FSH** are dependent on age, menstrual or menopausal status and brain health. If you are not menopausal, the **FSH** level tends to be < 11. If you are menopausal, we may consider attempting to lower your **FSH** level closer to 20 mIU/mL, but this depends on the specific goals of hormone optimization.
+
+Your baseline **ESTRADIOL (E2)** was {{lab-estradiol-female}} pg/mL. In women who are still menstruating, **E2** ranges can vary from 50-500 pg/mL, depending on when the lab was checked in the context of the menstrual cycle. In menopausal women, many researchers suggest optimal ranges should fall between 50-150 pg/mL.
+
+Your baseline **PROGESTERONE** was {{lab-progest-female}} ng/mL. Some researchers suggest optimal ranges may be from 1-5 ng/mL. Some researchers are impressed that the optimal level is higher, closer to 5-7 ng/mL. If you are a poor sleeper, or if you struggle with anxiety, you may consider your optimal range as the upper threshold.
+
+Your baseline **TOTAL TESTOSTERONE** was {{lab-testosterone-female}} ng/dL. Many women feel best when **TESTOSTERONE** ranges from 40-70 ng/dL.
+
+Your baseline **ESTRONE (E1)** level was {{FHH_E1}} and we believe the optimal range to be < 200 pg/mL.
+
+Your baseline **PROLACTIN** level was {{FHH_PROLA}} and we believe the optimal value to be near 13.75 pg/mL.
+
+Your baseline **LUTEINIZING HORMONE (LH)** level was {{FHH_LH}} and we believe the optimal level to be 22 mIU/mL. Again, the goal range is based on your age and menopausal status.
+
+Your baseline **SEX-HORMONE BINDING GLOBULIN (SHBG)** level was {{FHH_SHBG}}, and we believe the optimal range to be < 75 pg/mL in women.
+
+Your baseline **DIHYDROTESTOSTERONE (DHT)** level was {{FHH_DHT}} and we believe the optimal range to be < 30 ng/dL.
+
+{{#quick-female-hormones-hrt}}
+- There is a particularly good argument for you to consider the use of **HORMONE REPLACEMENT THERAPY**. Sex hormones associated with reproductive and sexual health, but they are also essential for cognitive and brain health. **ESTRADIOL** receptors are located on every cell of the body and the brain. When **ESTRADIOL** levels are optimized, cognitive health often improves. Androgens like **TESTOSTERONE** have anti-inflammatory, mood boosting benefits and may lessen the risk of osteoporosis. **PROGESTERONE** is very neurologically active and may help balance estrogen dominance, improve sleeping patterns, and calm anxiety. There are several reasons you may consider the use of hormone replacement therapy (HRT). Please refer to the section on hormone replacement therapy and its potential role for optimizing your health.
+{{/quick-female-hormones-hrt}}
+
+{{#quick-using-HRT}}
+- Though you may have used hormone replacement in the past, or you may be using hormone replacement currently, your current hormone levels may still not be considered optimal for cognitive health. Please refer to the section on hormone replacement therapy (HRT) and schedule a consultation with your primary care provider to talk about opportunities to optimize your hormone replacement therapy.
+{{/quick-using-HRT}}
+
+{{#Quick-Breast-CA}}
+- You have reported a personal history of **BREAST CANCER**. Traditional medicine suggests hormone therapy after breast cancer to be contraindicated, but emerging research now questions that clinical position. Many women with a personal history of breast cancer are embracing hormone optimization, especially in the context of progressive brain fog, memory loss, or other quality of life issues. Hormone optimization should only be done after thoughtful consideration. More information can be found in The Enhance Protocol Guidebook.
+{{/Quick-Breast-CA}}
+
+{{#BreastCA-Insomnia-Anxiety}}
+- **PROGESTERONE** optimization is an amazing way to improve **INSOMNIA** and to calm **ANXIETY**. **PROGESTERONE** has also been used in many clinical trials for those with a history of concussion or TBI because of its calming influence on the brain. You have reported a history of breast cancer. Hormone optimization should only be initiated after thoughtful consideration of your historical breast cancer. Informed consent is required before treatment is initiated. Consider a telemedicine consultation to discuss the risks and benefits of **PROGESTERONE**.
+{{/BreastCA-Insomnia-Anxiety}}
+
+{{#Quick-Hormone-Mood-Disorder}}
+- In your health history you provided, you identified challenges with either **DEPRESSION** or **ANXIETY**. Hormone optimization is a fantastic way to address depression and/or anxiety. This may factor into your decision about hormone optimization.
+{{/Quick-Hormone-Mood-Disorder}}
+
+{{#Prometrium-Sleep}}
+- In your health history, you identified a history of insomnia for which you are taking a prescription antidepressant to help with sleep disorder. Consider the use of **PROMETRIUM 100-200 mg/night**. It is a very safe, neurologically active hormone that helps promote improved sleep.
+{{/Prometrium-Sleep}}
+
+{{#Freq-UTI}}
+- Sex hormones optimization may lower your risk for frequent **URINARY TRACT INFECTIONS** related to atrophic vaginitis.
+{{/Freq-UTI}}
+{{/quick-female-hormones}}
+
+---
+
+## **Neurologically Active Hormones**
+
+{{#quick-pregnenolone-101}}
+**Pregnenolone Optimization:** Your pregnenolone level of {{quick-pregnenolone-lab-value}} is within optimal parameters.
+{{/quick-pregnenolone-101}}
+
+{{#quick-prog-50-100}}
+**Pregnenolone Support:** Consider pregnenolone supplementation (100mg at night) to optimize this "mother hormone."
+{{/quick-prog-50-100}}
+
+{{#quick-dhea-151}}
+**DHEA-S Status:** Your DHEA-S level of {{quick-dhea-lab-value}} is within optimal parameters.
+{{/quick-dhea-151}}
+
+{{#quick-dhea-150}}
+**DHEA-S Support:** Consider 7-Keto DHEA supplementation (100mg at night) for neurological support.
+{{/quick-dhea-150}}
+
+{{#quick-dhea-asvd}}
+**DHEA & Cardiovascular Health:** Low DHEA-S levels correlate with increased cardiovascular disease risk.
+{{/quick-dhea-asvd}}
+
+{{#quick-cortisol-15}}
+**Cortisol Support:** Consider morning cortisol support with Holy Basil or Mitochondrial Optimizer.
+{{/quick-cortisol-15}}
+
+---
+
+## **Medical History & Specialized Protocols**
+
+{{#quick-root-canal}}
+**Root Canal Considerations:** Previous root canals may harbor infections contributing to systemic inflammation. Consider cone beam CT scan evaluation.
+{{/quick-root-canal}}
+
+{{#quick-allergies}}
+**Allergy Management:** Chronic allergies may indicate environmental triggers, sinus issues, or dietary intolerances requiring comprehensive evaluation.
+{{/quick-allergies}}
+
+{{#quick-parkinsons}}
+**Parkinson's Support:** Focus on dental health, toxicity reduction, and protein timing with Sinemet if applicable.
+{{/quick-parkinsons}}
+
+{{#quick-gallbladder}}
+**Gallbladder History:** Previous gallbladder removal predisposes to toxicity due to impaired bile flow. Focus on liver support.
+{{/quick-gallbladder}}
+
+{{#BariSurg}}
+**Bariatric Surgery Support:** Consider taking a BETAINE HCL supplement with your meals, and particularly when you take a B-COMPLEX supplement. Your history of bariatric surgery may have reduced your ability to make HCL and can lead to acid reflux, poor digestion, bloating, etc. This can also negatively impact your ability to absorb essential B vitamins.
+{{/BariSurg}}
+
+{{#quick-mcas}}
+**Mast Cell Activation:** Consider comprehensive MCAS protocol including H1/H2 antihistamines and mast cell stabilizers.
+{{/quick-mcas}}
+
+{{#quick-histamine-diet}}
+**Histamine Intolerance:** Implement low-histamine diet avoiding fermented foods, aged cheeses, and alcohol.
+{{/quick-histamine-diet}}
+
+{{#quick-crp5-etoh}}
+**Alcohol & Inflammation:** Routine alcohol consumption may be contributing to your elevated inflammatory markers.
+{{/quick-crp5-etoh}}
+
+---
+
+## **Advanced Cardiovascular Protocols**
+
+{{#cholesterol-row}}
+**Cholesterol Management:** Your cholesterol level of {{cholesterol-row-value}} requires optimization through lifestyle and targeted interventions.
+{{/cholesterol-row}}
+
+{{#quick-CAC}}
+**Coronary Calcium Score:** Consider CAC scoring before initiating statin therapy for accurate cardiovascular risk assessment.
+{{/quick-CAC}}
+
+{{#mk2-cardiovascular-support}}
+**Cardiovascular Support:** Consider Vitamin K2 (MK-7) supplementation for cardiovascular health.
+{{/mk2-cardiovascular-support}}
+
+{{#statin-takes-statin}}
+**Statin Considerations:** If taking statins, ensure CoQ10 supplementation to prevent muscle-related side effects.
+{{/statin-takes-statin}}
+
+{{#trig-plasmalogens}}
+**Low Triglycerides:** Extremely low triglycerides may indicate systemic toxicity requiring evaluation.
+{{/trig-plasmalogens}}
+
+---
+
+## **Compound Risk Conditions**
+
+{{#root-canal-inflammation-compound}}
+**Root Canal + Inflammation:** Your combination of root canal history and elevated CRP creates compounded inflammatory risk.
+{{/root-canal-inflammation-compound}}
+
+{{#alcohol-homocysteine-b12-compound}}
+**Neurological Risk Triad:** Your combination of alcohol consumption, elevated homocysteine, and low B12 creates compounded neurological risk.
+{{/alcohol-homocysteine-b12-compound}}
+
+{{#sleep-apnea-cognitive-compound}}
+**Sleep & Cognitive Decline:** Your sleep apnea combined with cognitive symptoms requires immediate intervention.
+{{/sleep-apnea-cognitive-compound}}
+
+{{#diabetes-apo-e4-compound}}
+**Metabolic + Genetic Risk:** Your diabetes combined with APO E4 genetics creates additive Alzheimer's risk requiring aggressive intervention.
+{{/diabetes-apo-e4-compound}}
+
+---
+
+## **Implementation Strategy**
+
+1. **Start with Foundation:** Address vitamin D, omega-3, and basic metabolic health first
+2. **Phase 2:** Implement hormone optimization and advanced protocols
+3. **Phase 3:** Address specialized conditions and compound risks
+4. **Monitor Progress:** Retest labs in 90 days to assess improvement
+
+{{#atp-fuel-supplement}}
+**Energy Support:** Consider ATP Fuel supplementation for mitochondrial energy production.
+{{/atp-fuel-supplement}}
+
+---
+
+**Remember:** This roadmap is personalized based on your unique biochemistry. Implement changes gradually and monitor your response. Schedule follow-up consultation if you have questions about implementation.
+
+---
+
+*Generated by A Mind For All Seasons - Personalized Brain Health Optimization*
+
+## **Cardiovascular Risk and Cholesterol Levels**
+
+{{#quick-TC}}
+Your **TOTAL CHOLESTEROL** level was {{quick-TC}}. While cardiologists like to see **TOTAL CHOLESTEROL** levels < 200, we are a little more liberal with this marker.
+{{/quick-TC}}
+
+{{#quick-trigly}}
+Your **TRIGLYCERIDE** level was {{quick-trigly}}. The optimal level is thought to be <150, especially if you have insulin resistance, diabetes or elevated liver enzymes. This cholesterol marker is highly influenced by diet. In fact, it is most influenced by your carbohydrate (sugar) intake. If you want to lower your **TRIGLYCERIDE** levels, stop eating sugar!
+{{/quick-trigly}}
+
+{{#quick-HDL}}
+Your **HDL CHOLESTEROL**, which is often considered 'the good cholesterol,' was {{quick-HDL}}. The optimal is >40 and the most significant way to raise this level is daily exercise.
+{{/quick-HDL}}
+
+{{#quick-LDL}}
+Your **LDL CHOLESTEROL**, which is often considered 'the bad cholesterol' was {{quick-LDL}}. Cardiologists often use your **LDL CHOLESTEROL** to predict your need for cholesterol lowering medication like **STATIN** therapy. We are more cautious with **STATIN** medications due to their risk of causing brain fog, insulin resistance, and decreased **CoQ10** levels.
+{{/quick-LDL}}
+
+{{#quick-trig-HDL}}
+Your **TRIG-to-HDL RATIO** was {{quick-trig-HDL}}. The optimal **RATIO** is <2. Anything above 2 is a sign of insulin resistance.
+{{/quick-trig-HDL}}
+
+Too often, we pin our views of good vascular health on low cholesterol levels. However, there are a few other risk factors that contribute to good cardiovascular health and brain health. We have summarized these risk factors in a masterclass.
+
+**Masterclass:** https://community.amindforallseasons.com/c/masterclass/sections/387363/lessons/1441392
+
+- We recommend lifestyle as the primary method for optimizing your cholesterol before you default to cholesterol lowering medicine. The eating plan summarized previously is an excellent starting point to optimize your cholesterol levels.
+
+{{#Current-Smoker}}
+- One of the most successful interventions to lower your risk of cardiovascular disease or vascular dementia is to **QUIT SMOKING**. Please visit with your memory coach and consider ways we can help you become tobacco free.
+{{/Current-Smoker}}
+
+{{#cholesterol-row}}
+- We recommend lifestyle as the primary method for optimizing your cholesterol.
+
+- Elevated cholesterol levels may reflect a metabolic syndrome and may predict additional risk of poor vascular health. However, many providers rely heavily on **STATINS** to improve cholesterol values and vascular risk without contemplating their impact on brain fog and depletion of **CoQ10**. There are instances where this **STATIN** therapy may be very appropriate. However, at **AMFAS**, we prefer to look at other markers of oxidative or vascular stress **before** immediately jumping into **STATIN** therapy. You may consider completing a **CORONARY ARTERY CALCIUM SCORE**. This is a topic that will help to predict your specific risk for atherosclerosis and is a way to better understand if elevated cholesterol levels are **physiological** or **pathological**. You should attend Office Hours and inquire about this test with our medical director, Randy Vawdrey.
+
+- This test typically costs $100-$200 (depending on your location). A **CAC** score is arguably the best predictor of vascular health.
+{{/cholesterol-row}}
+
+{{#quick-MK2}}
+- Consider starting **MEGAQUINONE** to help support cardiovascular health.
+{{/quick-MK2}}
+
+{{#quick-takes-statin}}
+- Consider starting **MEGAQUINONE K2-7, 2 capsules/day**. This supplement is a prescription drug in many European countries for the treatment of cardiovascular disease. In the United States, it is great supplement to use if you have a history of cardiovascular disease and if you take a **STATIN** to lower cardiovascular risk.
+{{/quick-takes-statin}}
+
+{{#trig-plasmalogens-row}}
+- Curiously, your **TRIGLYCERIDES** are quite low. Not all cholesterol levels are problematic. An uncharacteristically low **TRIGLYCERIDE LEVEL** often correlates with cognitive decline. Dr. Bredesen, a renowned neurologist, has suggested that extremely low **TRIGLYCERIDE** levels may be related to systemic toxicity. Use lifestyle as the primary method for optimizing your cholesterol and do not be afraid to intentionally add healthy fats to your daily meal planning.
+
+- Consider completing the **PRODROME SCAN** blood test to evaluate your **PLASMALOGENS**.
+{{/trig-plasmalogens-row}}
+
+{{#quick-takes-statin}}
+- A **LIPID PANEL** offers little predictive value of your true cardiac risk. For example, many individuals with very low cholesterol have advanced vascular disease and others with higher cholesterol levels actually have low risk of atherosclerosis. Elevated cholesterol levels may simply reflect a metabolic syndrome, an unhealthy diet, or compromised liver health. Unfortunately, many individuals feel pressure to take **STATINS** to reduce cardiovascular risk, even when the actual risk has not been quantified.
+
+- If you want a better predictor of vascular health to help you decide if you should continue **STATIN** therapy, please request a **CORONARY ARTERY CALCIUM SCORE (CAC)**. A **CAC** score can help **quantify your actual risk** for atherosclerotic build-up in the coronary arteries. The **CAC** score of 0-99 is very low risk. A score of 100-299 reflects moderately increased risk, and a score of 300+ is severely increased risk.
+
+- Once you know your **CAC** score, you may choose to work through a few evidence-based interventions (in lieu of, or in addition to **STATINS**), to help lower your cardiovascular risk.
+
+- You may choose to complete a telemedicine consultation with one of our practitioners to talk through these evidence-based interventions. Keep in mind that lifestyle optimization (an anti-inflammatory diet & daily exercise) is the starting point. **Additional fees may apply to those who want a TELEMEDICINE CONSULTATION.**
+{{/quick-takes-statin}}
+
+{{#HxHTN}}
+- In your health history, you reported persistently **ELEVATED BLOOD PRESSURE**. High blood pressure exerts a negative impact on the lining of the blood vessels and may lessen the production of **eNOS** and **nNOS**. You may find benefit in a daily pharmaceutical to maintain blood pressure within optimal parameters. In the meantime, consider starting a nutraceutical called **NEURO2. The standard dose is 2 capsules, 2 x's per day.** This supplement contains the nootropic **VINPOCETINE**, which is used by many to support brain health and cerebral blood flow.
+{{/HxHTN}}
+
+{{#elevated-platelets-cardiovascular-risk}}
+- Your **PLATELET COUNT** was trending elevated, and given you concerns about risk for cognitive decline, your **APO E** genetics, your age, and your metabolic health, you should consider checking a **D-DIMER** and **LEIDEN FACTOR V**. The goal of these tests it rule our risk for clotting disorder or a heightened risk of cerebral vascular disease.
+{{/elevated-platelets-cardiovascular-risk}}
+
+---
+
+## **Nootropics and Brain Health**
+
+We refer to **NOOTROPICS** as a group of supplements that may serve several distinct functions. Participants use **NOOTROPICS** as cognitive boosters, memory enhancers, memory focus, motivation, memory mood, and cognition. If a **NOOTROPIC** is recommended below, a detailed summary about this recommendation will be offered in the corresponding section of your Guidebook.
+
+{{#quick-nootropic-choline}}
+- Consider starting an OTC form of a **CHOLINE** supplement. Our favorite brands include **ACETYL-CH ACTIVE** and **PARASYM PLUS**. The standard dose of either supplement is **2 capsules per day** (or a second dose when you need to be cognitively alert). **CHOLINE** may help to support the production of *acetylcholine* (the neurotransmitter associated with cognition). When our clients have an increased risk of cognitive dysfunction, a standard intervention in integrative medicine is to strive to improve **CHOLINE** levels in the brain. **CHOLINE** comes in many forms that are outlined in the summary about nootropics.
+{{/quick-nootropic-choline}}
+
+{{#quick-nootropic-lionsmane}}
+- Consider starting **LION'S MANE** powder or capsule **2-3 x's/day**.
+{{/quick-nootropic-lionsmane}}
+
+{{#Quick-Modafinil}}
+- You have reported the use of **CPAP** or **BIPAP** for sleep apnea and you are concerned about cognitive decline. Though we are cautious with medicines for neurological health, you may be a good candidate for a prescription of **MODAFINIL** or **PROVIGIL**. These medicines are used to improve wakefulness, attention, and focus in those with **SLEEP APNEA** or who use **CPAP**. For many, these medicines can be very helpful. This medication requires a prescription. You can ask your **PCP** to weigh in and offer an Rx, or you can bring your questions to Office Hours and schedule a **telemedicine consultation** with one of our providers. **Additional fees may apply.**
+{{/Quick-Modafinil}}
+
+- You are encouraged to start a supplement called **NITRIC BALANCE**. The standard dose is **10-20 mL as needed**. This supplement boasts a proprietary blend of nutraceuticals that stimulate the production of **eNOS** and improve blood flow. This supplement is often used as a pre-work out supplement or as an intervention for chronic headaches or migraines.
+
+- You are encouraged to start a supplement called **NEURO2**. The standard dose is **1 capsule, 2 x's per day**. This supplement contains **VINPOCETINE** and is used to support brain health and cerebral blood flow. **VINPOCETINE** is a prescription medicine in many countries outside of the USA but can be used as a supplement in the United States.
+
+- You are encouraged to start a supplement called **NEUROFLAM**. The standard dose is **2 capsules, 2x's per day**. This supplement contains a blend of nutraceutical flavonoid compounds that have been shown to be anti-inflammatory and neurologically stimulating. In animal studies, the ingredients in this supplement have been shown to cross the blood brain barrier, offering direct influence on the immune cells of the brain.
+
+{{#quick-focus-supp}}
+- Consider starting **BRAIN & MEMORY POWER BOOST** **2 capsules, 2x's/day**. Your history reports that you are taking a supplement to try and improve your focus. If you choose to take this supplement, you could take this in lieu of what you are taking now. This is a high-quality supplement to support cognition and may compare it to the supplement you are currently using. Work with your physician or memory coach to compare ingredients and quality. When you have completed the supply of the focus supplement you are currently taking, this may be a great alternative. Consider trying it.
+{{/quick-focus-supp}}
+
+- Consider starting **ACETYL-L-CARNITINE (ALCAR)** **500-1000 mg 2x/day**.
+
+- Consider starting a trial of **TRANSFER FACTORS** as a means of neutralizing viruses that may be contributing to a chronic inflammatory response. We recommend the brand **4Life TRANSFER FACTOR**. The standard dose is **two capsules/day**. Another brand is called **WELLNESS TRANSFER FACTOR**, and their standard dose is **one capsule 2x's/day**. You can purchase this supplement online. Transfer factors are derived from colostrum, and they serve to activate natural killer cells within our immune system.
+
+{{#brain-rescue-iii}}
+- Consider starting **BRAIN RESCUE III-** The starting dose is **one packet in the morning for 2 weeks**, and then **every other day**. This supplement is a hallmark intervention for those with a history of brain injury.
+{{/brain-rescue-iii}}
+
+- You are encouraged to start a supplement called **NEUROFLAM (K-46)**, a product from Apex Energetics. The dose I recommend is **2 capsules, 2x's/day**. Each of the ingredients in this supplement have been shown to cross the blood brain barrier, and they can have a significant impact at calming neuroinflammation and in helping to heal the blood brain barrier.
+
+{{#Surg-Weight-loss}}
+- Consider starting **BRAIN RESCUE III-** The starting dose is **one packet in the morning for 2 weeks**, and then **every other day**. This supplement is recommended for those with a history of malabsorption challenges related to surgical weight loss procedures. **Note:** this supplement could disrupt sleep as it contains some natural stimulants. You should use the supplement before **2:00 pm**. If you need that vitamin B supplementation, you should consider an **METHYLFOLATE** supplement. Ask your memory coach for guidance if you have questions.
+{{/Surg-Weight-loss}}
+
+{{#Quick-Omega-3}}
+- Please review the label of your current **OMEGA-3** supplement. Verify that it is a **TRIGLYCERIDE**-derived omega-3 supplement vs. an Ethyl Ester supplement. There is a substantial difference in absorption between these two types of omega-3 supplements. If not, please consider a shift to **PRO-OMEGA** or **ULTIMATE OMEGA 2X** by Nordic Naturals. The standard dose is **3 caps per day**.
+{{/Quick-Omega-3}}
+
+- Consider starting **PRO-OMEGA** or **ULTIMATE OMEGA 2X** by Nordic Naturals. **Two capsules, 2 x's/day**. The maintenance dose is **3 caps per day**.
+
+{{#MegaOmega}}
+- Consider starting **GUT-SPECIFIC FISH OIL (MEGA OMEGA)**. The standard dose is **two capsules, 2 x's/day**.
+{{/MegaOmega}}
+
+- Consider starting **ZMA** by **NOW SPORTS**. The standard dose is **three capsules/day**. This product contains proprietary blends of **ZINC**, **MAGNESIUM** and **ARGININE** that can help support the natural production of **TESTOSTERONE**.
+
+{{#quick-HSV}}
+- Consider starting a supplement that contains **TRANSFER FACTORS**. Transfer factors are derived from colostrum, and they serve to activate natural killer cells within our immune system. They are recommended for those with a history of chronic viral infections. A brand that is often recommended in the functional medicine world is **4Life TRANSFER FACTOR**. The standard dose is **two capsules/day**. Another brand is called **WELLNESS TRANSFER FACTOR**, and their standard dose is **one capsule 2x's/day**. You can purchase these supplements online.
+{{/quick-HSV}}
+
+{{#quick-EBV}}
+- Consider starting a supplement that contains **TRANSFER FACTORS**. A brand that is often recommended in the functional medicine world is **4Life TRANSFER FACTOR**. The standard dose is **two capsules/day**. Another brand is called **WELLNESS TRANSFER FACTOR**, and their standard dose is **one capsule 2x's/day**. You can purchase this supplement online. Transfer factors are derived from colostrum, and they serve to activate natural killer cells within our immune system. They are recommended for those with a history of chronic viral infections.
+{{/quick-EBV}}
+
+- Consider starting **PRODROMENEURO** is **1 mL/day** if you purchase liquids, or **one soft gel/day** if you purchase capsules.
+
+- Consider starting **THE ONE, MITOCHONDRIAL OPTIMIZER** from QuickSilver Scientific. The standard dose is **1 tsp/daily**. This is a high-quality antioxidant, containing **CoQ10**, **PQQ** and **RESVERATROL**.
+
+- Consider starting **PECTASOL-C®** by Econugenics. The standard dose is **5 grams per scoop**. You are encouraged to start with **1 scoop per day** (added to a drink), and if tolerated, increase to **1 scoop 2x's per day**. **PECTASOL-C®** enters the circulation from the digestive tract and works quickly to bind and block the actions of a biological protein in the body called **GALECTIN-3**. **PECTASOL-C®** has been shown to deliver broad-spectrum benefits from cellular regulation to immune response, cardiovascular and kidney function in over **75 published studies**. This fiber also serves as a binder that will support our detox interventions.
+
+- Consider the prescription medicine called **LOW DOSE NALTREXONE (LDN)**. The standard dosing is between **1- 4.5 mg/day**. Th medication is commonly taken an hour before bed. Read the summary in your Guidebook about **LDN** and consider its use in the treatment of autoimmunity and fibromyalgia. This medication requires a prescription so you will need to consult with your **PCP** or schedule a **TELEMEDICINE** consult with a provider from **AMFAS**. **Additional fees may apply**.
+
+{{#quick-parkinsons}}
+- Consider starting **TRU NIAGEN** **100-300 mg/day** or another **NAD+** support supplement called **NICOTINOMIDE RIBOSIDE**. The standard dosing of this supplement is **100 mg/day**.
+{{/quick-parkinsons}}
+
+- Consider starting **CLEAR WAY COFACTORS** **1 capsule, 2-3 x's/day** and consider trying a new morning drink called **CRIO BRU CACAO** as a way of introducing more high-quality flavonoids into your daily routine.
+
+{{#Thercumin}}
+- Consider starting **THERACURMIN HP** **1 capsule 2x's/day**. This supplement may help improve arthritic symptoms and help you reduce the need for anti-inflammatory medicines.
+{{/Thercumin}}
+
+- Consider starting **THERACURMIN HP** **1 capsule 2x's/day**. This supplement may help improve arthritic symptoms and help you reduce the need for anti-inflammatory medicines. You may also consider a supplement called **NEUROPROTEK®**. The standard dose is **one capsule 2x's per day**. This supplement contains the flavonoids of **Luteolin**, **Quercetin**, and **Rutin**, and it is recommended to be taken with food when **GI symptoms** are common triggers of **mast cell activation**. It too has a **LIPOSOMAL FORMULATION**, which may enhance it absorption and assimilation into your body.
+
+- Consider starting **PYCNOGENOL** **100-250 mg/day**.
+
+- Consider starting **CBD SYNNERGIES-PN** **2 soft gel capsules 2x/day**
+
+{{#vinpocetine}}
+- Consider starting **VINPOCETINE** **10 mg 2x's day**
+{{/vinpocetine}}
+
+- Consider starting **CS BRAINSENSE**; take as directed
+
+- Consider starting **PROTANDIM** **1 tablet/day**
+
+- Consider starting Dr. Bredesen's private label supplement called **RECODE TYPE II- ATROPHIC**. The standard dose is **three capsules daily**. This supplement is a great nootropic for boosting synaptic function and contains **Lion's Mane 500 mg** + **ALCAR 300 mg** + **Gotu Kola 250 mg** + **Green Coffee Whole Fruit 100 mg** + **Butchers Broom 150 mg**.
+
+- Consider starting Dr. Bredesen's private label supplement called **RECODE TYPE III- TOXIC**. The standard dose is **four capsules at dinner**. This supplement is a great detox supplement that contains **Vitamin C 750 mg** + **Selenium 250 mg** + **Milk Thistle Seed Extract 250 mg** + **Artichoke Leaf Extract 250 mg** + **Dandelion Root Extract 200 mg** + **NAC 200 mg** + **Taurine 100 mg** + **Turmeric Rhizome Extract 25 mg** + **Barberry Root Bark 25 mg** + **Chicory Roasted Root 25 mg** + **Guggul Resin Extract 25 mg** + **Resveratrol 25 mg**.
+
+- Consider starting Dr. Bredesen's private label supplement called **RECODE DAILY OMEGA-3**. The standard dosing ranges from **2-6 capsules per day**. The supplement contains **EPA 600 mg** + **DHA 400 mg/2 capsules**. I spent some time researching the **OMEGA** supplement from Dr. Bredesen's company but the details about the **OMEGA-3** are not well published. Verify that this supplement is a **triglyceride-based OMEGA-3** supplement, and not an **ethyl-ester based OMEGA-3**. I have included a summary about what is important when choosing an **OMEGA-3** supplement later in this summary.
+
+- Consider starting Dr. Bredesen's private label supplement called **RECODE DAILY MULTIVITAMIN** supplement. Standard dosing ranges from **two capsules per day**. The supplement contains **Vitamin A, C, D3 (4000 iu), E, K2 (as MK-7)**, most of the **B vitamins, plus Zinc 15 mg** + **Alpha Lipoic Acid 100 mg** + **CoQ10 (ubiquinone) 100 mg** + **Quercetin 100 mg** + **Acetyl Kelp Extract 75 mg** + **Trace Minerals (Redmond's Sea Salt) 75 mg** + **Tocotrienols (10% [2.5 mg] tocopherols) 25 mg per serving**.
+
+- Consider starting Dr. Bredesen's private label supplement called **RECODE AM DAILY BALANCE** supplement. The standard dose is **two scoops mixed in water**. This supplement contains **Fibersol**, **Fibregum (acacia gum)**, **Lethicin (sunflower)**, **Beet Root Juice**, **Bacopa Monnieri**, **Beta Glucan**, **L-glutathione**, **Calcium BHB**, **Sodium BHB**, **Magnesium Threonate**, **NAD+**, and **Choline 50 mg/serving**.
+
+- Consider starting Dr. Bredesen's private label supplement called **RECODE PM DAILY BALANCE**. The standard dose is **two scoops mixed in water**. This supplement contains **Calcium and Magnesium**, **Fibersol**, **Fibregum (acacia gum)**, **Ashwagandha**, **Chamomile**, **5-HTP Hawthorn Leaf**, **Lemon Balm**, **Passionflower**, **Valerian Root**, and **Melatonin 1 mg/serving**. If you choose to use **PROGESTERONE** to optimize female hormones, you may not need other herbs or botanicals to help calm you at night.
+
+- Consider starting Dr. Bredesen's private label supplement called **RECODE PM DAILY PROBIOTIC**. This supplement contains **Fructo-Oligosaccharides**, **Lactobacillus Helveticus (R0052)**, **Bifidobacteria Longum (R0175)**, **Lactobacillus Acidophilus (La-14)**, **Bifidobacteria Bifidum (Bb-06)**, and **Bifidobacteria Breve (Bb-03)**. **Recommendations for alternating use of probiotics are growing. If you are experiencing good bowel health, you could simplify your supplement schedule and discontinue this supplement.**
+
+{{#atp-fuel-supplement}}
+- You are taking the **ATP FUEL** supplement. This supplement contains **Vitamin E**, **Calcium**, **Phosphorus**, **Magnesium**, a proprietary blend of amino acids, **Alpha-Ketoglutaric acid**, **L-Tyrosine**, **Carnipure®**, and **CoQ10**.
+{{/atp-fuel-supplement}}
+
+{{#quick-pregnenolone-101}}
+**Neurologically Active Hormones that Support Brain Health**
+
+Your baseline **PREGNENOLONE** level was {{quick-pregnenolone-lab-value}} ng/dL, and an optimal level is 150-200 ng/dL. **PREGNENOLONE** is considered the "mother of all hormones" and it is very neurologically active. There is an abundance of research suggesting the cognitive benefits of optimizing this level. Optimizing pregnenolone levels is essential for optimal cognition.
+
+📚 **Masterclass** https://community.amindforallseasons.com/masterclass/sections/423847/lessons/1628460
+
+Your **PREGNENOLONE** level falls within the optimal parameters and no additional intervention is recommended.
+{{/quick-pregnenolone-101}}
+
+{{#quick-PROG-50-100}}
+**Neurologically Active Hormones that Support Brain Health**
+
+Your baseline **PREGNENOLONE** level was {{quick-pregnenolone-lab-value}} ng/dL, and an optimal level is 150-200 ng/dL. **PREGNENOLONE** is considered the "mother of all hormones" and it is very neurologically active. There is an abundance of research suggesting the cognitive benefits of optimizing this level. Optimizing pregnenolone levels is essential for optimal cognition.
+
+📚 **Masterclass** https://community.amindforallseasons.com/masterclass/sections/423847/lessons/1628460
+
+Please consider starting **PREGNENOLONE** 100 mg each night.
+{{/quick-PROG-50-100}}
+
+{{#quick-PROG<50}}
+**Neurologically Active Hormones that Support Brain Health**
+
+Your baseline **PREGNENOLONE** level was {{quick-pregnenolone-lab-value}} ng/dL, and an optimal level is 150-200 ng/dL. **PREGNENOLONE** is considered the "mother of all hormones" and it is very neurologically active. There is an abundance of research suggesting the cognitive benefits of optimizing this level. Optimizing pregnenolone levels is essential for optimal cognition.
+
+📚 **Masterclass** https://community.amindforallseasons.com/masterclass/sections/423847/lessons/1628460
+
+Your **PREGNENOLONE** is severely deficient. Please consider starting **PREGNENOLONE** 100 mg each night and discuss with your healthcare provider about potential causes and additional interventions.
+{{/quick-PROG<50}}
+
+{{#quick-DHEA-151}}
+Your baseline **DHEA-s** level is {{quick-dhea-lab-value}} ng/dL and an optimal level is at least >150 ng/dL. We recommend supplementation if you level falls below 150 ng/dL, but many clinicians who practice functional medicine suggest the DHEA-s level should be at least 200 ng/dL in women, and 250 ng/dL in men. Remember, **DHEA-s** is a valuable neuroprotective steroid that may help to reduce neuroinflammation.
+
+📚 **Masterclass** https://community.amindforallseasons.com/masterclass/sections/423847/lessons/1587283
+
+Your **DHEA-s** level falls within the optimal parameters and no additional intervention is recommended.
+{{/quick-DHEA-151}}
+
+{{#quick-DHEA-150}}
+Your baseline **DHEA-s** level is {{quick-dhea-lab-value}} ng/dL and an optimal level is at least >150 ng/dL. We recommend supplementation if you level falls below 150 ng/dL, but many clinicians who practice functional medicine suggest the DHEA-s level should be at least 200 ng/dL in women, and 250 ng/dL in men. Remember, **DHEA-s** is a valuable neuroprotective steroid that may help to reduce neuroinflammation.
+
+📚 **Masterclass** https://community.amindforallseasons.com/masterclass/sections/423847/lessons/1587283
+
+Please consider starting **7-KETO DHEA** 100 mg at night.
+{{/quick-DHEA-150}}
+
+{{#quick-DHEA-200-249}}
+Please consider starting **7-KETO DHEA** 50 mg at night.
+{{/quick-DHEA-200-249}}
+
+{{#quick-DHEA-ASVD}}
+Did you know that your **DHEA-s** levels are *directly correlated* with coronary artery disease? The **higher** your **DHEA-s** level, the **lower** your risk of heart disease. This is significant considering your **DHEA-s** level!
+{{/quick-DHEA-ASVD}}
+
+{{#quick-DHEA-LUPRON}}
+Your **DHEA** level is sub-optimal for cognitive health, and we recommend you consider taking **7-KETO DHEA** 50 mg at night to optimize this level. Since you have a history of **PROSTATE CANCER** and you have been told that **TESTOSTERONE** optimization is contraindicated. More information is needed before an optimization strategy can be offered.
+{{/quick-DHEA-LUPRON}}
+
+{{#quick-cortisol-15}}
+**Cortisol and Brain Health**
+
+Your baseline **CORTISOL** level was {{quick-cortisol-lab-value}} μg/dL. Optimal cortisol levels for brain health typically range from 15-25 μg/dL in the morning. Low cortisol levels can significantly impact cognitive function, energy levels, and stress response.
+
+Your cortisol level is below the optimal range and may benefit from adrenal support. Consider discussing cortisol replacement therapy or adrenal support supplements with your healthcare provider.
+{{/quick-cortisol-15}}
+
+{{#cortisol-severe-support}}
+Given your very low cortisol levels combined with symptoms of chronic fatigue, comprehensive adrenal support is strongly recommended. This may include prescription cortisol replacement therapy under medical supervision.
+{{/cortisol-severe-support}}
+
+{{#neurological-hormone-support}}
+**Comprehensive Neurological Hormone Support**
+
+You have multiple neurologically active hormone deficiencies combined with cognitive and energy symptoms. A comprehensive approach to hormone optimization may provide significant benefits for brain health, energy, and overall well-being. Consider working with a healthcare provider experienced in hormone optimization to develop a coordinated treatment plan.
+{{/neurological-hormone-support}}
+
+**Adrenal Hormones That Influence Brain Health**
+
+Your first morning **CORTISOL** level was {{quick-cortisol-lab-value}} ng/dL and an optimal level is >15 ng/dL.
+
+{{#Cort515}}
+This level falls within the optimal parameters and no additional intervention is recommended.
+
+We recommend 1 of 2 supplements. No need to start both supplements but starting one of them may be helpful. These recommendations include **MITOCHONDRIAL OPTIMIZER** from Quicksilver Scientific. The recommended dose is 1 tsp each morning from Quicksilver Scientific. Another supplement is **GOLD SUPER MEN N** by Apex Energetics. The standard dose is 1 capsule/day.
+{{/Cort515}}
+
+{{#quick-cortisol-15}}
+**Low Cortisol Support**
+
+Your cortisol level is below the optimal range for brain health. Low cortisol can significantly impact cognitive function, energy levels, and stress response. Consider discussing cortisol replacement therapy or comprehensive adrenal support with your healthcare provider.
+
+{{#cortisol-severe-support}}
+Given your very low cortisol levels combined with symptoms of chronic fatigue, comprehensive adrenal support is strongly recommended. This may include prescription cortisol replacement therapy under medical supervision.
+{{/cortisol-severe-support}}
+
+{{#cortisol-borderline}}
+Your cortisol is in the borderline low range (5-15 ng/dL). Consider starting with natural adrenal support supplements before considering prescription interventions.
+{{/cortisol-borderline}}
+
+{{#cortisol-very-low}}
+Your cortisol is very low (<5 ng/dL). This requires immediate attention and likely prescription intervention. Please discuss with your healthcare provider promptly.
+{{/cortisol-very-low}}
+{{/quick-cortisol-15}}
+
+{{#quick-cortisol-high}}
+**Elevated Cortisol Management**
+
+Your cortisol level is elevated (>25 ng/dL), which can indicate chronic stress, adrenal hyperfunction, or other underlying conditions. Elevated cortisol can negatively impact brain health, memory, and cognitive function.
+
+{{#cortisol-stress-management}}
+Given your elevated cortisol combined with stress-related symptoms, a comprehensive stress management protocol is recommended. This may include:
+- Adaptogenic herbs (Ashwagandha, Rhodiola)
+- Stress reduction techniques (meditation, mindfulness)
+- Sleep optimization
+- Exercise modification
+- Consider working with a healthcare provider to rule out underlying conditions
+{{/cortisol-stress-management}}
+{{/quick-cortisol-high}}
+
+{{#exercise-cortisol-support}}
+**Athletic Adrenal Support**
+
+Your combination of exercise symptoms and low cortisol suggests possible overtraining syndrome or exercise-induced adrenal fatigue. Consider:
+- Reducing training intensity temporarily
+- Increasing recovery time between sessions
+- Nutritional support for adrenal function
+- Sleep optimization (8+ hours nightly)
+- Electrolyte and mineral repletion
+- Working with a sports medicine physician for comprehensive evaluation
+{{/exercise-cortisol-support}}
+
+---
+
+## **Please Consider Additional Screening Tests Related to Brain Health**
+
+The extensive panel of labs completed when you start The Enhance Protocol® is an excellent start to your health screening process to improve cognitive function. However, it is only a start! There are other screening tests that we recommend to help you identify silent health conditions that may impact your brain health or compromise your cognitive function. Though this list is not intended to be comprehensive, it is intended to help you to start thinking about the relationship of these tests to your brain health. Consider the following summary and bring your questions to office hours. If you need a prescription for any of these tests, please consult with your primary care provider or schedule a telemedicine consultation with one of our medical providers. Additional fees may apply.
+
+**Advanced Concussion Recovery Screenings-** If you would like to determine if you have unresolved brain inflammation from a historical concussion or traumatic brain injury, we recommend you complete a mood and symptom questionnaire, balance board testing, and a QEEG "brain map" testing. As a number of other screenings as it relates to your symptoms. The costs associated with these tests vary based on individual need.
+
+**Advanced Cardiovascular Testing-** If you take a STATIN medication to lower cholesterol, or if your doctor suggests you take one, then we recommend you complete a coronary artery calcium scan. A cholesterol panel offers little predictive value of your true cardiac risk. Cholesterol levels are a better predictor of metabolic syndrome, an unhealthy diet, or compromised liver health. If you want a better predictor of vascular health to help you decide if you should continue STATIN therapy, please consider the following:
+
+- **Coronary Artery Calcium Score (CAC)-** A CAC score can help quantify your actual risk for atherosclerotic build-up in the coronary arteries. The CAC score of 0-99 is very low risk, a score of 100-299 reflects moderately increased risk, and a score of 300+ is severely increased risk.
+
+- **D-Dimer, Leiden Factor 5, and Galectin-3 testing-** These lab tests help to identify additional inflammatory risk related to clotting disorders and heart disease.
+
+- **Continuous Blood Pressure Monitoring-** High blood pressure is a major contributor of cognitive deficits. If you are taking blood pressure medicine and you still have episodes of high blood pressure, we recommend you do a 24-hour ambulatory blood pressure reading.
+
+**Cone Beam CT Scan (CBCT) of your mouth-** If you have a history of at least 1 root canal, history of a fractured tooth, several crowns or old dental amalgams, or if you have a complex history of dental challenges, gingivitis, periodontal disease, we encourage you to discuss cavitat screening at CBCT. This test is more sensitive than traditional plain film x-rays done at your annual dental screening. The mouth is a reservoir of very inflammatory bacteria, and if you have a hidden infection, that cavitation, or a mild abscess "silent screaming," it can negatively impact your brain health. If you have sleep disturbances or you take sleeping medicine (OTC or prescription), if you snore, or if you are overweight, you are encouraged to complete an overnight sleep study.
+
+**Advanced Gastrointestinal Screening-** If you have irritable bowel syndrome, celiac disease, persistent acid reflux, eosinophilic esophagitis, colitis, chronic constipation or persistent diarrhea, then additional gastrointestinal screening may be indicated. More information about GI testing is needed before best testing options can be identified.
+
+**Overnight Oximetry or a Full Sleep Study-** 25% of all individuals at risk for cognitive impairment have disordered sleep or low oxygen levels at night. Sometimes, this is an **obstructive** sleep apnea, and other times, it is a **non-obstructive central** sleep apnea. Failure to get oxygen at night impairs the glymphatic system and can negatively impact brain health. If you have sleep disturbance, if you take sleeping medicine (OTC or prescription), if you snore, or if you are overweight, you are encouraged to complete an overnight sleep study.
+
+---
+
+## **Chronic Inflammation Can Lead to Inflammation in Your Brain**
+
+Many individuals do not realize that there is a relationship to inflammation in the body and brain health. If you are in a constant of inflammation, the brain will be negatively impacted. If one of the lab tests shown below exceeds the threshold for optimal health (brain health included), a treatment intervention may be recommended. You are encouraged to take these considerations back to your primary care provider or schedule a telemedicine consultation with a provider form A Mind For All Seasons.
+
+{{#quick-CRP}}
+Your baseline **hsCRP** is {{quick-CRP}}. The goal is to have a very low level, at least < 1 mg/L. **hsCRP** is a general marker of an inflammatory response. Systemic inflammation can negatively impact brain health. Please review the potential causes of an elevated **hsCRP** and work to resolve triggers of systemic inflammation.
+{{/quick-CRP}}
+
+{{#quick-CRP-above-optimal}}
+**Normal CRP:** This level falls within the optimal parameters and no additional intervention is recommended.
+{{/quick-CRP-above-optimal}}
+
+{{^quick-CRP-above-optimal}}
+**CRP > 1:** There are many potential causes form low grade systemic inflammation. The chart below will help you identify potential contributors. You may also find insight into triggers of inflammation by reviewing our membership site.
+{{/quick-CRP-above-optimal}}
+
+### **Triggers of Systemic Inflammation**
+
+| **Low Grade Infections** | **GI Tract Inflammation** | **Systemic Inflammatory** |
+|-------------------------|---------------------------|---------------------------|
+| Chronic Sinus Infections | IBS or Leaky Gut caused by excess sugar intake, alcohol, processed foods, food preservatives and additives, frequent use of aspirin or ibuprofen (NSAIDs), acid reflux medicine or acid suppressors, constipation, diarrhea, poor digestion, etc. | Lyme disease, Shingles, Air pollution, Metabolic Syndrome / IR, Obesity, Autoimmunity, Obstructive Sleep Apnea, Sedentary Lifestyle, Smoking, Toxins |
+| Urinary Tract Infection | **Acid Reflux** | **Obesity** |
+| Chronic Tonsil Infections | **Irritable Bowel** | **Autoimmunity** |
+| **Gingivitis** | **Bloating or Belching** | **Obstructive Sleep Apnea** |
+| Poor Dental Health | **Diarrhea** | **Sedentary Lifestyle** |
+| Broken Dental Fillings or Crowns | **Constipation** | **Smoking** |
+| **Periodontitis** | **Diverticulitis** | **Toxins** |
+| **Vaginitis** | | |
+| **Cellulitis** | | |
+| **Alcohol (even modest intake)** | | |
+| **Processed Junk Foods** | | |
+
+{{#quick-CRP-elevated}}
+**CRP > 1**
+{{/quick-CRP-elevated}}
+
+{{#quick-apo-e4-genetics}}
+Some of our clients are interested in 'brain-specific' markers of inflammation that can be more predictive of Alzheimer's or other neurodegenerative diseases. You may choose to complete this test if you have the **APO E4** genetics or a strong family history that might lead to testing. It is called the **APO E-RELATED PROTEIN** marker test.
+
+📚 **Masterclass** https://community.amindforallseasons.com/masterclass/sections/387364/lessons/1441406 **CRP > 1**
+{{/quick-apo-e4-genetics}}
+
+{{#quick-CRP-09-omega-<5}}
+**CRP 0.9 - omega <5:** **GI CHALLENGES** can be a common starting point for chronic inflammatory conditions. You are encouraged to have an open discussion with your health coach about supplements and dietary strategies that may help to calm systemic inflammation. Your coach can talk you through various testing options if you are concerned about GI health. **CRP 0.9 - omega <5**
+{{/quick-CRP-09-omega-<5}}
+
+**Albumin to Globulin (A/G) Ratio and Protein Synthesis**
+
+{{#quick-AG-ratio}}
+Your baseline **A/G RATIO** is {{quick-AG-ratio}}. The goal is to have a level of at least 1.5. A/G RATIO is an assessment of protein synthesis and can be a marker of liver function and nutritional status. A low A/G ratio may suggest chronic inflammation, liver dysfunction, or poor protein utilization.
+{{/quick-AG-ratio}}
+
+{{#quick-AG-15}}
+**Normal A/G Ratio:** This level falls within the optimal parameters and no additional intervention is recommended.
+{{/quick-AG-15}}
+
+{{^quick-AG-15}}
+**A/G Ratio <1.5:** There are many potential causes for a sub-optimal albumin to globulin ratio. The chart below will help you identify potential contributors. You may also find insight into factors affecting protein synthesis by reviewing our membership site.
+{{/quick-AG-15}}
+
+{{#quick-AG-ETOH}}
+**A/G Ratio + Alcohol:** Routine alcohol intake can be a potential contributor to a suboptimal A/G ratio. ALCOHOL inflames the liver and often impacts protein synthesis. Even if you consume ALCOHOL in moderation, you can run the risk of inducing an inflammatory response and altering your A/G RATIO. You may help to correct this imbalance by complete abstinence from ALCOHOL.
+{{/quick-AG-ETOH}}
+
+**Uric Acid and Metabolic Inflammation**
+
+{{#quick-uric-acid}}
+Your baseline **URIC ACID** level was {{quick-uric-acid}} mg/dL, and many practitioners like to see this value <6.5 mg/dL. **URIC ACID** is a systemic marker of inflammation, and when elevated, it may be contributory to high blood pressure, chronic gout, symptoms of chronic arthritis, neurodegenerative diseases, and other conditions related to systemic inflammation.
+{{/quick-uric-acid}}
+
+{{#UricAcid65}}
+This level falls within the optimal parameters and no additional intervention is recommended.
+{{/UricAcid65}}
+
+{{^UricAcid65}}
+**URIC ACID > 6.5:** There are many potential causes for elevated uric acid levels. These include dietary choices (red meat, alcohol, processed foods), reduced process foods and salt intake, avoiding high fructose corn syrup, staying well hydrated, etc. You may need personalized feedback.
+
+You may also consider a broader discussion about the potential risks and benefits of a prescription medicine called **ALLOPURINOL**. This is a topic you are encouraged to discuss in **Office Hours** with Handy or another coach from AMFAS.
+{{/UricAcid65}}
+
+{{#UAAcid-Gout}}
+You have reported a history of **GOUT**, which is usually exacerbated by elevated **URIC ACID LEVELS**. Please visit with your memory coach and your primary care provider about your **URIC ACID LEVELS** where there is elevated risk for heart disease or neurodegenerative disease.
+{{/UAAcid-Gout}}
+
+{{#quick-uric-acid-ETOH}}
+**URIC ACID + Alcohol:** Routine **ALCOHOL** intake is an additional predictor of an imbalanced **A/G RATIO**. **ALCOHOL** inflames the GI tract and often causes gastritis. Even if you consume **ALCOHOL** in moderation, you can run the risk of inducing an inflammatory response in the GI tract and altering your **URIC ACID LEVEL** naturally and avoid adding another medication.
+{{/quick-uric-acid-ETOH}}
+
+---
+
+## **Other Insights From Your Lab Work**
+
+There may be other risk factors identified in your lab work that should be factored into your efforts to improve brain health. We have summarized these challenges below.
+
+### **Blood Counts and Risk for Anemia**
+
+As a part of our testing, we completed a **COMPLETE BLOOD COUNT**. Your Red Blood Cell count (**RBC**) was {{CBC_RBC}}, your **HEMOGLOBIN** was {{CBC_HGB}}, your **HEMATOCRIT** was {{CBC_HCT}}, and your **PLATELET** count was {{CBC_PLT}}.
+
+**These markers fall within the optimal parameters and no additional intervention is recommended.**
+
+{{#quick-anemia}}
+**At least one of these variables may be suggestive that you are trending towards ANEMIA. This puts the brain at risk by limiting the delivery of oxygen to the brain.**
+{{/quick-anemia}}
+
+Your MCV condition and **MACROCYTOSIS** may be elevated. The elevated MCV level may be related to the use of **ALCOHOL**, or it may indicate you have stomach-related challenges like acid reflux. However, it may also be related to other factors and conditions or your healthcare providers would be happy to talk to that. Please consider additional interventions. Please schedule a telemedicine consultation if you want more support. Otherwise, you can address this with your primary care physician.
+
+### **Risk for Blood Clots and Cerebral Vascular Disease**
+
+{{#Coags}}
+We checked a **D-DIMER** level which was elevated at {{quick-D-Dimer}} ng/L. The **D-DIMER** has more top-of-mind awareness since the COVID pandemic. If you are at risk for neurodegenerative disorder from vascular risk factors (heart disease, stroke, blood clots) and you are not currently taking an anticoagulant like **ELIQUIS** or **XARELTO** (and many others) you may consider starting a few OTC supplements to lower your risk of blood clots.
+{{/Coags}}
+
+{{#Coags}}
+You are encouraged to start a supplement called **NITRIC BALANCE**. The standard dose is 1-2 tsp 2x's daily. This supplement is a rapid acting liposomal preparation that contains **VINPOCETINE** and other nutrients that support vasodilation of your blood vessels and improved circulation and blood flow.
+{{/Coags}}
+
+{{#Coags}}
+You are encouraged to start a supplement called **NEURO2**. The standard dose is 1 capsule 2x's daily. This supplement is a capsule that contains **VINPOCETINE** and other nutrients that support vasodilation and blood flow.
+{{/Coags}}
+
+{{#Coags}}
+If you have had a historical blood clot, or you are at high risk for vascular issues, you may consider checking your **FACTOR V LEIDEN** genetics.
+{{/Coags}}
+
+Your **PLATELET** count is suboptimal and **is not obvious contributor** listed in your history. If you are taking any medications (**NSAIDS**, acid reducers, seizure medications, etc.), these can contribute to a low-trending **PLATELET** count. Consider the **ORTHO ARTA** as part of treatment approach or to discuss about alternatives to immunity and others anti-platelet therapies.
+
+Your White Blood cell count **WBC** was {{CBC_WBC}}, your **ABSOLUTE NEUTROPHIL** count was {{CBC_NEUT_ABS}}, and your **ABSOLUTE LYMPHOCYTE** count was {{CBC_LYMPH_ABS}}. These cell counts represent a generalized reflection of your immune response at the time of your lab tests.
+
+**These markers fall within the optimal parameters and no additional intervention is recommended.**
+
+{{#quick-immune-elevated}}
+**At least one of these values is ELEVATED and may reflect an active immune response. We encourage you to consult with your primary care provider about these values.**
+{{/quick-immune-elevated}}
+
+{{#quick-immune-suppressed}}
+**At least one of these values is LOWER than expected and may be suspicious for a weakened immune response. This may be a one-time result in your results, or it may be a pattern which shows up consistently.**
+{{/quick-immune-suppressed}}
+
+---
+
+## **The Symptoms of a Historical Concussion May Be Chronic**
+
+In your health history, you reported a historical head injury and many troublesome neurological symptoms. Many individuals may not think they have experienced a serious concussion because **they did not experience a loss of consciousness** associated with a head injury; however, we now understand concussion and post-concussion syndrome much better than we did 10 years ago. Some of the symptoms that you are experiencing may be related to chronic, post-concussive syndrome. One of the primary challenges associated with concussions or TBI's is that they can initiate an inflammatory response that leads to poor brain health, lower oxygen delivery to the brain, activation of the brain's immune system, a disrupted blood brain barrier, a dysfunctional pituitary gland, and a host of other metabolic challenges unique to the brain.
+
+**TSI Masterclass** https://community.amindforallseasons.com/c/masterclass/sections/387365/lessons/1441412
+
+- Many individuals struggle with long-term, bothersome neurological symptoms. This can include ringing in the ears (tinnitus), chronic or persistent headaches, migraines, vertigo, dizziness, anxiety, depression, chronic fatigue, etc. Each of these symptoms may be related to a condition called **DYSAUTONOMIA**, which can be linked to the afterglow of historical concussions.
+
+**TSI Masterclass** https://community.amindforallseasons.com/c/masterclass/sections/387365/lessons/1441408
+
+- If you would like to determine if you have unresolved brain inflammation as a historical concussion or TBI, we recommend you learn more about a **VOMS** assessment. This simple, 5-minute test helps to identify unresolved symptoms related to post-concussion syndrome.
+
+- If you are distant from our Boise headquarters and a local consultation is not readily available, you can watch a brief video of a VOMS assessment online [?] and then administer this assessment on yourself to see if it induces troublesome symptoms. If you make your symptoms or brain fog worse, you should probably initiate an intervention to help resolve any lingering concussion recovery.
+
+- You can find this short video on YouTube at **https://www.youtube.com/watch?v=CjfSkCgksL-1025**
+
+- Please attend our Office Hours and ask about **CONCUSSION PROTOCOL** and how to incorporate more Home-based interventions into your daily routine. We can offer you several different support tools to aide in your recovery.
+
+**High-Tech Support Options:**
+
+- Since head injuries and the "wear and tear of life" can lead to continuous state of oxidative stress, the short-term use of a high-dose antioxidant may prove to be very helpful.
+
+- Consider one thousand **HYPERBARIC OXYGEN CHAMBERS** at a concentrated dose of flavonoid called **LUTEOLIN**. This supplement contains a robust dose of turmeric and black pepper mixed in an MCT oil. It is very well absorbed and can help kill free-radicals that can interfere with systemic inflammation after suffering from traumatic brain injuries.
+
+- You may consider taking an **ANTIOXIDANT CHALLENGE** using either **RIZAMAL/GLUTATHIONE 5-in-1**, **NAD+** or **FIRE ORAL MITOCHONDRIAL OPTIMIZER**. (1,500-2,500 mg per day). Each of these challenges can be embraced anywhere from 2-4 weeks.
+
+- Each of these supplements are liquid, liposomal supplements that can help to improve absorption and efficacy.
+
+- Each of the supplements listed are not of the highest quality and are verified by 3rd party verification, but quality and purity as an additional value for customers.
+
+- Everyone responds to supplements in unique ways. What may be very impactful for one person may not be very impactful for another. Therefore, we have identified 3 different anti-inflammatory and antioxidant supplements that have shown to be very beneficial when taken for a brief period of time.
+
+- Bring your questions about the **ANTIOXIDANT CHALLENGE** to Office Hours and we can provide you guidance. Regardless of the type of brain injury - minor traumatic brain injury that results in a loss of oxygen delivery to the brain. Unfortunately, this is when the brain requires the most oxygen to help recover! Because of this loss of oxygen, clients with symptoms tend to heal faster when treated with **Hyperbaric Oxygen Therapy (HBOT)**.
+
+- Consider the option of using these therapies in your area or consider taking a trip to Boise, Idaho so you can experience these therapies at the **AMFAS** headquarters. We have learned that many individuals like to try these therapies before committing to the long-term treatment.
+
+- If you are a poor sleeper, consider a trial of a prescription medication called **PROGESTERONE**. We recommend this be a bioidentical hormone, not a synthetic version of a drug. PROGESTERONE can be used in both men and women as part of our post-concussion syndrome treatments.
+
+- **PROGESTERONE** has been used in several major, large, hospital-based clinical trials for the acute treatment of traumatic brain injuries. **PROGESTERONE** helps to calm chemical toxicity in the brain by activating GABA receptors.
+
+- Many individuals who have experienced traumatic brain injuries may have poor sleep quality or poor duration of anxiety.
+
+- This medicine requires a prescription. You can learn more about the use of **PROGESTERONE** by attending Office Hours.
+
+---
+
+## **Other Insights From Your Lab Work**
+
+There may be other risk factors identified in your lab work that should be factored into your efforts to improve brain health. We have summarized these challenges below.
+
+### **Blood Counts and Risk for Anemia**
+
+As a part of our testing, we completed a **COMPLETE BLOOD COUNT**. Your Red Blood Cell count (**RBC**) was {{CBC_RBC}}, your **HEMOGLOBIN** was {{CBC_HGB}}, your **HEMATOCRIT** was {{CBC_HCT}}, and your **PLATELET** count was {{CBC_PLT}}.
+
+**These markers fall within the optimal parameters and no additional intervention is recommended.**
+
+{{#quick-anemia}}
+**At least one of these variables may be suggestive that you are trending towards ANEMIA. This puts the brain at risk by limiting the delivery of oxygen to the brain.**
+{{/quick-anemia}}
+
+Your MCV condition and **MACROCYTOSIS** may be elevated. The elevated MCV level may be related to the use of **ALCOHOL**, or it may indicate you have stomach-related challenges like acid reflux. However, it may also be related to other factors and conditions or your healthcare providers would be happy to talk to that. Please consider additional interventions. Please schedule a telemedicine consultation if you want more support. Otherwise, you can address this with your primary care physician.
+
+### **Risk for Blood Clots and Cerebral Vascular Disease**
+
+{{#Coags}}
+We checked a **D-DIMER** level which was elevated at {{quick-D-Dimer}} ng/L. The **D-DIMER** has more top-of-mind awareness since the COVID pandemic. If you are at risk for neurodegenerative disorder from vascular risk factors (heart disease, stroke, blood clots) and you are not currently taking an anticoagulant like **ELIQUIS** or **XARELTO** (and many others) you may consider starting a few OTC supplements to lower your risk of blood clots.
+{{/Coags}}
+
+{{#Coags}}
+You are encouraged to start a supplement called **NITRIC BALANCE**. The standard dose is 1-2 tsp 2x's daily. This supplement is a rapid acting liposomal preparation that contains **VINPOCETINE** and other nutrients that support vasodilation of your blood vessels and improved circulation and blood flow.
+{{/Coags}}
+
+{{#Coags}}
+You are encouraged to start a supplement called **NEURO2**. The standard dose is 1 capsule 2x's daily. This supplement is a capsule that contains **VINPOCETINE** and other nutrients that support vasodilation and blood flow.
+{{/Coags}}
+
+{{#Coags}}
+If you have had a historical blood clot, or you are at high risk for vascular issues, you may consider checking your **FACTOR V LEIDEN** genetics.
+{{/Coags}}
+
+Your **PLATELET** count is suboptimal and **is not obvious contributor** listed in your history. If you are taking any medications (**NSAIDS**, acid reducers, seizure medications, etc.), these can contribute to a low-trending **PLATELET** count. Consider the **ORTHO ARTA** as part of treatment approach or to discuss about alternatives to immunity and others anti-platelet therapies.
+
+Your White Blood cell count **WBC** was {{CBC_WBC}}, your **ABSOLUTE NEUTROPHIL** count was {{CBC_NEUT_ABS}}, and your **ABSOLUTE LYMPHOCYTE** count was {{CBC_LYMPH_ABS}}. These cell counts represent a generalized reflection of your immune response at the time of your lab tests.
+
+**These markers fall within the optimal parameters and no additional intervention is recommended.**
+
+{{#quick-immune-elevated}}
+**At least one of these values is ELEVATED and may reflect an active immune response. We encourage you to consult with your primary care provider about these values.**
+{{/quick-immune-elevated}}
+
+{{#quick-immune-suppressed}}
+**At least one of these values is LOWER than expected and may be suspicious for a weakened immune response. This may be a one-time result in your results, or it may be a pattern which shows up consistently.**
+{{/quick-immune-suppressed}}
+
+
+

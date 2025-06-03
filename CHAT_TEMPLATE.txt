@@ -1,0 +1,35 @@
+📋 COPY THIS FOR NEW AI CHATS:
+
+# Mind Stoke Platform - Development Context
+
+## Project Overview
+Mind Stoke is an internal AMFAS platform for processing client health data and generating personalized PDF roadmaps for brain/body health optimization. Staff upload labs, clients complete HHQ (Health History Questionnaire), cognitive assessments are added, and the system generates comprehensive health roadmaps.
+
+## 🚨 CRITICAL REQUIREMENT
+**"We need to make sure all labs are being generated in the roadmap as there is never a situation we don't have lab values in the roadmap"**
+
+## Core Architecture
+- **Flask Server**: Python backend on port 5001 (`/Users/jstoker/Documents/mindstoke-server`)
+- **Key File**: `roadmap_generator.py` with `_process_all_content_controls()` method
+- **Template**: `/roadmap-template/new-patient-roadmap.txt`
+- **Test Client**: `78659670-c75f-4c9e-b9d9-49a18db641b6`
+- **Debug URL**: `http://localhost:5001/roadmap/debug/78659670-c75f-4c9e-b9d9-49a18db641b6`
+
+## Key Methods (roadmap_generator.py)
+```python
+_process_all_content_controls()           # CORE: Ensures ALL labs processed
+_process_all_lab_values_comprehensive()   # Processes every lab with thresholds
+_evaluate_lab_threshold()                 # Intelligent threshold evaluation  
+_get_comprehensive_lab_ranges()           # Gender-specific lab ranges
+```
+
+## Lab Categories Processed
+CBC, Chemistry Panel, Liver Function, Thyroid, Vitamins (D/B12/E), Minerals, Omega Fatty Acids, Genetics (APO E/MTHFR), Hormones
+
+## Quick Start
+```bash
+cd /Users/jstoker/Documents/mindstoke-server && python run.py
+# Server on http://localhost:5001
+```
+
+**Full documentation in MINDSTOKE_CONTEXT.md** 
