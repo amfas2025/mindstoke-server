@@ -135,11 +135,7 @@ def generate(client_id):
         generator = RoadmapGenerator()
         current_app.logger.info("RoadmapGenerator created successfully")
         
-        current_app.logger.info("About to call _process_all_content_controls")
-        processed_content = generator._process_all_content_controls(client_data, lab_data, hhq_responses)
-        current_app.logger.info(f"processed_content created successfully with keys: {list(processed_content.keys()) if processed_content else 'None'}")
-        
-        # Generate roadmap content using processed controls
+        # Generate roadmap content (this already processes all content controls internally)
         current_app.logger.info("About to generate roadmap content")
         roadmap_content = generator.generate_roadmap(
             client_data=client_data,
@@ -159,8 +155,7 @@ def generate(client_id):
                              client=client,
                              roadmap_content=roadmap_content,
                              generated_date=generated_date,
-                             supplements=supplements,
-                             processed_content=processed_content)
+                             supplements=supplements)
         
     except Exception as e:
         current_app.logger.error(f"Error generating roadmap for client {client_id}: {str(e)}")

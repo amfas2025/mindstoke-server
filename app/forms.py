@@ -1,11 +1,17 @@
 from flask_wtf import FlaskForm
-from wtforms import BooleanField, SubmitField, TextAreaField
+from wtforms import BooleanField, StringField, SubmitField, TextAreaField
 from wtforms.validators import DataRequired
 from app.utils.supabase_client import fetch_health_history_questions
 
 # Cache for the generated form class to avoid regenerating on every request
-_cached_form_class = None
+_cached_form_class = None  # Clear cache to force regeneration with new fields
 _field_mapping = {}
+
+def clear_form_cache():
+    """Clear the cached form class to force regeneration."""
+    global _cached_form_class, _field_mapping
+    _cached_form_class = None
+    _field_mapping = {}
 
 def create_hhq_form_class():
     """Factory function to create a dynamic HHQ form class with fields from the database."""
@@ -49,12 +55,22 @@ def create_hhq_form_class():
             # Store the mapping
             _field_mapping[form_field_name] = db_variable_name
             
-            # Add field to form attributes with validation
-            form_attrs[form_field_name] = BooleanField(
-                question_text,
-                description=question.get('description', ''),
-                validators=[DataRequired()] if question.get('required', False) else []
-            )
+            # Determine field type based on variable name or question content
+            if db_variable_name in ['hh-height', 'hh-weight']:
+                # Use StringField for height and weight
+                form_attrs[form_field_name] = StringField(
+                    question_text,
+                    description=question.get('description', ''),
+                    validators=[DataRequired()] if question.get('required', False) else []
+                )
+                print(f"DEBUG: Created StringField for {db_variable_name}")
+            else:
+                # Use BooleanField for all other questions (existing behavior)
+                form_attrs[form_field_name] = BooleanField(
+                    question_text,
+                    description=question.get('description', ''),
+                    validators=[DataRequired()] if question.get('required', False) else []
+                )
             
         print(f"DEBUG: Successfully added {len(_field_mapping)} dynamic fields to form class")
     except Exception as e:

@@ -75,43 +75,38 @@
         </div>
     </div>
 
-    <!-- APO E Genetics Section -->
-    <div class="mb-4">
-        <div class="text-center p-3 mb-3" style="background-color: black; color: white;">
-            <h4 class="mb-0">APO E Genetic Profile and Your Risk for Oxidative Stress</h4>
-        </div>
-        <div style="padding: 0 15px;">
-            <p style="margin-bottom: 10px;">Your APO E Genotype is {{ processed_content.get('genome-type', '[genome-type]') }}. Your APO E genetics has some predictive value for increased risk of cardiovascular and neurodegenerative disease. Your GLUTATHIONE level was {{ processed_content.get('GLUT_VALUE', '[GLUT_VALUE]') }} and many neurologists suggest the optimal range may exceed 300 μg/mL. GLUTATHIONE reflects your ability to calm oxidative stress.</p>
-            
-            {% if processed_content.get('has_E4') %}
-                {% if processed_content.get('quick-E4') %}
-                    <p style="margin-bottom: 20px;">You have both of the APO E4 genes that may convey greater risk of Alzheimer's. However, genetics convey susceptibility, but they are not determinative... you can influence their expression! You will want to be particularly thoughtful about embracing a healthy lifestyle, using high quality supplements, hormone optimization, and toxicity. Details about each of these interventions will follow.</p>
-                {% elif processed_content.get('quick-E4E3') %}
-                    <p style="margin-bottom: 20px;">You have one of the APO E4 genes that may convey greater risk of Alzheimer's. However, genetics convey susceptibility, but they are not determinative... you can influence their expression! You will want to be particularly thoughtful about embracing a healthy lifestyle, using high quality supplements, hormone optimization, and toxicity. Details about each of these interventions will follow.</p>
-                {% endif %}
-            {% else %}
-                <p style="margin-bottom: 20px;">You do not have the APO E genetic risk for Alzheimer's Dementia. You should consider ADDITIONAL IMMUNE SYSTEM TESTING and/or TOXICITY TESTING to clarify your risk for TOXIC CONTRIBUTORS of neurodegenerative disease.</p>
-            {% endif %}
-        </div>
-    </div>
-
     <!-- Dynamic Lab Results Content -->
     <div class="roadmap-content" style="padding: 0 15px;">
         {% for line in roadmap_content.split('\n') %}
             {% if line.strip() %}
-                {% if 'supplement' in line.lower() or 'recommend' in line.lower() or 'consider' in line.lower() %}
-                    <!-- Supplement recommendations in green -->
-                    <div class="p-2 mb-2" style="background-color: #90EE90; color: black;">
-                        {{ line.strip() }}
-                    </div>
-                {% elif line.strip().endswith(':') and line.strip()|length < 100 %}
-                    <!-- Section heading -->
+                {% set clean_line = line.strip() %}
+                
+                {# Skip duplicate welcome messages since we have our own header #}
+                {% if 'Welcome' in clean_line and ('**' in clean_line or '*' in clean_line) %}
+                    {# Skip this line - it's a duplicate welcome #}
+                {% elif clean_line.startswith('# ') %}
+                    {# Main title - skip since we have our own header #}
+                {% elif clean_line.startswith('## ') %}
+                    {# Section heading with markdown syntax #}
+                    {% set heading_text = clean_line[3:].strip().replace('**', '') %}
                     <div class="text-center p-2 mb-3 mt-4" style="background-color: black; color: white;">
-                        <h5 class="mb-0">{{ line.strip() }}</h5>
+                        <h5 class="mb-0">{{ heading_text }}</h5>
                     </div>
+                {% elif clean_line.startswith('---') %}
+                    {# Section divider - add some space #}
+                    <div style="margin: 20px 0;"></div>
+                {% elif 'supplement' in clean_line.lower() or 'recommend' in clean_line.lower() or 'consider' in clean_line.lower() or clean_line.startswith('- ') %}
+                    {# Supplement recommendations in green #}
+                    <div class="p-2 mb-2" style="background-color: #90EE90; color: black;">
+                        {{ clean_line.replace('- ', '• ') }}
+                    </div>
+                {% elif clean_line.startswith('**') and clean_line.endswith('**') %}
+                    {# Bold text - make it a subheading #}
+                    {% set bold_text = clean_line[2:-2] %}
+                    <h6 class="mt-3 mb-2" style="font-weight: bold; color: #2c3e50;">{{ bold_text }}</h6>
                 {% else %}
-                    <!-- Regular content -->
-                    <p style="margin-bottom: 8px;">{{ line.strip() }}</p>
+                    {# Regular content #}
+                    <p style="margin-bottom: 8px;">{{ clean_line }}</p>
                 {% endif %}
             {% else %}
                 <br>

@@ -75,10 +75,28 @@
                             {% for field in form %}
                                 {% if field.name in current_section_fields %}
                                     {% set _ = fields_in_section.append(field) %}
-                                    <div class="form-check mb-3">
-                                        {{ field(class="form-check-input", id=field.name) }}
-                                        {{ field.label(class="form-check-label", for=field.name) }}
-                                    </div>
+                                    
+                                    {% if field.__class__.__name__ == 'StringField' %}
+                                        <!-- Text input field for height/weight -->
+                                        <div class="mb-3">
+                                            {{ field.label(class="form-label") }}
+                                            {{ field(class="form-control", placeholder=field.description) }}
+                                            {% if field.description %}
+                                                <div class="form-text">{{ field.description }}</div>
+                                            {% endif %}
+                                            {% if field.errors %}
+                                                {% for error in field.errors %}
+                                                    <div class="text-danger">{{ error }}</div>
+                                                {% endfor %}
+                                            {% endif %}
+                                        </div>
+                                    {% else %}
+                                        <!-- Checkbox field for yes/no questions -->
+                                        <div class="form-check mb-3">
+                                            {{ field(class="form-check-input", id=field.name) }}
+                                            {{ field.label(class="form-check-label", for=field.name) }}
+                                        </div>
+                                    {% endif %}
                                 {% endif %}
                             {% endfor %}
                             

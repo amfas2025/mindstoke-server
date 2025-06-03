@@ -230,10 +230,18 @@ def upsert_individual_hhq_answers(client_id, answers_dict, attempt_id):
 
         payloads = []
         for variable_name, value in answers_dict.items():
+            # Handle different value types based on the field
+            if variable_name in ['hh-height', 'hh-weight']:
+                # Store text values as-is for height and weight
+                response_value = str(value) if value else ''
+            else:
+                # Store boolean values as 'True'/'False' for other fields
+                response_value = 'True' if value else 'False'
+                
             payloads.append({
                 'client_id': client_id,
                 'question_variable_name': variable_name,
-                'response_value': 'True' if value else 'False',
+                'response_value': response_value,
                 'attempt_id': attempt_id,
                 'taken_at': taken_at,
                 'responses': snapshot
@@ -366,11 +374,18 @@ def upsert_hhq_answers_partial(client_id, answers_dict, attempt_id):
         
         payloads = []
         for variable_name, value in answers_dict.items():
-            # Save both True and False values for current section
+            # Handle different value types based on the field
+            if variable_name in ['hh-height', 'hh-weight']:
+                # Store text values as-is for height and weight
+                response_value = str(value) if value else ''
+            else:
+                # Store boolean values as 'True'/'False' for other fields
+                response_value = 'True' if value else 'False'
+                
             payloads.append({
                 'client_id': client_id,
                 'question_variable_name': variable_name,
-                'response_value': 'True' if value else 'False',
+                'response_value': response_value,
                 'attempt_id': attempt_id,
                 'taken_at': taken_at,
                 'responses': json.dumps({variable_name: value})

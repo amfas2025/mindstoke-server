@@ -9,6 +9,7 @@ from reportlab.lib.styles import getSampleStyleSheet, ParagraphStyle
 from reportlab.lib.units import inch
 from reportlab.lib.colors import HexColor
 from reportlab.lib import colors
+from risk_factor_mapping import RiskFactorMapper
 
 class RoadmapGenerator:
     """
@@ -201,9 +202,18 @@ class RoadmapGenerator:
         # 5. Apply gender-specific sections
         roadmap = self._process_gender_sections(roadmap, client_data.get('gender'))
         
-        # 6. Clean up any remaining placeholders
+        # 6. Remove empty sections that have no applicable content
+        roadmap = self._remove_empty_sections(roadmap)
+        
+        # 7. Clean up any remaining placeholders and improve formatting
         roadmap = self._cleanup_placeholders(roadmap)
         
+        return roadmap
+    
+    def _remove_empty_sections(self, roadmap: str) -> str:
+        """Remove sections that are empty or have no content."""
+        # For now, just return the roadmap as-is
+        # This can be enhanced later if needed
         return roadmap
     
     def _apply_content_controls_to_template(self, roadmap: str, processed_content: Dict[str, Any]) -> str:
@@ -211,20 +221,47 @@ class RoadmapGenerator:
         Apply all processed content controls to the roadmap template.
         This replaces content control placeholders with appropriate content or removes them.
         """
-        # Apply each content control from our intelligent processing
+        # FIRST: Handle special MTHFR placeholders before general processing
+        if 'MTHFR_C677T' in processed_content and 'MTHFR_A1298C' in processed_content:
+            mthfr_c677t = processed_content['MTHFR_C677T']
+            mthfr_a1298c = processed_content['MTHFR_A1298C']
+            
+            # Replace the literal placeholder text with variant names
+            roadmap = roadmap.replace('{{MTHFR_C677T}}', 'C677T')
+            roadmap = roadmap.replace('{{MTHFR_A1298C}}', 'A1298C')
+            
+            print(f"DEBUG: MTHFR placeholder replacement. C677T: {mthfr_c677t}, A1298C: {mthfr_a1298c}")
+        
+        # THEN: Process all other content controls
         for control_name, control_value in processed_content.items():
-            # Handle conditional blocks: {{#control_name}}content{{/control_name}}
-            block_pattern = f"{{{{#{control_name}}}}}(.*?){{{{/{control_name}}}}}"
+            # Skip MTHFR placeholders as they're handled above
+            if control_name in ['MTHFR_C677T', 'MTHFR_A1298C']:
+                continue
+                
+            # Escape special regex characters in control name
+            escaped_control_name = re.escape(control_name)
+                
+            # Handle regular conditional blocks: {{#control_name}}content{{/control_name}}
+            block_pattern = f"{{{{#{escaped_control_name}}}}}(.*?){{{{/{escaped_control_name}}}}}"
+            
+            # Handle inverted conditional blocks: {{^control_name}}content{{/control_name}}
+            inverted_block_pattern = f"{{{{\\^{escaped_control_name}}}}}(.*?){{{{/{escaped_control_name}}}}}"
             
             if isinstance(control_value, bool):
                 if control_value:
-                    # Show the content by removing the conditional markers, keeping the content
+                    # Show regular conditional content, hide inverted conditional content
                     def replace_block(match):
                         return match.group(1)  # Return just the content without the markers
                     roadmap = re.sub(block_pattern, replace_block, roadmap, flags=re.DOTALL)
+                    # Remove inverted conditional blocks (since condition is true)
+                    roadmap = re.sub(inverted_block_pattern, "", roadmap, flags=re.DOTALL)
                 else:
-                    # Hide the content by removing the entire block
+                    # Hide regular conditional content, show inverted conditional content
                     roadmap = re.sub(block_pattern, "", roadmap, flags=re.DOTALL)
+                    # Show inverted conditional content
+                    def replace_inverted_block(match):
+                        return match.group(1)  # Return just the content without the markers
+                    roadmap = re.sub(inverted_block_pattern, replace_inverted_block, roadmap, flags=re.DOTALL)
             
             # Handle simple placeholders: {{control_name}}
             placeholder = f"{{{{{control_name}}}}}"
@@ -235,59 +272,7 @@ class RoadmapGenerator:
                 # For complex values, convert to string or remove if empty
                 roadmap = roadmap.replace(placeholder, str(control_value) if control_value else "")
         
-        # Special handling for MTHFR variants (template has specific placeholder pattern)
-        if 'MTHFR_C677T' in processed_content and 'MTHFR_A1298C' in processed_content:
-            mthfr_c677t = processed_content['MTHFR_C677T']
-            mthfr_a1298c = processed_content['MTHFR_A1298C']
-            
-            # Enhanced MTHFR variant processing to handle all combinations
-            variant_text = "Your MTHFR Genotype shows "
-            variants_found = []
-            
-            # Process C677T variant - fix the detection logic
-            if mthfr_c677t and str(mthfr_c677t).strip() not in ['Not Detected', 'not detected', '', 'normal']:
-                if 'homozygous' in str(mthfr_c677t).lower():
-                    variants_found.append("C677T homozygous")
-                elif 'heterozygous' in str(mthfr_c677t).lower():
-                    variants_found.append("C677T heterozygous") 
-                else:
-                    variants_found.append("C677T")
-            
-            # Process A1298C variant - fix the detection logic
-            if mthfr_a1298c and str(mthfr_a1298c).strip() not in ['Not Detected', 'not detected', '', 'normal']:
-                if 'homozygous' in str(mthfr_a1298c).lower():
-                    variants_found.append("A1298C homozygous")
-                elif 'heterozygous' in str(mthfr_a1298c).lower():
-                    variants_found.append("A1298C heterozygous")
-                else:
-                    variants_found.append("A1298C")
-            
-            # Construct the appropriate text based on findings
-            if len(variants_found) == 2:
-                # Both variants detected
-                variant_text += f"a {variants_found[0]} and an {variants_found[1]} variant"
-            elif len(variants_found) == 1:
-                # Single variant detected
-                variant_name = variants_found[0]
-                article = "an" if variant_name.startswith('A') else "a"
-                variant_text += f"{article} {variant_name} variant"
-            else:
-                # No variants detected
-                variant_text = "Your MTHFR Genotype shows no detected variants"
-            
-            # Replace the MTHFR template patterns (handle multiple possible patterns)
-            old_patterns = [
-                "Your MTHFR Genotype shows a _ variant and a_ variant",
-                "Your MTHFR Genotype shows a Detected variant and aDetected variant",
-                "Your MTHFR Genotype shows a _ variant and an _ variant",
-                "Your MTHFR Genotype shows _ variant and _ variant"
-            ]
-            
-            for old_pattern in old_patterns:
-                roadmap = roadmap.replace(old_pattern, variant_text)
-            
-            print(f"DEBUG: Enhanced MTHFR processing. C677T: {mthfr_c677t}, A1298C: {mthfr_a1298c}, Variants found: {variants_found}, Final text: {variant_text}")
-        
+        # Remove the old MTHFR processing logic that was below
         return roadmap
     
     def _remove_content_control_section(self, roadmap: str, control_name: str) -> str:
@@ -342,18 +327,31 @@ class RoadmapGenerator:
     
     def _replace_client_info(self, roadmap: str, client_data: Dict[str, Any]) -> str:
         """Replace basic client information placeholders."""
-        # Client name replacements
-        name = client_data.get('name', 'Patient')
+        
+        # Handle Handlebars-style placeholders
+        firstname = client_data.get('firstname', client_data.get('name', 'Patient'))
+        roadmap = roadmap.replace('{{firstname}}', firstname)
+        
+        # Handle today's date
+        today = client_data.get('today', datetime.now().strftime('%B %d, %Y'))
+        roadmap = roadmap.replace('{{today}}', today)
+        
+        # Handle lab date
+        lab_date = client_data.get('lab-date', client_data.get('labs_date', 'your recent labs'))
+        roadmap = roadmap.replace('{{lab-date}}', lab_date)
+        
+        # Legacy replacements (keep for backward compatibility)
+        name = client_data.get('name', firstname)
         roadmap = roadmap.replace('_______', name)  # Main name placeholder
         roadmap = roadmap.replace('___________', name)  # Secondary name placeholder
         roadmap = roadmap.replace('Dear _-', f'Dear {name},')
         
-        # Date replacements
+        # Date replacements (legacy)
         report_date = datetime.now().strftime('%B %d, %Y')
         roadmap = roadmap.replace('Report Date: _', f'Report Date: {report_date}')
         roadmap = roadmap.replace('Report Date: __', f'Report Date: {report_date}')
         
-        # Labs drawn date
+        # Labs drawn date (legacy)
         labs_date = client_data.get('labs_date', report_date)
         roadmap = roadmap.replace('Labs Drawn: _____', f'Labs Drawn: {labs_date}')
         
@@ -546,14 +544,44 @@ disease."""
         return roadmap
     
     def _cleanup_placeholders(self, roadmap: str) -> str:
-        """Clean up any remaining unfilled placeholders."""
-        # Replace any remaining single underscores with "Not Available"
-        roadmap = re.sub(r'\b_\b', 'Not Available', roadmap)
+        """Clean up remaining placeholders and improve formatting for better readability."""
         
-        # Replace any remaining multiple underscores
-        roadmap = re.sub(r'_{3,}', 'Not Available', roadmap)
+        # Remove any remaining placeholder patterns
+        roadmap = re.sub(r'\{\{[^}]*\}\}', '', roadmap)
+        roadmap = re.sub(r'\{[^}]*\}', '', roadmap)
         
-        return roadmap
+        # Clean up excessive whitespace and empty lines
+        # Remove multiple consecutive empty lines (more than 2)
+        roadmap = re.sub(r'\n\s*\n\s*\n+', '\n\n', roadmap)
+        
+        # Remove trailing whitespace from lines
+        roadmap = re.sub(r'[ \t]+$', '', roadmap, flags=re.MULTILINE)
+        
+        # Clean up section breaks with too much spacing
+        roadmap = re.sub(r'\n\s*---\s*\n\s*\n+', '\n\n---\n\n', roadmap)
+        
+        # Remove empty sections (lines with just whitespace between headers)
+        roadmap = re.sub(r'(##.*?\n)\s*\n\s*\n(##)', r'\1\n\2', roadmap)
+        
+        # Clean up bullet points with excessive spacing
+        roadmap = re.sub(r'\n\s*\n\s*-\s', '\n- ', roadmap)
+        
+        # Remove sections that are just headers with no content
+        roadmap = re.sub(r'##\s*\*\*[^*]+\*\*\s*\n\s*\n\s*(?=##|\Z)', '', roadmap)
+        
+        # Clean up "Consider the following:" with no following content
+        roadmap = re.sub(r'Consider the following:\s*\n\s*\n\s*(?=-|##|\Z)', '', roadmap)
+        
+        # Remove excessive spacing around bullet points
+        roadmap = re.sub(r'\n\n\n+(-\s)', r'\n\n\1', roadmap)
+        
+        # Clean up spacing before section dividers
+        roadmap = re.sub(r'\n\s*\n\s*\n+---', '\n\n---', roadmap)
+        
+        # Final cleanup: ensure consistent section spacing
+        roadmap = re.sub(r'\n{4,}', '\n\n\n', roadmap)
+        
+        return roadmap.strip()
     
     def get_supplement_recommendations(self, lab_results: Dict[str, Any]) -> list:
         """Extract supplement recommendations based on lab results."""
@@ -788,714 +816,6 @@ disease."""
         doc.build(story)
         return output_path
     
-    def _process_all_content_controls(self, client_data: Dict[str, Any], lab_results: Dict[str, Any], 
-                                     hhq_responses: Dict[str, Any] = None) -> Dict[str, Any]:
-        """
-        Intelligent conditional processing system using all lab thresholds and compound logic.
-        Based on comprehensive lab panel analysis and HHQ integration.
-        ENSURES ALL LAB VALUES ARE REPRESENTED IN THE ROADMAP.
-        """
-        processed = {}
-        
-        # Set default values
-        if hhq_responses is None:
-            hhq_responses = {}
-        
-        # Get client info
-        gender = client_data.get('gender', '').lower()
-        client_name = client_data.get('name', '')
-        firstname = client_name.split()[0] if client_name else 'Patient'
-        
-        # Basic client information
-        processed.update({
-            'fullname': client_name,
-            'firstname': firstname,
-            'today': datetime.now().strftime('%B %d, %Y'),
-            'lab-date': datetime.now().strftime('%B %d, %Y')
-        })
-        
-        # Get comprehensive lab ranges
-        ranges = self._get_comprehensive_lab_ranges()
-        
-        # Calculate compound lab values and ratios
-        calculated_values = self._calculate_compound_lab_values(lab_results)
-        lab_results.update(calculated_values)
-        
-        # CRITICAL: Process ALL lab values first to ensure complete coverage
-        processed.update(self._process_all_lab_values_comprehensive(lab_results, ranges, gender))
-        
-        # Process specific marker categories (these will add to, not replace, the comprehensive processing)
-        processed.update(self._process_inflammatory_markers(lab_results, hhq_responses, ranges))
-        processed.update(self._process_cardiovascular_markers(lab_results, hhq_responses, ranges))
-        processed.update(self._process_metabolic_markers(lab_results, hhq_responses, ranges))
-        processed.update(self._process_thyroid_markers(lab_results, hhq_responses, ranges))
-        processed.update(self._process_nutrient_markers(lab_results, hhq_responses, ranges))
-        processed.update(self._process_genetic_markers(lab_results, hhq_responses))
-        
-        # Gender-specific hormone processing
-        if gender == 'male':
-            processed.update(self._process_male_hormone_markers(lab_results, hhq_responses, ranges))
-            processed['quick-male-hormones'] = True
-            processed['quick-female-hormones'] = False
-        else:
-            processed.update(self._process_female_hormone_markers(lab_results, hhq_responses, ranges))
-            processed['quick-female-hormones'] = True
-            processed['quick-male-hormones'] = False
-        
-        # Process compound conditions that combine multiple markers
-        processed.update(self._process_compound_conditions(lab_results, hhq_responses, ranges))
-        
-        # Process HHQ-based conditions and interactions
-        processed.update(self._process_hhq_based_conditions(hhq_responses, lab_results))
-        
-        # Process advanced protocols (hormones, supplements, specialized interventions)
-        processed.update(self._process_advanced_protocols(lab_results, hhq_responses, ranges))
-        
-        return processed
-
-    def _process_all_lab_values_comprehensive(self, lab_results: Dict[str, Any], ranges: Dict, gender: str) -> Dict[str, Any]:
-        """
-        COMPREHENSIVE processing that ensures ALL lab values get represented in the roadmap.
-        This is the safety net to make sure no lab value is missed.
-        """
-        processed = {}
-        
-        # Map all possible lab values to content controls
-        lab_mappings = {
-            # Inflammatory markers
-            'INFLAM_CRP': 'quick-hsCRP',
-            'INFLAM_HOMOCYS': 'quick-homocysteine', 
-            'INFLAM_ESR': 'quick-ESR',
-            'INFLAM_FERRITIN': 'quick-ferritin',
-            
-            # Lipid panel
-            'LIPID_CHOL': 'cholesterol-row',
-            'LIPID_HDL': 'quick-HDL',
-            'LIPID_LDL': 'quick-LDL', 
-            'LIPID_TRIG': 'quick-triglycerides',
-            'LIPID_NONHDL': 'quick-nonHDL',
-            
-            # Complete blood count
-            'CBC_WBC': 'quick-WBC',
-            'CBC_RBC': 'quick-RBC',
-            'CBC_HGB': 'quick-hemoglobin',
-            'CBC_HCT': 'quick-hematocrit',
-            'CBC_PLT': 'quick-platelets',
-            
-            # Comprehensive metabolic panel
-            'CHEM_GLU': 'glucose-elevated',
-            'CHEM_BUN': 'quick-BUN',
-            'CHEM_CREAT': 'quick-creatinine',
-            'CHEM_EGFR': 'quick-eGFR',
-            'CHEM_NA': 'quick-sodium',
-            'CHEM_K': 'quick-potassium',
-            'CHEM_CL': 'quick-chloride',
-            'CHEM_CO2': 'quick-CO2',
-            
-            # Liver function
-            'LFT_ALT': 'quick-ALT',
-            'LFT_AST': 'quick-AST',
-            'LFT_ALKP': 'quick-alkaline-phosphatase',
-            'LFT_BILI': 'quick-bilirubin',
-            'LFT_ALB': 'quick-albumin',
-            
-            # Thyroid panel
-            'THY_TSH': 'TSH-elevated',
-            'THY_T4F': 'quick-FT4',
-            'THY_T3F': 'FT3-low',
-            'THY_RT3': 'quick-reverseT3',
-            'THY_T4': 'quick-T4',
-            'THY_T3': 'quick-T3',
-            
-            # Vitamins & nutrients
-            'VIT_D25': 'D-optimal',
-            'VIT_B12': 'quick-B12',
-            'VIT_FOLATE': 'quick-folate',
-            'VIT_E': 'quick-vitE',
-            
-            # Minerals
-            'MIN_FE': 'quick-iron',
-            'MIN_TIBC': 'quick-TIBC',
-            'MIN_FERR': 'quick-ferritin',
-            'MIN_ZN': 'zinc-status',
-            'MIN_CU': 'quick-copper',
-            'MIN_MG': 'magnesium-status',
-            
-            # Male hormones
-            'MHt_TEST_TOT': 'testosterone-low',
-            'MHt_TEST_FREE': 'free-testosterone-low',
-            'MHt_PSA': 'quick-PSA',
-            'NEURO_DHEAS': 'quick-DHEA-low',
-            
-            # Female hormones
-            'FHt_E2': 'quick-estradiol',
-            'FHt_PROG': 'quick-progesterone',
-            'FHt_FSH': 'quick-FSH',
-            'FHt_LH': 'quick-LH',
-            
-            # Metabolic
-            'METAB_INS': 'insulin-elevated',
-            'METAB_HBA1C': 'HbA1c',
-            'METAB_CPEP': 'quick-C-peptide',
-            
-            # Specialty markers
-            'OMEGA_CHECK': 'OmegaCheck',
-            'SPEC_IGF1': 'quick-IGF1',
-            'SPEC_CORTISOL': 'quick-cortisol',
-        }
-        
-        # Process every single lab value
-        for lab_key, lab_value in lab_results.items():
-            if lab_value is None:
-                continue
-                
-            # Get the content control name for this lab
-            control_name = lab_mappings.get(lab_key, f'lab-{lab_key.lower()}')
-            
-            # Determine if the value should trigger the control
-            should_trigger = self._evaluate_lab_threshold(lab_key, lab_value, ranges, gender)
-            processed[control_name] = should_trigger
-            
-            # Also create value-specific controls for key markers
-            if lab_key in ['INFLAM_CRP', 'VIT_D25', 'THY_TSH', 'LIPID_CHOL']:
-                processed[f'{control_name}-value'] = str(lab_value)
-        
-        # Ensure specific critical controls are always evaluated
-        critical_controls = [
-            'quick-hsCRP', 'cholesterol-row', 'glucose-elevated', 'TSH-elevated',
-            'D-optimal', 'testosterone-low', 'insulin-elevated', 'HbA1c'
-        ]
-        
-        for control in critical_controls:
-            if control not in processed:
-                processed[control] = False
-                
-        return processed
-
-    def _evaluate_lab_threshold(self, lab_key: str, lab_value: float, ranges: Dict, gender: str) -> bool:
-        """
-        Evaluate whether a lab value should trigger its content control.
-        Returns True if the value indicates an issue that should be addressed.
-        """
-        try:
-            lab_value = float(lab_value)
-        except (ValueError, TypeError):
-            return False
-            
-        # Gender-specific range mapping
-        range_map = {
-            'INFLAM_CRP': 'CRP',
-            'INFLAM_HOMOCYS': 'Homocysteine',
-            'LIPID_CHOL': 'TotalChol',
-            'LIPID_HDL': 'HDL_M' if gender == 'male' else 'HDL_F',
-            'LIPID_LDL': 'LDL',
-            'LIPID_TRIG': 'Triglycerides',
-            'CHEM_GLU': 'Glucose',
-            'THY_TSH': 'TSH',
-            'THY_T4F': 'FT4',
-            'THY_T3F': 'FT3',
-            'VIT_D25': 'VitD',
-            'VIT_B12': 'B12',
-            'MIN_ZN': 'Zinc',
-            'MIN_MG': 'Magnesium',
-            'MHt_TEST_TOT': 'TestTotal_M',
-            'MHt_TEST_FREE': 'TestFree_M',
-            'NEURO_DHEAS': 'DHEAS_M' if gender == 'male' else 'DHEAS_F',
-            'FHt_E2': 'Estradiol_F',
-            'FHt_PROG': 'Progesterone_F',
-            'METAB_INS': 'Insulin',
-            'METAB_HBA1C': 'HbA1c',
-        }
-        
-        range_key = range_map.get(lab_key)
-        if not range_key or range_key not in ranges:
-            # If no specific range, consider values outside very broad normal ranges as triggers
-            return lab_value < 1 or lab_value > 1000  # Default conservative check
-            
-        range_info = ranges[range_key]
-        
-        # Determine if value is outside optimal range (triggers intervention)
-        below_min = lab_value < range_info.get('optimal_min', 0)
-        above_max = lab_value > range_info.get('optimal_max', float('inf'))
-        
-        return below_min or above_max
-    
-    def _get_comprehensive_lab_ranges(self) -> Dict[str, Dict[str, float]]:
-        """
-        Complete lab reference ranges from panel analysis.
-        Returns optimal health ranges, not just 'normal' ranges.
-        """
-        return {
-            # Inflammatory Markers
-            'CRP': {'optimal_max': 0.9, 'unit': 'mg/dL'},
-            'IL6': {'optimal_max': 3.0, 'unit': 'pg/mL'},
-            'TNF': {'optimal_max': 6.0, 'unit': 'pg/mL'},
-            'MPO': {'optimal_max': 400, 'unit': 'pmol/L'},
-            'Fibrinogen': {'optimal_max': 550, 'unit': 'mg/dL'},
-            'SerumTryptase': {'optimal_min': 15, 'unit': 'ng/dL'},
-            'Galectin3': {'optimal_max': 15, 'unit': 'ng/mL'},
-            'Homocysteine': {'optimal_max': 7, 'unit': 'mmol/L'},
-            
-            # Cardiovascular
-            'TotalChol': {'optimal_min': 150, 'unit': 'mg/dL'},
-            'sdLDL': {'optimal_max': 20, 'unit': 'mg/dL'},
-            'oxLDL': {'optimal_max': 60, 'unit': 'U/L'},
-            'LDLp': {'optimal_max': 1000, 'unit': ''},
-            'DDimer': {'optimal_max': 1.0, 'unit': ''},
-            
-            # Metabolic
-            'Glucose': {'optimal_min': 65, 'optimal_max': 95, 'unit': 'mg/dL'},
-            'Insulin': {'optimal_max': 4.5, 'unit': 'mIU/mL'},
-            'HbA1c': {'optimal_max': 5.6, 'unit': '%'},
-            'AG_Ratio': {'optimal_min': 1.8, 'unit': ''},
-            'ALT': {'optimal_max': 25, 'unit': 'IU/L'},
-            'AST': {'optimal_max': 10, 'unit': 'IU/L'},
-            'eGFR': {'optimal_min': 60, 'unit': ''},
-            
-            # Thyroid
-            'TSH': {'optimal_max': 2.0, 'unit': 'ng/dL'},
-            'FT3': {'optimal_min': 3.2, 'optimal_max': 4.2, 'unit': 'pg/mL'},
-            'FT4': {'optimal_min': 1.3, 'optimal_max': 1.8, 'unit': 'ng/dL'},
-            'RT3': {'optimal_max': 15, 'unit': 'ng/dL'},
-            'TPO': {'optimal_max': 30, 'unit': 'IU/mL'},
-            'TgAb': {'optimal_max': 1.0, 'unit': 'IU/mL'},
-            
-            # Nutrients
-            'VitD': {'optimal_min': 50, 'optimal_max': 80, 'unit': 'ng/dL'},
-            'VitE': {'optimal_min': 12, 'optimal_max': 20, 'unit': 'mcg/mL'},
-            'VitB12': {'optimal_min': 500, 'optimal_max': 1500, 'unit': 'pg/mL'},
-            'Folate': {'optimal_min': 10, 'optimal_max': 25, 'unit': 'ng/mL'},
-            'OmegaCheck': {'optimal_min': 5.4, 'unit': '% by weight'},
-            'Omega63Ratio': {'optimal_max': 4.0, 'unit': ''},
-            'AA_EPA_Ratio': {'optimal_max': 8.0, 'unit': ''},
-            'MgRBC': {'optimal_min': 5.2, 'optimal_max': 6.5, 'unit': 'mg/dL'},
-            'Zinc': {'optimal_min': 90, 'optimal_max': 110, 'unit': 'mcg/dL'},
-            'CZ_Ratio': {'optimal_min': 0.8, 'optimal_max': 1.2, 'unit': ''},
-            'Selenium': {'optimal_min': 110, 'optimal_max': 150, 'unit': 'ng/mL'},
-            
-            # Male Hormones
-            'TestTotal_M': {'optimal_min': 690, 'unit': 'ng/dL'},
-            'TestFree_M': {'optimal_min': 12, 'optimal_max': 15, 'unit': 'ng/dL'},
-            'DHT_M': {'optimal_max': 54, 'unit': 'ng/d'},
-            'DHEAS_M': {'optimal_min': 150, 'optimal_max': 300, 'unit': 'pg/dL'},
-            'PSA': {'optimal_max': 4.0, 'unit': ''},
-            
-            # Female Hormones
-            'Estradiol_F': {'target': 90, 'unit': 'pg/mL'},
-            'Progesterone_F': {'optimal_min': 5, 'optimal_max': 7, 'unit': 'ng/mL'},
-            'TestTotal_F': {'optimal_min': 50, 'optimal_max': 75, 'unit': 'ng/dL'},
-            'DHEAS_F': {'target': 277, 'unit': 'pg/dL'},
-            
-            # Neuro/Adrenal
-            'Pregnenolone': {'optimal_min': 50, 'optimal_max': 100, 'unit': 'ng/dL'},
-            'Cortisol': {'optimal_min': 10, 'optimal_max': 18, 'unit': 'mcg/dL'},
-            
-            # CBC
-            'WBC': {'optimal_min': 3.4, 'optimal_max': 10.8, 'unit': ''},
-            'Neutrophils': {'optimal_min': 1.4, 'optimal_max': 7.0, 'unit': 'x10E3/uL'},
-            'Lymphocytes': {'optimal_min': 0.7, 'optimal_max': 3.1, 'unit': 'x10E3/uL'},
-        }
-    
-    def _calculate_compound_lab_values(self, lab_results: Dict[str, Any]) -> Dict[str, float]:
-        """Calculate compound lab values and ratios."""
-        calculated = {}
-        
-        # HOMA-IR calculation
-        glucose = self._get_lab_value(lab_results, ['CHEM_GLU', 'Glucose', 'MBP_Gluc'])
-        insulin = self._get_lab_value(lab_results, ['METAB_INS', 'Insulin', 'Insul'])
-        if glucose and insulin:
-            calculated['HOMA_IR'] = (glucose * insulin) / 405.45
-        
-        # T-HDL Ratio (Triglycerides / HDL)
-        trig = self._get_lab_value(lab_results, ['LIPID_TRIG', 'Triglycerides', 'Trig'])
-        hdl = self._get_lab_value(lab_results, ['LIPID_HDL', 'HDL Cholesterol', 'HDL'])
-        if trig and hdl:
-            calculated['T_HDL_Ratio'] = trig / hdl
-        
-        # A/G Ratio
-        albumin = self._get_lab_value(lab_results, ['LFT_ALB', 'Albumin', 'MBP_Album'])
-        total_protein = self._get_lab_value(lab_results, ['Total_Protein'])
-        if albumin and total_protein:
-            globulin = total_protein - albumin
-            if globulin > 0:
-                calculated['AG_Ratio'] = albumin / globulin
-        
-        # Copper/Zinc Ratio
-        copper = self._get_lab_value(lab_results, ['MIN_CU', 'Copper', 'Copper'])
-        zinc = self._get_lab_value(lab_results, ['MIN_ZN', 'Zinc', 'Zinc'])
-        if copper and zinc:
-            calculated['CZ_Ratio'] = copper / zinc
-        
-        # E:P Ratio (Female hormones)
-        estradiol = self._get_lab_value(lab_results, ['FHt_E2', 'Estradiol', 'FHH_EST'])
-        progesterone = self._get_lab_value(lab_results, ['FHt_PROG', 'Progesterone', 'FHH_PROG'])
-        if estradiol and progesterone:
-            calculated['EP_Ratio'] = estradiol / progesterone
-        
-        return calculated
-    
-    def _process_inflammatory_markers(self, labs: Dict, hhq: Dict, ranges: Dict) -> Dict:
-        """Process inflammatory markers and related conditions."""
-        processed = {}
-        
-        # CRP processing
-        crp = self._get_lab_value(labs, ['INFLAM_CRP', 'C-Reactive Protein', 'C-Reactive-Protein,-Cardiac'])
-        if crp:
-            processed['quick-hsCRP'] = crp > ranges['CRP']['optimal_max']
-            if crp <= 0.9:
-                processed['CRP-below-09'] = True
-            elif crp <= 3.0:
-                processed['CRP-09-3'] = True
-            else:
-                processed['CRP-above-3'] = True
-        
-        # Omega status for compound conditions
-        omega_check = self._get_lab_value(labs, ['OMEGA_CHECK', 'OmegaCheck'])
-        if omega_check:
-            processed['OmegaCheck'] = omega_check
-            # Compound condition: CRP + Omega
-            if crp and omega_check:
-                processed['quick-CRP-09-omega-<5'] = (crp > 0.9 and omega_check < 5.4)
-        
-        # Root canal + inflammation compound condition
-        if hhq.get('hh_root_canal') and crp and crp > ranges['CRP']['optimal_max']:
-            processed['root-canal-inflammation'] = True
-        
-        # Homocysteine
-        homocysteine = self._get_lab_value(labs, ['INFLAM_HOMOCYS', 'Homocysteine'])
-        if homocysteine:
-            processed['quick-homocysteine'] = homocysteine > ranges['Homocysteine']['optimal_max']
-        
-        return processed
-    
-    def _process_cardiovascular_markers(self, labs: Dict, hhq: Dict, ranges: Dict) -> Dict:
-        """Process cardiovascular markers and smoking interactions."""
-        processed = {}
-        
-        # Cholesterol processing
-        total_chol = self._get_lab_value(labs, ['LIPID_CHOL', 'Cholesterol, Total', 'TC'])
-        if total_chol:
-            processed['cholesterol-row'] = total_chol < ranges['TotalChol']['optimal_min']
-        
-        # T-HDL ratio
-        t_hdl = labs.get('T_HDL_Ratio')
-        if t_hdl:
-            processed['T-HDL-ratio'] = t_hdl > 3.5  # Elevated risk threshold
-        
-        # Smoking compound conditions
-        current_smoker = hhq.get('hh_current_smoker', False)
-        processed['Current-Smoker'] = current_smoker
-        
-        # CAC (Coronary Artery Calcium) - typically from HHQ or imaging
-        cac_score = hhq.get('cac_score', 0)  # Assume HHQ captures this
-        processed['quick-CAC'] = cac_score > 100
-        
-        return processed
-    
-    def _process_metabolic_markers(self, labs: Dict, hhq: Dict, ranges: Dict) -> Dict:
-        """Process metabolic markers including diabetes risk."""
-        processed = {}
-        
-        # Glucose processing
-        glucose = self._get_lab_value(labs, ['CHEM_GLU', 'Glucose'])
-        if glucose:
-            if glucose < ranges['Glucose']['optimal_min']:
-                processed['glucose-low'] = True
-            elif glucose > ranges['Glucose']['optimal_max']:
-                processed['glucose-elevated'] = True
-                processed['quick-diabetes-risk'] = True
-        
-        # Insulin and HOMA-IR
-        insulin = self._get_lab_value(labs, ['METAB_INS', 'Insulin'])
-        homa_ir = labs.get('HOMA_IR')
-        if insulin:
-            processed['insulin-elevated'] = insulin > ranges['Insulin']['optimal_max']
-        if homa_ir:
-            processed['HOMA-IR-elevated'] = homa_ir > 2.5  # Insulin resistance threshold
-        
-        # HbA1c
-        hba1c = self._get_lab_value(labs, ['METAB_HBA1C', 'A1c'])
-        if hba1c:
-            processed['HbA1c'] = hba1c > ranges['HbA1c']['optimal_max']
-        
-        # A/G Ratio
-        ag_ratio = labs.get('AG_Ratio')
-        if ag_ratio:
-            processed['quick-AG-ratio'] = ag_ratio < ranges['AG_Ratio']['optimal_min']
-        
-        return processed
-    
-    def _process_thyroid_markers(self, labs: Dict, hhq: Dict, ranges: Dict) -> Dict:
-        """Process thyroid function with compound conditions."""
-        processed = {}
-        
-        # Individual thyroid markers
-        tsh = self._get_lab_value(labs, ['THY_TSH', 'TSH'])
-        ft3 = self._get_lab_value(labs, ['THY_T3F', 'FT3'])
-        rt3 = self._get_lab_value(labs, ['RT3', 'Reverse T3'])
-        
-        if tsh:
-            processed['TSH-elevated'] = tsh > ranges['TSH']['optimal_max']
-        if ft3:
-            processed['FT3-low'] = ft3 < ranges['FT3']['optimal_min']
-        if rt3:
-            processed['quick-reverseT3'] = rt3 > ranges['RT3']['optimal_max']
-        
-        # Compound thyroid condition
-        thyroid_dysfunction = False
-        if tsh and tsh > ranges['TSH']['optimal_max']:
-            thyroid_dysfunction = True
-        if ft3 and ft3 < ranges['FT3']['optimal_min']:
-            thyroid_dysfunction = True
-        if rt3 and rt3 > ranges['RT3']['optimal_max']:
-            thyroid_dysfunction = True
-        
-        processed['TSH-T3-rT3'] = thyroid_dysfunction
-        
-        return processed
-    
-    def _process_male_hormone_markers(self, labs: Dict, hhq: Dict, ranges: Dict) -> Dict:
-        """Process male hormone markers and age-related conditions."""
-        processed = {}
-        
-        # Testosterone
-        test_total = self._get_lab_value(labs, ['MHt_TEST_TOT', 'Testosterone, Total'])
-        test_free = self._get_lab_value(labs, ['MHt_TEST_FREE', 'Free Testosterone'])
-        
-        if test_total:
-            processed['testosterone-low'] = test_total < ranges['TestTotal_M']['optimal_min']
-        if test_free:
-            processed['free-testosterone-low'] = test_free < ranges['TestFree_M']['optimal_min']
-        
-        # DHEA-s processing
-        dheas = self._get_lab_value(labs, ['NEURO_DHEAS', 'DHEA-Sulfate'])
-        vit_d = self._get_lab_value(labs, ['VIT_D25', 'Vitamin D'])
-        
-        if dheas:
-            if dheas < ranges['DHEAS_M']['optimal_min']:
-                processed['quick-DHEA-low'] = True
-            if dheas > ranges['DHEAS_M']['optimal_max']:
-                processed['quick-DHEA-high'] = True
-        
-        # Compound DHEA + Vitamin D condition
-        if dheas and vit_d:
-            processed['quick-DHEA-AS-VD'] = (dheas < ranges['DHEAS_M']['optimal_min'] and 
-                                           vit_d < ranges['VitD']['optimal_min'])
-        
-        return processed
-    
-    def _process_female_hormone_markers(self, labs: Dict, hhq: Dict, ranges: Dict) -> Dict:
-        """Process female hormone markers and menopause-related conditions."""
-        processed = {}
-        
-        # Hormone balance
-        estradiol = self._get_lab_value(labs, ['FHt_E2', 'Estradiol'])
-        progesterone = self._get_lab_value(labs, ['FHt_PROG', 'Progesterone'])
-        ep_ratio = labs.get('EP_Ratio')
-        
-        if estradiol:
-            processed['estradiol-status'] = estradiol
-        if progesterone:
-            processed['progesterone-low'] = progesterone < ranges['Progesterone_F']['optimal_min']
-        
-        # E:P ratio evaluation
-        if ep_ratio:
-            if ep_ratio > 10:
-                processed['EP-ratio-excellent'] = True
-            elif ep_ratio > 5:
-                processed['EP-ratio-good'] = True
-            else:
-                processed['EP-ratio-poor'] = True
-        
-        # Menopause-related conditions
-        menopause_status = self._determine_menopause_status(hhq)
-        processed['menopause-status'] = menopause_status
-        
-        # Breast cancer history compound conditions
-        if hhq.get('hh_breast_cancer'):
-            processed['Quick-Breast-CA'] = True
-            # Compound: Breast CA + sleep/anxiety issues
-            if (hhq.get('hh_cant_stay_asleep') or hhq.get('hh_persistent_anxiety_medications')):
-                processed['BreastCA-Insomnia-Anxiety'] = True
-        
-        return processed
-    
-    def _process_nutrient_markers(self, labs: Dict, hhq: Dict, ranges: Dict) -> Dict:
-        """Process vitamin and mineral status."""
-        processed = {}
-        
-        # Vitamin D comprehensive processing
-        vit_d = self._get_lab_value(labs, ['VIT_D25', 'Vitamin D', '25OHVID'])
-        if vit_d:
-            if vit_d < 30:
-                processed['D-deficient'] = True
-            elif vit_d < 50:
-                processed['D-insufficient'] = True
-                processed['quick-VitD-row'] = True
-            elif 50 <= vit_d <= 55:
-                processed['D-50-55'] = True
-            elif vit_d > 80:
-                processed['D-high'] = True
-            else:
-                processed['D-optimal'] = True
-        
-        # Vitamin E
-        vit_e = self._get_lab_value(labs, ['VIT_E', 'Vitamin E'])
-        if vit_e:
-            processed['quick-vitE'] = (vit_e < ranges['VitE']['optimal_min'] or 
-                                     vit_e > ranges['VitE']['optimal_max'])
-        
-        # Omega fatty acids
-        omega_63_ratio = self._get_lab_value(labs, ['OMEGA_6_3_RATIO', 'Omega6:3'])
-        if omega_63_ratio:
-            processed['omega-63-ratio-elevated'] = omega_63_ratio > ranges['Omega63Ratio']['optimal_max']
-        
-        # Minerals
-        zinc = self._get_lab_value(labs, ['MIN_ZN', 'Zinc'])
-        mg_rbc = self._get_lab_value(labs, ['MIN_MG_RBC', 'Magnesium, RBC'])
-        
-        if zinc:
-            processed['zinc-status'] = 'low' if zinc < ranges['Zinc']['optimal_min'] else 'optimal'
-        if mg_rbc:
-            processed['magnesium-status'] = 'low' if mg_rbc < ranges['MgRBC']['optimal_min'] else 'optimal'
-        
-        return processed
-    
-    def _process_genetic_markers(self, labs: Dict, hhq: Dict) -> Dict:
-        """Process genetic markers (APO E, MTHFR)."""
-        processed = {}
-        
-        print(f"DEBUG: All lab keys: {list(labs.keys())}")
-        
-        # APO E processing - check all possible key variations
-        apo_e_keys = ['APO1', 'APO2', 'apo1', 'apo2', 'APOE', 'apoe', 'APO_E', 'APO E', 
-                      'APO E Genotyping Result', 'apoe_genotype', 'APOE_1', 'APOE_2']
-        
-        apo_e1 = None
-        apo_e2 = None
-        
-        # Find APO E values
-        for key in apo_e_keys:
-            if key in labs and labs[key] is not None:
-                apo_e_value = str(labs[key]).strip()
-                print(f"DEBUG: Found APO E in key '{key}': {apo_e_value}")
-                
-                # Parse combined values like "E3/E4" or "E3,E4"
-                if '/' in apo_e_value:
-                    parts = apo_e_value.split('/')
-                    apo_e1 = parts[0].strip()
-                    apo_e2 = parts[1].strip() if len(parts) > 1 else parts[0].strip()
-                elif ',' in apo_e_value:
-                    parts = apo_e_value.split(',')
-                    apo_e1 = parts[0].strip()
-                    apo_e2 = parts[1].strip() if len(parts) > 1 else parts[0].strip()
-                else:
-                    # Single value or first allele
-                    if not apo_e1:
-                        apo_e1 = apo_e_value
-                    elif not apo_e2:
-                        apo_e2 = apo_e_value
-                
-                break  # Use first found value
-        
-        print(f"DEBUG: Final APO E values - apo_e1: {apo_e1}, apo_e2: {apo_e2}")
-        
-        # Construct the full genotype string
-        if apo_e1 and apo_e2:
-            # Clean up the values
-            apo_e1_clean = apo_e1.replace('*', '').strip()
-            apo_e2_clean = apo_e2.replace('*', '').strip()
-            
-            full_genotype = f"{apo_e1_clean}/{apo_e2_clean}" if apo_e1_clean != apo_e2_clean else apo_e1_clean
-            processed['genome-type'] = full_genotype
-            
-            print(f"DEBUG: Setting genome-type to: {full_genotype}")
-            
-            # Determine APO E status
-            if 'E4' in str(apo_e1_clean) or 'E4' in str(apo_e2_clean):
-                processed['quick-E4'] = True
-                if 'E4' in str(apo_e1_clean) and 'E4' in str(apo_e2_clean):
-                    processed['APO-E4-homozygous'] = True
-                else:
-                    processed['APO-E4-heterozygous'] = True
-            elif ('E3' in str(apo_e1_clean) and 'E4' in str(apo_e2_clean)) or ('E4' in str(apo_e1_clean) and 'E3' in str(apo_e2_clean)):
-                processed['quick-E4E3'] = True
-            else:
-                processed['quick-notE4'] = True
-        elif apo_e1:  # Only one value found
-            apo_e1_clean = apo_e1.replace('*', '').strip()
-            processed['genome-type'] = apo_e1_clean
-            
-            # Process single allele status (same logic as paired alleles)
-            if 'E4' in str(apo_e1_clean):
-                processed['quick-E4'] = True
-                processed['APO-E4-heterozygous'] = True  # Assume heterozygous for single allele
-            else:
-                processed['quick-notE4'] = True
-        else:
-            processed['genome-type'] = 'Not Available'
-            print("DEBUG: No APO E values found")
-        
-        # Glutathione value - check multiple possible keys
-        glut_keys = ['METAB_GLUT', 'Glutathione', 'Total Glutathione', 'GLUTATHIONE', 'glutathione']
-        glut_value = None
-        
-        for key in glut_keys:
-            if key in labs and labs[key] is not None:
-                glut_value = labs[key]
-                print(f"DEBUG: Found Glutathione in key '{key}': {glut_value}")
-                break
-        
-        if glut_value:
-            processed['GLUT_VALUE'] = f"{glut_value} μg/mL"
-        else:
-            processed['GLUT_VALUE'] = 'Not Available'
-        
-        # MTHFR processing - check all possible key variations
-        mthfr_keys = ['MTHFR_1', 'MTHFR_2', 'mthfr_1', 'mthfr_2', 'MTHFR C677T', 'MTHFR A1298C',
-                      'C677T', 'A1298C', 'mthfr_c677t', 'mthfr_a1298c']
-        
-        mthfr1 = 'Not Detected'
-        mthfr2 = 'Not Detected'
-        
-        # Look for C677T variant
-        for key in ['MTHFR_1', 'mthfr_1', 'MTHFR C677T', 'C677T', 'mthfr_c677t']:
-            if key in labs and labs[key] is not None:
-                mthfr1 = str(labs[key]).strip()
-                print(f"DEBUG: Found MTHFR C677T in key '{key}': {mthfr1}")
-                break
-        
-        # Look for A1298C variant  
-        for key in ['MTHFR_2', 'mthfr_2', 'MTHFR A1298C', 'A1298C', 'mthfr_a1298c']:
-            if key in labs and labs[key] is not None:
-                mthfr2 = str(labs[key]).strip()
-                print(f"DEBUG: Found MTHFR A1298C in key '{key}': {mthfr2}")
-                break
-        
-        print(f"DEBUG: Final MTHFR values - C677T: {mthfr1}, A1298C: {mthfr2}")
-        
-        # Set the actual MTHFR values for template replacement
-        processed['MTHFR_C677T'] = mthfr1
-        processed['MTHFR_A1298C'] = mthfr2
-        
-        # Determine if variants are present
-        if mthfr1 and 'Not Detected' not in str(mthfr1).upper() and 'NOT DETECTED' not in str(mthfr1).upper():
-            processed['quick-MTHFR1'] = True
-        else:
-            processed['quick-MTHFR1'] = False
-            
-        if mthfr2 and 'Not Detected' not in str(mthfr2).upper() and 'NOT DETECTED' not in str(mthfr2).upper():
-            processed['quick-MTHFR2'] = True
-        else:
-            processed['quick-MTHFR2'] = False
-        
-        # Overall MTHFR variant status
-        processed['has-MTHFR-variants'] = processed['quick-MTHFR1'] or processed['quick-MTHFR2']
-        
-        print(f"DEBUG: Final processed genetics: {processed}")
-        
-        return processed
-    
     def _process_compound_conditions(self, labs: Dict, hhq: Dict, ranges: Dict) -> Dict:
         """Process complex compound conditions that combine multiple factors."""
         processed = {}
@@ -1541,10 +861,42 @@ disease."""
         processed['quick-fatigue'] = hhq.get('hh_chronic_fatigue', False) or hhq.get('hh_fatigue', False)
         processed['quick-parkinsons'] = hhq.get('hh_diag_parkinsons', False)
         processed['quick-gallbladder'] = hhq.get('hh_gallbladder_removed', False)
+        processed['BariSurg'] = hhq.get('hh_bariatric_surgery', False)
         processed['quick-histamine-diet'] = hhq.get('hh_histamine_intolerance', False)
         processed['quick-mcas'] = hhq.get('hh_mast_cell_activation', False)
         processed['quick-likes-soda'] = hhq.get('hh_soda_consumption', False)
         processed['quick-depression-mood-disorder'] = hhq.get('hh_depression', False) or hhq.get('hh_anxiety_medications', False)
+        
+        # Supplement and substance history
+        processed['quick-taking-NAC'] = hhq.get('hh_taking_nac', False) or hhq.get('hh_supplement_nac', False)
+        processed['quick-ETOH-WD'] = hhq.get('hh_alcohol_withdrawal', False) or hhq.get('hh_etoh_withdrawal', False)
+        processed['Quick-krill'] = hhq.get('hh_taking_krill_oil', False) or hhq.get('hh_supplement_krill', False) or hhq.get('hh_krill_oil', False)
+        processed['Quick-Thinner'] = hhq.get('hh_blood_thinner', False) or hhq.get('hh_anticoagulant', False) or hhq.get('hh_warfarin', False) or hhq.get('hh_coumadin', False)
+        
+        # Diet and metabolic lifestyle conditions
+        processed['quick-likes-sugar'] = hhq.get('hh_likes_sugar', False) or hhq.get('hh_sugar_consumption', False) or hhq.get('hh_high_sugar_diet', False)
+        processed['quick-likes-soda'] = hhq.get('hh_likes_soda', False) or hhq.get('hh_soda_consumption', False) or hhq.get('hh_drinks_soda', False)
+        
+        # APO E4 + sugar combination condition
+        apo_e = labs.get('APO1') or labs.get('APO E Genotyping Result')
+        has_apo_e4 = apo_e and 'E4' in str(apo_e)
+        if has_apo_e4 and processed.get('quick-likes-sugar', False):
+            processed['quick-sugars-APOE4'] = True
+            
+        # Ketone supplementation support (could be based on various factors)
+        has_metabolic_dysfunction = (
+            hhq.get('hh_diabetes', False) or 
+            hhq.get('hh_insulin_resistance', False) or
+            hhq.get('hh_brain_fog', False) or
+            has_apo_e4
+        )
+        if has_metabolic_dysfunction:
+            processed['ketone-supplement-support'] = True
+        
+        # Celiac and autoimmune diet conditions
+        processed['Celiac'] = hhq.get('hh_celiac_disease', False)
+        processed['quick-celiac'] = hhq.get('hh_celiac_disease', False)
+        processed['quick-gluten-sensitivity'] = hhq.get('hh_gluten_sensitivity', False)
         
         # Sleep and Lifestyle Conditions  
         processed['quick-sleep-hormones'] = hhq.get('hh_cant_stay_asleep', False) or hhq.get('hh_sleep_medications', False)
@@ -1578,10 +930,57 @@ disease."""
         processed['quick-fibromyalgia'] = hhq.get('hh_fibromyalgia', False)
         processed['quick-rheumatoid-arthritis'] = hhq.get('hh_rheumatoid_arthritis', False)
         
+        # Allergy and Immune System Conditions
+        processed['quick-allergies'] = hhq.get('hh_chronic_allergies', False) or hhq.get('hh_seasonal_allergies', False)
+        processed['Quick-Allergies'] = hhq.get('hh_chronic_allergies', False) or hhq.get('hh_seasonal_allergies', False)
+        
+        # Histamine intolerance condition - triggered by chronic allergies + alcohol consumption
+        has_chronic_allergies = hhq.get('hh_chronic_allergies', False) or hhq.get('hh_seasonal_allergies', False)
+        has_alcohol_consumption = hhq.get('hh_alcohol_consumption', False) or hhq.get('hh_drinks_alcohol', False)
+        if has_chronic_allergies and has_alcohol_consumption:
+            processed['Quick-Histamine-Diet'] = True
+        elif hhq.get('hh_histamine_intolerance', False):
+            processed['Quick-Histamine-Diet'] = True
+            
+        # MCAS condition - triggered by GI headaches + chronic allergies or explicit MCAS history
+        has_gi_headaches = hhq.get('hh_gi_headaches', False) or hhq.get('hh_headaches', False)
+        if (has_gi_headaches and has_chronic_allergies) or hhq.get('hh_mast_cell_activation', False):
+            processed['quick-MCAS'] = True
+        
         # Cardiovascular Conditions
         processed['quick-heart-disease'] = hhq.get('hh_heart_disease', False)
         processed['quick-high-blood-pressure'] = hhq.get('hh_high_blood_pressure', False)
         processed['quick-stroke'] = hhq.get('hh_stroke', False) or hhq.get('hh_tia', False)
+        
+        # Cardiovascular Risk Factors and Interventions
+        processed['Current-Smoker'] = hhq.get('hh_current_smoker', False) or hhq.get('hh_smoker', False)
+        processed['HxHTN'] = hhq.get('hh_high_blood_pressure', False) or hhq.get('hh_hypertension', False) or hhq.get('hh_elevated_blood_pressure', False)
+        processed['quick-takes-statin'] = hhq.get('hh_takes_statin', False) or hhq.get('hh_statin_medication', False) or hhq.get('hh_cholesterol_medication', False)
+        
+        # Advanced Cardiovascular Risk Assessment
+        # Elevated platelets + multiple risk factors = D-DIMER/LEIDEN FACTOR V testing
+        platelets = self._get_lab_value(labs, ['CBC_PLT', 'Platelets'])
+        apo_e = labs.get('APO1') or labs.get('APO E Genotyping Result')
+        has_apo_e4 = apo_e and 'E4' in str(apo_e)
+        
+        # Assess metabolic health status
+        glucose = self._get_lab_value(labs, ['CHEM_GLU', 'Glucose'])
+        insulin = self._get_lab_value(labs, ['METAB_INS', 'Insulin'])
+        hba1c = self._get_lab_value(labs, ['METAB_HBA1C', 'Hemoglobin A1c'])
+        has_metabolic_dysfunction = (
+            (glucose and glucose > 100) or
+            (insulin and insulin > 7) or
+            (hba1c and hba1c > 5.6) or
+            hhq.get('hh_diabetes', False) or
+            hhq.get('hh_insulin_resistance', False)
+        )
+        
+        # Compound risk assessment for clotting disorders
+        if (platelets and platelets > 400 and  # Elevated platelets
+            has_apo_e4 and  # APO E4 genetics
+            has_metabolic_dysfunction and  # Metabolic health concerns
+            hhq.get('hh_cognitive_decline_concerns', False)):  # Cognitive decline concerns
+            processed['elevated-platelets-cardiovascular-risk'] = True
         
         # Cancer History
         processed['quick-cancer-history'] = hhq.get('hh_cancer_history', False)
@@ -1607,6 +1006,115 @@ disease."""
         processed['quick-anxiety'] = hhq.get('hh_anxiety', False)
         processed['quick-panic-attacks'] = hhq.get('hh_panic_attacks', False)
         
+        # ================================
+        # NOOTROPICS AND BRAIN HEALTH CONDITIONS
+        # ================================
+        
+        # Basic Nootropic Conditions
+        # Choline supplement recommendation - general cognitive support
+        has_cognitive_risk = (
+            hhq.get('hh_brain_fog', False) or
+            hhq.get('hh_memory_problems', False) or
+            hhq.get('hh_cognitive_decline_concerns', False) or
+            has_apo_e4 or
+            hhq.get('hh_attention_problems', False) or
+            hhq.get('hh_concentration_issues', False)
+        )
+        if has_cognitive_risk:
+            processed['quick-nootropic-choline'] = True
+            
+        # Lion's Mane for cognitive enhancement
+        if has_cognitive_risk or hhq.get('hh_wants_cognitive_enhancement', False):
+            processed['quick-nootropic-lionsmane'] = True
+            
+        # Focus supplement recommendations for those already taking focus supplements
+        if (hhq.get('hh_taking_focus_supplement', False) or 
+            hhq.get('hh_taking_brain_supplement', False) or
+            hhq.get('hh_taking_nootropics', False)):
+            processed['quick-focus-supp'] = True
+            
+        # Sleep Apnea & Prescription Nootropics
+        # MODAFINIL/PROVIGIL for CPAP/BIPAP users with cognitive concerns OR TBI patients
+        uses_cpap = (hhq.get('hh_sleep_apnea', False) or 
+                    hhq.get('hh_uses_cpap', False) or 
+                    hhq.get('hh_uses_bipap', False))
+        has_tbi = (hhq.get('hh_head_injury', False) or 
+                  hhq.get('hh_concussion', False) or 
+                  hhq.get('hh_traumatic_brain_injury', False) or
+                  hhq.get('hh_tbi', False))
+        if (uses_cpap or has_tbi) and has_cognitive_risk:
+            processed['Quick-Modafinil'] = True
+            
+        # Brain Injury & Specialized Protocols
+        # BRAIN RESCUE III for brain injury history
+        has_brain_injury = (hhq.get('hh_head_injury', False) or 
+                          hhq.get('hh_concussion', False) or 
+                          hhq.get('hh_traumatic_brain_injury', False) or
+                          hhq.get('hh_tbi', False) or
+                          hhq.get('hh_brain_injury', False))
+        if has_brain_injury:
+            processed['brain-rescue-iii'] = True
+            
+        # Surgery-Weight Loss & Malabsorption
+        # BRAIN RESCUE III for bariatric surgery patients with malabsorption
+        if hhq.get('hh_bariatric_surgery', False):
+            processed['Surg-Weight-loss'] = True
+            
+        # Omega-3 Optimization for Current Users
+        # Upgrade recommendations for those taking omega-3
+        if (hhq.get('hh_taking_omega3', False) or 
+            hhq.get('hh_taking_fish_oil', False) or
+            hhq.get('hh_omega3_supplement', False)):
+            processed['Quick-Omega-3'] = True
+            
+        # Gut-specific omega-3 for GI issues
+        has_gi_issues = (hhq.get('hh_digestive_issues', False) or
+                        hhq.get('hh_irritable_bowel', False) or
+                        hhq.get('hh_chronic_constipation', False) or
+                        hhq.get('hh_leaky_gut', False))
+        if has_gi_issues:
+            processed['MegaOmega'] = True
+            
+        # Immune System & Viral Support
+        # HSV (Herpes Simplex Virus) support
+        if (hhq.get('hh_cold_sores', False) or 
+            hhq.get('hh_herpes_simplex', False) or
+            hhq.get('hh_hsv', False)):
+            processed['quick-HSV'] = True
+            
+        # EBV (Epstein-Barr Virus) support  
+        if (hhq.get('hh_epstein_barr', False) or 
+            hhq.get('hh_ebv', False) or
+            hhq.get('hh_chronic_fatigue_virus', False)):
+            processed['quick-EBV'] = True
+            
+        # Parkinson's Disease Support
+        # TRU NIAGEN/NAD+ support for Parkinson's
+        if hhq.get('hh_diag_parkinsons', False):
+            processed['quick-parkinsons'] = True
+            
+        # Arthritis & Inflammation Support
+        # THERACURMIN HP for arthritic symptoms
+        if (hhq.get('hh_arthritis', False) or 
+            hhq.get('hh_joint_pain', False) or
+            hhq.get('hh_rheumatoid_arthritis', False) or
+            hhq.get('hh_osteoarthritis', False)):
+            processed['Thercumin'] = True
+            
+        # Vinpocetine for cerebral blood flow
+        # Triggered by circulation issues, memory problems, or high blood pressure
+        has_circulation_issues = (hhq.get('hh_circulation_problems', False) or
+                                hhq.get('hh_high_blood_pressure', False) or
+                                hhq.get('hh_memory_problems', False) or
+                                hhq.get('hh_brain_fog', False))
+        if has_circulation_issues:
+            processed['vinpocetine'] = True
+            
+        # Current Supplement Integration
+        # ATP FUEL supplement (client currently taking)
+        if hhq.get('hh_taking_atp_fuel', False):
+            processed['atp-fuel-supplement'] = True
+            
         # Compound Conditions - Lab + HHQ interactions
         crp = self._get_lab_value(labs, ['INFLAM_CRP', 'C-Reactive Protein'])
         omega_check = self._get_lab_value(labs, ['OMEGA_CHECK', 'OmegaCheck'])
@@ -1629,7 +1137,7 @@ disease."""
             processed['sleep-apnea-cognitive-compound'] = True
             
         # Diabetes + APO E4 = additive problems
-        apo_e = self._get_lab_value(labs, ['APO1', 'APO E Genotyping Result'])
+        apo_e = labs.get('APO1') or labs.get('APO E Genotyping Result')
         if (hhq.get('hh_diabetes', False) and 
             apo_e and 'E4' in str(apo_e)):
             processed['diabetes-apo-e4-compound'] = True
@@ -1639,6 +1147,692 @@ disease."""
         if hhq.get('hh_snoring', False) and bmi > 25:
             processed['snoring-bmi-compound'] = True
             
+        # CRP + low Omega-3 = compound inflammation risk
+        # CRP >0.9 + OmegaCheck <5.4 = elevated inflammation with poor omega status  
+        if crp and omega_check:
+            if crp > 0.9 and omega_check < 5.4:
+                processed['quick-CRP-09-omega-<5'] = True
+        
+        # Concussion/TBI + very low Omega 6:3 ratio = OMEGA-3 CHALLENGE
+        # History of concussion/TBI OR very low omega 6:3 index justifies OMEGA-3 CHALLENGE
+        omega_63_ratio = self._get_lab_value(labs, ['OMEGA_6_3_RATIO', 'Omega-6/Omega-3 Ratio'])
+        has_head_injury = (hhq.get('hh_head_injury', False) or 
+                          hhq.get('hh_concussion', False) or 
+                          hhq.get('hh_traumatic_brain_injury', False) or
+                          hhq.get('hh_tbi', False))
+        
+        if has_head_injury or (omega_63_ratio and omega_63_ratio > 10):  # Very elevated ratio
+            processed['checked-omega-63-ratio'] = True
+        
+        # Neurological omega-3 optimization = suboptimal omega-3 for brain health
+        # Triggers when OmegaCheck is low OR has neurological symptoms/conditions
+        has_neurological_symptoms = (hhq.get('hh_brain_fog', False) or 
+                                    hhq.get('hh_memory_problems', False) or
+                                    hhq.get('hh_cognitive_decline', False) or
+                                    has_head_injury)
+        
+        if (omega_check and omega_check < 6.0) or has_neurological_symptoms:
+            processed['omega-neurological-suboptimal'] = True
+        
+        # Taking omega-3 but still suboptimal = need to upgrade/increase dosing
+        # Client IS taking omega-3 supplements BUT omega 6:3 ratio still >4:1
+        taking_omega3 = (hhq.get('hh_taking_omega3', False) or 
+                        hhq.get('hh_taking_fish_oil', False) or
+                        hhq.get('hh_omega3_supplement', False) or
+                        hhq.get('hh_fish_oil_supplement', False))
+        
+        if taking_omega3 and omega_63_ratio and omega_63_ratio > 4.0:
+            processed['Taking-an-OMEGA'] = True
+        
+        # ================================
+        # COMPREHENSIVE THYROID FUNCTION CONDITIONS
+        # ================================
+        
+        # Get thyroid lab values
+        tsh = self._get_lab_value(labs, ['THY_TSH', 'TSH'])
+        free_t3 = self._get_lab_value(labs, ['THY_T3F', 'Triiodothyronine (T3), Free'])
+        free_t4 = self._get_lab_value(labs, ['THY_T4F', 'T4, Free (Direct)'])
+        reverse_t3 = self._get_lab_value(labs, ['RT3', 'Reverse T3'])
+        tpo_antibody = self._get_lab_value(labs, ['THY_TPOAB', 'Thyroid Peroxidase (TPO) Ab'])
+        tg_antibody = self._get_lab_value(labs, ['THY_TGAB', 'Thyroglobulin Antibody'])
+        
+        # Set up basic thyroid markers for display
+        if tsh is not None:
+            processed['quick-TSH'] = f"{tsh:.2f}"
+        if free_t3 is not None:
+            processed['quick-FT3'] = f"{free_t3:.2f}"
+        if free_t4 is not None:
+            processed['quick-FT4'] = f"{free_t4:.2f}"
+        if reverse_t3 is not None:
+            processed['quick-rT3'] = f"{reverse_t3:.1f}"
+        if tpo_antibody is not None:
+            processed['quick-TPO'] = f"{tpo_antibody:.0f}"
+        if tg_antibody is not None:
+            processed['quick-tg-ab'] = f"{tg_antibody:.1f}"
+        
+        # Thyroid row condition - shows detailed thyroid panel when any thyroid markers are available
+        if any([reverse_t3, tpo_antibody, tg_antibody]):
+            processed['thyroid-row'] = True
+        
+        # Optimal thyroid function
+        # All markers within optimal ranges: TSH 0.4-2.5, Free T3 3.2-4.2, Free T4 1.3-1.8, rT3 <15, TPO <34, TgAb <1
+        thyroid_optimal = True
+        thyroid_has_dysfunction = False
+        
+        if tsh is not None and (tsh < 0.4 or tsh > 2.5):
+            thyroid_optimal = False
+            thyroid_has_dysfunction = True
+        if free_t3 is not None and (free_t3 < 3.2 or free_t3 > 4.2):
+            thyroid_optimal = False
+            thyroid_has_dysfunction = True
+        if free_t4 is not None and (free_t4 < 1.3 or free_t4 > 1.8):
+            thyroid_optimal = False
+            thyroid_has_dysfunction = True
+        if reverse_t3 is not None and reverse_t3 > 15:
+            thyroid_optimal = False
+            thyroid_has_dysfunction = True
+        if tpo_antibody is not None and tpo_antibody > 34:
+            thyroid_optimal = False
+            thyroid_has_dysfunction = True
+        if tg_antibody is not None and tg_antibody > 1:
+            thyroid_optimal = False
+            thyroid_has_dysfunction = True
+            
+        # Only trigger optimal if truly optimal AND we have thyroid data
+        if thyroid_optimal and any([tsh, free_t3, free_t4]) and not thyroid_has_dysfunction:
+            processed['thyroid-optimal'] = True
+        else:
+            # Explicitly set to False when there's dysfunction to prevent optimal message
+            processed['thyroid-optimal'] = False
+        
+        # High TSH (obvious hypothyroidism)
+        if tsh is not None and tsh > 7:
+            processed['quick-TSH>7'] = True
+        else:
+            # Explicitly set to False when TSH is not >7
+            processed['quick-TSH>7'] = False
+        
+        # Low TSH scenarios - opportunity to optimize (only if not severely high)
+        if tsh is not None and tsh > 2.5 and tsh <= 7:
+            processed['low-TSH'] = True
+        
+        # High thyroid - TSH exceeds optimal + taking thyroid medicine (only if not severely high)
+        if (tsh is not None and tsh > 2.5 and tsh <= 7 and 
+            (hhq.get('hh_takes_thyroid_medicine', False) or hhq.get('hh_thyroid_medication', False))):
+            processed['High-thyroid'] = True
+        
+        # Complex thyroid dysfunction - TSH + reverse T3 trending wrong
+        # TSH elevated OR Free T3 low + Reverse T3 elevated
+        complex_thyroid_dysfunction = False
+        if ((tsh is not None and tsh > 2.5) or 
+            (free_t3 is not None and free_t3 < 3.6)) and \
+           (reverse_t3 is not None and reverse_t3 > 15):
+            processed['TSH-T3-rT3'] = True
+            # Set values for template variables
+            if free_t3 is not None:
+                processed['FreeT3'] = f"{free_t3:.2f}"
+            if reverse_t3 is not None:
+                processed['ReverseT3'] = f"{reverse_t3:.1f}"
+            complex_thyroid_dysfunction = True
+        
+        # Elevated reverse T3 condition
+        if reverse_t3 is not None and reverse_t3 > 15:
+            processed['quick-reverseT3'] = True
+        
+        # Fatigue + thyroid issues = Free T3 therapy candidate
+        # Chronic fatigue + any thyroid dysfunction
+        has_chronic_fatigue = (hhq.get('hh_chronic_fatigue', False) or 
+                              hhq.get('hh_chronic_fatigue_syndrome', False) or
+                              hhq.get('hh_fatigue', False))
+        
+        thyroid_dysfunction_present = (
+            (tsh is not None and tsh > 2.5) or
+            (free_t3 is not None and free_t3 < 3.2) or
+            (reverse_t3 is not None and reverse_t3 > 15) or
+            complex_thyroid_dysfunction
+        )
+        
+        if has_chronic_fatigue and thyroid_dysfunction_present:
+            processed['quick-fatigue'] = True
+        
+        # Hashimoto's autoimmune condition
+        # TPO >34 OR TgAb >1 = autoimmune thyroiditis risk
+        has_hashimotos_markers = False
+        if tpo_antibody is not None and tpo_antibody > 34:
+            has_hashimotos_markers = True
+        if tg_antibody is not None and tg_antibody > 1:
+            has_hashimotos_markers = True
+        
+        # Also check HHQ for explicit Hashimoto's diagnosis
+        if (has_hashimotos_markers or 
+            hhq.get('hh_hashimotos', False) or 
+            hhq.get('hh_thyroid_autoimmune', False) or
+            hhq.get('hh_autoimmune_thyroiditis', False)):
+            processed['quick-hashimotos'] = True
+        
+        # ================================
+        # COMPREHENSIVE FEMALE HORMONE CONDITIONS
+        # ================================
+        
+        # Get female hormone lab values
+        fsh = self._get_lab_value(labs, ['FHt_FSH', 'FSH'])
+        estradiol = self._get_lab_value(labs, ['FHt_E2', 'Estradiol'])
+        progesterone = self._get_lab_value(labs, ['FHt_PROG', 'Progesterone'])
+        testosterone_female = self._get_lab_value(labs, ['FHt_TT', 'Testosterone'])
+        estrone = self._get_lab_value(labs, ['FHt_E1', 'Estrone'])
+        prolactin = self._get_lab_value(labs, ['FHt_PROL', 'Prolactin'])
+        lh = self._get_lab_value(labs, ['FHt_LH', 'LH'])
+        shbg = self._get_lab_value(labs, ['FHt_SHBG', 'SHBG'])
+        dht = self._get_lab_value(labs, ['FHt_DHT', 'DHT'])
+        
+        # Determine menopause status
+        menopause_status = self._determine_menopause_status(hhq)
+        
+        # Only process female hormones for female clients
+        if hhq.get('gender') == 'female' or hhq.get('sex') == 'female':
+            processed['quick-female-hormones'] = True
+            
+            # Hormone replacement therapy recommendations
+            # Based on suboptimal hormone levels or symptoms
+            hormone_dysfunction = False
+            
+            # Check for suboptimal hormone levels
+            if fsh is not None:
+                if menopause_status in ['premenopausal', 'perimenopause'] and fsh > 11:
+                    hormone_dysfunction = True
+                elif menopause_status in ['natural_menopause', 'surgical_menopause'] and fsh > 20:
+                    hormone_dysfunction = True
+            
+            if estradiol is not None:
+                if menopause_status in ['premenopausal', 'perimenopause'] and (estradiol < 50 or estradiol > 500):
+                    hormone_dysfunction = True
+                elif menopause_status in ['natural_menopause', 'surgical_menopause'] and (estradiol < 50 or estradiol > 150):
+                    hormone_dysfunction = True
+            
+            if progesterone is not None and (progesterone < 1 or progesterone > 7):
+                hormone_dysfunction = True
+                
+            if testosterone_female is not None and (testosterone_female < 40 or testosterone_female > 70):
+                hormone_dysfunction = True
+            
+            # Symptom-based triggers for HRT
+            has_menopausal_symptoms = (
+                hhq.get('hh_hot_flashes', False) or
+                hhq.get('hh_night_sweats', False) or
+                hhq.get('hh_mood_swings', False) or
+                hhq.get('hh_low_libido', False) or
+                hhq.get('hh_vaginal_dryness', False) or
+                hhq.get('hh_brain_fog', False) or
+                hhq.get('hh_memory_problems', False)
+            )
+            
+            has_cognitive_symptoms = (
+                hhq.get('hh_brain_fog', False) or
+                hhq.get('hh_memory_problems', False) or
+                hhq.get('hh_attention_problems', False) or
+                hhq.get('hh_cognitive_decline', False)
+            )
+            
+            has_mood_symptoms = (
+                hhq.get('hh_depression', False) or
+                hhq.get('hh_anxiety', False) or
+                hhq.get('hh_mood_disorder', False)
+            )
+            
+            # HRT recommendation triggers
+            if (hormone_dysfunction or has_menopausal_symptoms or has_cognitive_symptoms or 
+                has_mood_symptoms or menopause_status in ['natural_menopause', 'surgical_menopause']):
+                processed['quick-female-hormones-hrt'] = True
+            else:
+                processed['quick-female-hormones-hrt'] = False
+            
+            # Currently using HRT
+            if (hhq.get('hh_takes_estrogen', False) or 
+                hhq.get('hh_takes_progesterone', False) or
+                hhq.get('hh_takes_testosterone', False) or
+                hhq.get('hh_hormone_replacement', False)):
+                processed['quick-using-HRT'] = True
+            else:
+                processed['quick-using-HRT'] = False
+            
+            # Breast cancer history considerations
+            if hhq.get('hh_breast_cancer', False):
+                processed['Quick-Breast-CA'] = True
+                
+                # Special considerations for sleep/anxiety with breast cancer history
+                if (hhq.get('hh_insomnia', False) or 
+                    hhq.get('hh_anxiety', False) or
+                    hhq.get('hh_depression', False)):
+                    processed['BreastCA-Insomnia-Anxiety'] = True
+                else:
+                    processed['BreastCA-Insomnia-Anxiety'] = False
+            else:
+                processed['Quick-Breast-CA'] = False
+                processed['BreastCA-Insomnia-Anxiety'] = False
+            
+            # Mood disorder considerations
+            if (hhq.get('hh_depression', False) or 
+                hhq.get('hh_anxiety', False) or
+                hhq.get('hh_mood_disorder', False)):
+                processed['Quick-Hormone-Mood-Disorder'] = True
+            else:
+                processed['Quick-Hormone-Mood-Disorder'] = False
+            
+            # Sleep issues with antidepressant use
+            if (hhq.get('hh_insomnia', False) and 
+                (hhq.get('hh_takes_antidepressant', False) or 
+                 hhq.get('hh_takes_sleep_medication', False))):
+                processed['Prometrium-Sleep'] = True
+            else:
+                processed['Prometrium-Sleep'] = False
+            
+            # Frequent UTI considerations
+            if hhq.get('hh_frequent_uti', False) or hhq.get('hh_recurrent_uti', False):
+                processed['Freq-UTI'] = True
+            else:
+                processed['Freq-UTI'] = False
+        else:
+            # Explicitly set female hormone conditions to False for non-female clients
+            processed['quick-female-hormones'] = False
+            processed['quick-female-hormones-hrt'] = False
+            processed['quick-using-HRT'] = False
+            processed['Quick-Breast-CA'] = False
+            processed['BreastCA-Insomnia-Anxiety'] = False
+            processed['Quick-Hormone-Mood-Disorder'] = False
+            processed['Prometrium-Sleep'] = False
+            processed['Freq-UTI'] = False
+        
+        # ================================
+        # COMPREHENSIVE MALE HORMONE CONDITIONS
+        # ================================
+        
+        # Get male hormone lab values
+        total_testosterone = self._get_lab_value(labs, ['MHt_TT', 'MHt_TEST_TOT', 'Testosterone'])
+        free_testosterone = self._get_lab_value(labs, ['MHt_FREE_T', 'MHt_TEST_FREE', 'Free Testosterone'])
+        shbg_male = self._get_lab_value(labs, ['MHt_SHBG', 'SHBG'])
+        psa = self._get_lab_value(labs, ['MHt_PSA', 'PSA'])
+        lh_male = self._get_lab_value(labs, ['MHt_LH', 'LH'])
+        fsh_male = self._get_lab_value(labs, ['MHt_FSH', 'FSH'])
+        prolactin_male = self._get_lab_value(labs, ['MHt_PROL', 'Prolactin'])
+        dht_male = self._get_lab_value(labs, ['MHt_DHT', 'DHT'])
+        estradiol_male = self._get_lab_value(labs, ['MHt_E2', 'Estradiol'])
+        estrone_male = self._get_lab_value(labs, ['MHt_E1', 'Estrone'])
+        progesterone_male = self._get_lab_value(labs, ['MHt_PROG', 'Progesterone'])
+        
+        # Only process male hormones for male clients
+        if hhq.get('gender') == 'male' or hhq.get('sex') == 'male':
+            processed['quick-male-hormones'] = True
+            
+            # Testosterone optimization recommendations
+            # Based on suboptimal hormone levels or symptoms
+            hormone_dysfunction = False
+            
+            # Check for suboptimal male hormone levels
+            if total_testosterone is not None:
+                if total_testosterone < 600:  # Combined threshold for treatment consideration
+                    hormone_dysfunction = True
+                    processed['testosterone-low'] = True
+                    # Sub-categorize for specific messaging
+                    if total_testosterone < 400:
+                        processed['testosterone-clinically-low'] = True
+                    else:
+                        processed['testosterone-suboptimal'] = True
+                else:
+                    processed['testosterone-low'] = False
+                    processed['testosterone-suboptimal'] = False
+                    processed['testosterone-clinically-low'] = False
+            
+            if free_testosterone is not None:
+                if free_testosterone < 12:  # Below optimal range
+                    hormone_dysfunction = True
+                    processed['free-testosterone-low'] = True
+                else:
+                    processed['free-testosterone-low'] = False
+            
+            if shbg_male is not None:
+                if shbg_male > 45:  # Elevated SHBG affects free testosterone
+                    processed['quick-male-hormones-shbg'] = True
+                else:
+                    processed['quick-male-hormones-shbg'] = False
+            
+            # PSA considerations
+            if psa is not None:
+                if psa > 4.0:  # Elevated PSA
+                    processed['Quick-PSA'] = True
+                    processed['psa-elevated'] = True
+                elif psa > 2.5:  # Borderline elevated
+                    processed['Quick-PSA'] = True
+                    processed['psa-borderline'] = True
+                else:
+                    processed['Quick-PSA'] = False
+            
+            # Symptom-based triggers for hormone optimization
+            has_hypogonadal_symptoms = (
+                hhq.get('hh_erectile_dysfunction', False) or
+                hhq.get('hh_low_libido', False) or
+                hhq.get('hh_fatigue', False) or
+                hhq.get('hh_muscle_weakness', False) or
+                hhq.get('hh_depression', False) or
+                hhq.get('hh_brain_fog', False) or
+                hhq.get('hh_memory_problems', False)
+            )
+            
+            has_cognitive_symptoms = (
+                hhq.get('hh_brain_fog', False) or
+                hhq.get('hh_memory_problems', False) or
+                hhq.get('hh_attention_problems', False) or
+                hhq.get('hh_cognitive_decline', False)
+            )
+            
+            has_sleep_issues = (
+                hhq.get('hh_sleep_apnea', False) or
+                hhq.get('hh_insomnia', False) or
+                hhq.get('hh_uses_cpap', False)
+            )
+            
+            # TRT/HRT recommendation triggers (excluding prostate cancer or elevated PSA)
+            has_prostate_contraindication = (
+                hhq.get('hh_prostate_cancer', False) or
+                (psa is not None and psa > 4.0)
+            )
+            
+            # TRT/HRT recommendation triggers 
+            # For prostate cancer patients, still recommend discussion (like breast cancer in females)
+            has_severe_psa_elevation = (psa is not None and psa > 4.0)
+            
+            if (hormone_dysfunction or has_hypogonadal_symptoms or has_cognitive_symptoms):
+                # Recommend HRT discussion unless PSA is severely elevated
+                if not has_severe_psa_elevation:
+                    processed['quick-male-hormones-hrt'] = True
+                else:
+                    processed['quick-male-hormones-hrt'] = False
+            else:
+                processed['quick-male-hormones-hrt'] = False
+            
+            # Currently using TRT
+            if (hhq.get('hh_takes_testosterone', False) or 
+                hhq.get('hh_hormone_replacement', False) or
+                hhq.get('hh_trt', False)):
+                processed['quick-using-TRT'] = True
+            else:
+                processed['quick-using-TRT'] = False
+            
+            # Prostate cancer history considerations
+            if hhq.get('hh_prostate_cancer', False):
+                processed['Quick-Prostate-CA'] = True
+                
+                # LUPRON considerations for prostate cancer patients
+                if (hhq.get('hh_takes_lupron', False) or 
+                    hhq.get('hh_lupron', False) or
+                    hhq.get('hh_hormone_suppression', False)):
+                    processed['quick-LUPRON'] = True
+                else:
+                    processed['quick-LUPRON'] = False
+            else:
+                processed['Quick-Prostate-CA'] = False
+                processed['quick-LUPRON'] = False
+            
+            # Sleep and hormone connection
+            if has_sleep_issues and (hormone_dysfunction or has_hypogonadal_symptoms):
+                processed['quick-sleep-hormones'] = True
+            else:
+                processed['quick-sleep-hormones'] = False
+            
+            # ZMA testosterone support for natural optimization
+            if (hormone_dysfunction and not hhq.get('hh_takes_testosterone', False)):
+                processed['zma-testosterone-support'] = True
+            else:
+                processed['zma-testosterone-support'] = False
+            
+            # Age-related considerations
+            if hhq.get('hh_age_over_50', False) or hhq.get('hh_age_over_65', False):
+                processed['quick-age-related-decline'] = True
+            else:
+                processed['quick-age-related-decline'] = False
+            
+            # TBI and hormone optimization (Mark Gordon protocol)
+            has_brain_injury = (hhq.get('hh_head_injury', False) or 
+                              hhq.get('hh_concussion', False) or 
+                              hhq.get('hh_traumatic_brain_injury', False) or
+                              hhq.get('hh_tbi', False))
+            
+            if has_brain_injury and (hormone_dysfunction or has_cognitive_symptoms):
+                processed['quick-tbi-hormone-protocol'] = True
+            else:
+                processed['quick-tbi-hormone-protocol'] = False
+            
+            # Metabolic dysfunction affecting hormones
+            has_metabolic_dysfunction = (
+                hhq.get('hh_diabetes', False) or
+                hhq.get('hh_metabolic_syndrome', False) or
+                hhq.get('hh_insulin_resistance', False)
+            )
+            
+            if has_metabolic_dysfunction and hormone_dysfunction:
+                processed['metabolic-hormone-connection'] = True
+            else:
+                processed['metabolic-hormone-connection'] = False
+        else:
+            # Explicitly set male hormone conditions to False for non-male clients
+            processed['quick-male-hormones'] = False
+            processed['testosterone-low'] = False
+            processed['testosterone-suboptimal'] = False
+            processed['free-testosterone-low'] = False
+            processed['quick-male-hormones-shbg'] = False
+            processed['quick-male-hormones-hrt'] = False
+            processed['quick-using-TRT'] = False
+            processed['Quick-Prostate-CA'] = False
+            processed['quick-LUPRON'] = False
+            processed['Quick-PSA'] = False
+            processed['quick-sleep-hormones'] = False
+            processed['zma-testosterone-support'] = False
+            processed['quick-age-related-decline'] = False
+            processed['quick-tbi-hormone-protocol'] = False
+            processed['metabolic-hormone-connection'] = False
+        
+        # ================================
+        # NEUROLOGICALLY ACTIVE HORMONES
+        # ================================
+        
+        # Get neurologically active hormone lab values
+        pregnenolone = self._get_lab_value(labs, ['NEURO_PREG', 'Pregnenolone, MS'])
+        dhea_s = self._get_lab_value(labs, ['NEURO_DHEAS', 'DHEA-Sulfate'])
+        cortisol = self._get_lab_value(labs, ['NEURO_CORT', 'Cortisol'])
+        
+        # Store lab values for template display
+        if pregnenolone is not None:
+            processed['quick-pregnenolone-lab-value'] = f"{pregnenolone:.0f}"
+        if dhea_s is not None:
+            processed['quick-dhea-lab-value'] = f"{dhea_s:.0f}"
+        if cortisol is not None:
+            processed['quick-cortisol-lab-value'] = f"{cortisol:.1f}"
+        
+        # PREGNENOLONE CONDITIONS
+        if pregnenolone is not None:
+            if 150 <= pregnenolone <= 200:  # Optimal range
+                processed['quick-pregnenolone-101'] = True
+                processed['quick-PROG-50-100'] = False
+                processed['quick-PROG<50'] = False
+            elif 50 <= pregnenolone < 150:  # Low, needs supplementation
+                processed['quick-PROG-50-100'] = True
+                processed['quick-pregnenolone-101'] = False
+                processed['quick-PROG<50'] = False
+            elif pregnenolone < 50:  # Very low
+                processed['quick-PROG<50'] = True
+                processed['quick-pregnenolone-101'] = False
+                processed['quick-PROG-50-100'] = False
+            else:  # Above optimal range
+                processed['quick-pregnenolone-101'] = False
+                processed['quick-PROG-50-100'] = False
+                processed['quick-PROG<50'] = False
+        else:
+            # No pregnenolone data
+            processed['quick-pregnenolone-101'] = False
+            processed['quick-PROG-50-100'] = False
+            processed['quick-PROG<50'] = False
+        
+        # DHEA-S CONDITIONS
+        if dhea_s is not None:
+            if dhea_s >= 250:  # Optimal range
+                processed['quick-DHEA-151'] = True
+                processed['quick-DHEA-150'] = False
+                processed['quick-DHEA-200-249'] = False
+            elif dhea_s >= 200:  # Borderline optimal
+                processed['quick-DHEA-151'] = True
+                processed['quick-DHEA-200-249'] = True  # Lower dose recommendation
+                processed['quick-DHEA-150'] = False
+            elif dhea_s >= 150:  # Borderline low
+                processed['quick-DHEA-151'] = True
+                processed['quick-DHEA-150'] = False
+                processed['quick-DHEA-200-249'] = False
+            else:  # Low, needs supplementation
+                processed['quick-DHEA-150'] = True
+                processed['quick-DHEA-151'] = False
+                processed['quick-DHEA-200-249'] = False
+        else:
+            # No DHEA-S data
+            processed['quick-DHEA-151'] = False
+            processed['quick-DHEA-150'] = False
+            processed['quick-DHEA-200-249'] = False
+        
+        # DHEA & CARDIOVASCULAR DISEASE CORRELATION
+        # Low DHEA-S levels correlate with increased cardiovascular disease risk
+        has_cardiovascular_disease = (
+            hhq.get('hh_heart_disease', False) or
+            hhq.get('hh_cardiovascular_disease', False) or
+            hhq.get('hh_coronary_artery_disease', False) or
+            hhq.get('hh_myocardial_infarction', False) or
+            hhq.get('hh_heart_attack', False)
+        )
+        
+        if has_cardiovascular_disease and dhea_s and dhea_s < 150:
+            processed['quick-DHEA-ASVD'] = True
+        else:
+            processed['quick-DHEA-ASVD'] = False
+        
+        # DHEA & LUPRON CONNECTION (Male prostate cancer patients)
+        # LUPRON suppresses hormones including DHEA-S
+        is_male = hhq.get('gender') == 'male' or hhq.get('sex') == 'male'
+        takes_lupron = (
+            hhq.get('hh_takes_lupron', False) or
+            hhq.get('hh_lupron', False) or
+            hhq.get('hh_hormone_suppression', False)
+        )
+        
+        if is_male and takes_lupron and dhea_s and dhea_s < 150:
+            processed['quick-DHEA-LUPRON'] = True
+        else:
+            processed['quick-DHEA-LUPRON'] = False
+        
+        # CORTISOL SUPPORT CONDITIONS
+        if cortisol is not None:
+            if cortisol < 15:  # Low cortisol needs support
+                processed['quick-cortisol-15'] = True
+                
+                # Additional categorization for cortisol levels
+                if cortisol >= 5:  # Borderline low cortisol (5-15 ng/dL)
+                    processed['Cort515'] = True
+                    processed['cortisol-borderline'] = True
+                    processed['cortisol-very-low'] = False
+                else:  # Very low cortisol (<5 ng/dL)
+                    processed['Cort515'] = False
+                    processed['cortisol-very-low'] = True
+                    processed['cortisol-borderline'] = False
+                
+                # Additional adrenal support for very low cortisol + symptoms
+                has_adrenal_symptoms = (
+                    hhq.get('hh_chronic_fatigue', False) or
+                    hhq.get('hh_adrenal_fatigue', False) or
+                    hhq.get('hh_low_energy', False) or
+                    hhq.get('hh_morning_fatigue', False)
+                )
+                
+                if cortisol < 10 and has_adrenal_symptoms:
+                    processed['cortisol-severe-support'] = True
+                else:
+                    processed['cortisol-severe-support'] = False
+            else:
+                # Optimal or high cortisol levels (≥15 ng/dL)
+                processed['quick-cortisol-15'] = False
+                processed['Cort515'] = False
+                processed['cortisol-severe-support'] = False
+                processed['cortisol-borderline'] = False
+                processed['cortisol-very-low'] = False
+                
+                # Check for elevated cortisol (>25 ng/dL)
+                if cortisol > 25:
+                    processed['quick-cortisol-high'] = True
+                    processed['cortisol-elevated'] = True
+                    
+                    # High cortisol with stress symptoms = stress management protocol
+                    has_stress_symptoms = (
+                        hhq.get('hh_chronic_stress', False) or
+                        hhq.get('hh_anxiety', False) or
+                        hhq.get('hh_insomnia', False) or
+                        hhq.get('hh_high_blood_pressure', False)
+                    )
+                    
+                    if has_stress_symptoms:
+                        processed['cortisol-stress-management'] = True
+                    else:
+                        processed['cortisol-stress-management'] = False
+                else:
+                    processed['quick-cortisol-high'] = False
+                    processed['cortisol-elevated'] = False
+                    processed['cortisol-stress-management'] = False
+        else:
+            processed['quick-cortisol-15'] = False
+            processed['Cort515'] = False
+            processed['cortisol-severe-support'] = False
+            processed['cortisol-borderline'] = False
+            processed['cortisol-very-low'] = False
+            processed['quick-cortisol-high'] = False
+            processed['cortisol-elevated'] = False
+            processed['cortisol-stress-management'] = False
+        
+        # EXERCISE-INDUCED CORTISOL ISSUES
+        # Athletes with overtraining syndrome and low cortisol
+        is_athlete = (
+            hhq.get('hh_athlete', False) or
+            hhq.get('hh_exercise_frequently', False) or
+            hhq.get('hh_high_intensity_training', False)
+        )
+        
+        has_exercise_symptoms = (
+            hhq.get('hh_exercise_intolerance', False) or
+            hhq.get('hh_muscle_weakness', False) or
+            hhq.get('hh_overtraining', False) or
+            hhq.get('hh_performance_decline', False)
+        )
+        
+        if is_athlete and has_exercise_symptoms and cortisol and cortisol < 15:
+            processed['exercise-cortisol-support'] = True
+        else:
+            processed['exercise-cortisol-support'] = False
+        
+        # COMPOUND NEUROLOGICAL HORMONE CONDITIONS
+        # Multiple hormone deficiencies = comprehensive support needed
+        has_multiple_deficiencies = (
+            processed.get('quick-PROG-50-100', False) or 
+            processed.get('quick-PROG<50', False) or
+            processed.get('quick-DHEA-150', False) or
+            processed.get('quick-cortisol-15', False)
+        )
+        
+        has_neurological_symptoms = (
+            hhq.get('hh_brain_fog', False) or
+            hhq.get('hh_memory_problems', False) or
+            hhq.get('hh_chronic_fatigue', False) or
+            hhq.get('hh_depression', False) or
+            hhq.get('hh_anxiety', False)
+        )
+        
+        if has_multiple_deficiencies and has_neurological_symptoms:
+            processed['neurological-hormone-support'] = True
+        else:
+            processed['neurological-hormone-support'] = False
+        
+        
         return processed
     
     def _determine_menopause_status(self, hhq: Dict) -> str:
@@ -1660,6 +1854,13 @@ disease."""
                     return float(labs[key])
                 except (ValueError, TypeError):
                     continue
+        return None
+    
+    def _get_lab_string_value(self, labs: Dict, possible_keys: List[str]) -> Optional[str]:
+        """Get lab string value (for genetics, etc.) by checking multiple possible key names."""
+        for key in possible_keys:
+            if key in labs and labs[key] is not None:
+                return str(labs[key])
         return None
     
     def _calculate_homa_ir(self, glucose, insulin):
@@ -1685,14 +1886,14 @@ disease."""
                 
                 if vit_d_val >= 60:
                     vit_d_rec = "This level is close to the optimal parameters and though no additional intervention is recommended, you may want to check your VITAMIN D level a few times per year to make sure that it does not drop."
+                elif vit_d_val >= 55:
+                    vit_d_rec = "Your VITAMIN D level is suboptimal, and supplementation is recommended. Since your VITAMIN D was 55-59, you are encouraged to supplement with 4,000 iu of VITAMIN D3 per day, and then recheck your levels in 90 days."
                 elif vit_d_val >= 50:
-                    vit_d_rec = "Your VITAMIN D level is suboptimal, and supplementation is recommended. Since your VITAMIN D was 50-59, you are encouraged to supplement with 4,000 iu of VITAMIN D3 per day, and then recheck your levels in 90 days."
+                    vit_d_rec = "Your VITAMIN D level is suboptimal, and supplementation is recommended. Since your VITAMIN D was 50-54, you are encouraged to supplement with 6,000 iu of VITAMIN D3 per day, and then recheck your levels in 90 days."
                 elif vit_d_val >= 40:
-                    vit_d_rec = "Since your VITAMIN D was 40-49, you are encouraged to supplement with 6,000 iu of VITAMIN D3 per day, and then recheck your levels in 90 days."
-                elif vit_d_val >= 30:
-                    vit_d_rec = "Since your VITAMIN D was 30-39, you are encouraged to supplement with 8,000 iu of VITAMIN D3 per day, and then recheck your levels in 90 days."
+                    vit_d_rec = "Since your VITAMIN D was 40-49, you are encouraged to supplement with 8,000 iu of VITAMIN D3 per day, and then recheck your levels in 90 days."
                 else:
-                    vit_d_rec = "Since your VITAMIN D was < 30, you are encouraged to supplement with 10,000 iu of VITAMIN D3 per day, and then recheck your levels in 90 days."
+                    vit_d_rec = "Since your VITAMIN D was < 40, you are encouraged to supplement with 10,000 iu of VITAMIN D3 per day, and then recheck your levels in 90 days."
                 
                 story.append(Paragraph(vit_d_text, body_style))
                 story.append(Paragraph(vit_d_rec, supplement_style))
@@ -1855,163 +2056,1204 @@ METHYLPRO. The dosing is 1 capsule/day. We also recommend METHYLPRO B-COMPLEX + 
         
         return recommendations
 
-    def _process_advanced_protocols(self, labs: Dict, hhq: Dict, ranges: Dict) -> Dict:
+    def _process_all_content_controls(self, client_data: Dict[str, Any], lab_results: Dict[str, Any], 
+                                     hhq_responses: Dict[str, Any] = None) -> Dict[str, Any]:
         """
-        Process advanced hormone and supplement protocols from professional template.
-        Includes pregnenolone, DHEA, cortisol, and specialized supplement considerations.
+        Comprehensive content control processor that ensures ALL lab values are evaluated
+        and ALL possible content controls are triggered based on intelligent thresholds.
+        
+        This is the core method that solves the lab representation problem by:
+        1. Processing every single lab value against comprehensive thresholds
+        2. Evaluating HHQ responses for content triggers
+        3. Creating compound conditions from lab + HHQ combinations
+        4. Using gender-specific and age-specific range mappings
+        5. Ensuring critical controls always get evaluated with safety nets
+        
+        Returns a dictionary of ALL content controls that should be triggered.
+        """
+        if hhq_responses is None:
+            hhq_responses = {}
+            
+        processed_content = {}
+        
+        # 1. COMPREHENSIVE LAB VALUE PROCESSING
+        # Process every single lab value with intelligent thresholds
+        processed_content.update(self._process_all_lab_values_comprehensive(client_data, lab_results, hhq_responses))
+        
+        # 2. HHQ-BASED CONDITIONS
+        # Process all HHQ responses for content triggers
+        processed_content.update(self._process_hhq_based_conditions(hhq_responses, lab_results))
+        
+        # 3. COMPOUND CONDITIONS
+        # Create sophisticated lab + HHQ combination conditions
+        ranges = self._get_comprehensive_lab_ranges(client_data.get('gender', 'unknown'))
+        processed_content.update(self._process_compound_conditions(lab_results, hhq_responses, ranges))
+        
+        # 4. GENETIC PROCESSING
+        # Handle APO E and MTHFR genetics
+        processed_content.update(self._process_genetics_comprehensive(lab_results))
+        
+        # 5. CBC AND COAGULATION INSIGHTS PROCESSING
+        # Handle CBC and coagulation markers for Other Insights section
+        processed_content.update(self._process_cbc_and_coagulation_insights(lab_results, hhq_responses, ranges))
+        
+        # 6. BMI AND WEIGHT INSIGHTS PROCESSING
+        # Handle BMI calculations and weight-related conditions for Body Weight section
+        processed_content.update(self._process_bmi_and_weight_insights(client_data, hhq_responses))
+        
+        # 7. RISK PROFILE INSIGHTS PROCESSING
+        # Handle risk factor analysis for Other Insights section
+        processed_content.update(self._process_risk_profile_insights(hhq_responses))
+        
+        # 8. SAFETY NETS - Ensure critical controls are always evaluated
+        processed_content.update(self._apply_safety_nets(lab_results, hhq_responses, client_data))
+        
+        return processed_content
+    
+    def _process_all_lab_values_comprehensive(self, client_data: Dict[str, Any], lab_results: Dict[str, Any], hhq_responses: Dict[str, Any]) -> Dict[str, Any]:
+        """
+        Process ALL lab values comprehensively using intelligent thresholds.
+        This ensures every lab result triggers appropriate content controls.
+        """
+        if hhq_responses is None:
+            hhq_responses = {}
+            
+        processed = {}
+        gender = client_data.get('gender', 'unknown').lower()
+        
+        # Get comprehensive lab ranges for this gender
+        ranges = self._get_comprehensive_lab_ranges(gender)
+        
+        # INFLAMMATORY MARKERS
+        self._evaluate_lab_threshold(processed, lab_results, 'INFLAM_CRP', 'C-Reactive Protein, Cardiac', 
+                                   'quick-CRP', ranges['CRP'])
+        self._evaluate_lab_threshold(processed, lab_results, 'INFLAM_HOMOCYS', 'Homocyst(e)ine', 
+                                   'quick-homocysteine', ranges['Homocysteine'])
+        self._evaluate_lab_threshold(processed, lab_results, 'INFLAM_URIC', 'Uric Acid', 
+                                   'quick-uric-acid', ranges['UricAcid'])
+        
+        # Add specific CRP processing for inflammation section
+        crp = self._get_lab_value(lab_results, ['INFLAM_CRP', 'C-Reactive Protein, Cardiac'])
+        if crp is not None:
+            processed['quick-CRP'] = crp
+            
+            if crp <= 1.0:  # Optimal CRP
+                processed['quick-CRP-above-optimal'] = True  # For optimal message
+                processed['quick-CRP-elevated'] = False
+            else:  # Elevated CRP > 1.0
+                processed['quick-CRP-above-optimal'] = False  # Hide optimal message  
+                processed['quick-CRP-elevated'] = True
+        
+        # Add homocysteine-specific processing
+        homocysteine = self._get_lab_value(lab_results, ['INFLAM_HOMOCYS', 'Homocyst(e)ine'])
+        if homocysteine:
+            processed['homocysteine-value'] = homocysteine
+            
+            # Check for elevated levels and sub-conditions
+            if homocysteine > 7.0:  # Above optimal goal
+                processed['quick-homocysteine'] = True  # Override any value set by threshold evaluation
+                
+                # Sub-condition: Levels > 12 → Trimethylglycine
+                if homocysteine > 12.0:
+                    processed['quick-Homo12'] = True
+                    
+                # Sub-condition: Levels > 15 → Creatine monohydrate 
+                if homocysteine > 15.0:
+                    processed['quick-Homo15'] = True
+            else:
+                # Explicitly set to False for optimal levels (override threshold evaluation)
+                processed['quick-homocysteine'] = False
+            
+            # Always store related B vitamin values for the template
+            b12 = self._get_lab_value(lab_results, ['VIT_B12', 'Vitamin B12'])
+            if b12:
+                processed['quick-B12-value'] = b12
+                
+            # Look for folate/folic acid values
+            folate = self._get_lab_value(lab_results, ['VIT_FOLATE', 'Folate', 'Folic Acid'])
+            if folate:
+                processed['quick-folic-acid-value'] = folate
+            else:
+                processed['quick-folic-acid-value'] = 'Not Available'
+        
+        # COMPLETE BLOOD COUNT  
+        self._evaluate_lab_threshold(processed, lab_results, 'CBC_WBC', 'WBC', 
+                                   'quick-WBC', ranges['WBC'])
+        self._evaluate_lab_threshold(processed, lab_results, 'CBC_RBC', 'RBC', 
+                                   'quick-RBC', ranges['RBC'])
+        self._evaluate_lab_threshold(processed, lab_results, 'CBC_HGB', 'Hemoglobin', 
+                                   'quick-hemoglobin', ranges['Hemoglobin'])
+        self._evaluate_lab_threshold(processed, lab_results, 'CBC_PLT', 'Platelets', 
+                                   'quick-platelets', ranges['Platelets'])
+        
+        # COMPREHENSIVE METABOLIC PANEL
+        self._evaluate_lab_threshold(processed, lab_results, 'CHEM_GLU', 'Glucose', 
+                                   'quick-glucose', ranges['Glucose'])
+        self._evaluate_lab_threshold(processed, lab_results, 'CHEM_BUN', 'BUN', 
+                                   'quick-BUN', ranges['BUN'])
+        self._evaluate_lab_threshold(processed, lab_results, 'CHEM_CREAT', 'Creatinine', 
+                                   'quick-creatinine', ranges['Creatinine'])
+        self._evaluate_lab_threshold(processed, lab_results, 'CHEM_EGFR', 'eGFR', 
+                                   'quick-eGFR', ranges['eGFR'])
+        
+        # LIPID PANEL - COMPREHENSIVE CHOLESTEROL PROCESSING
+        self._evaluate_lab_threshold(processed, lab_results, 'LIPID_CHOL', 'Cholesterol, Total', 
+                                   'quick-TC', ranges['TotalCholesterol'])
+        self._evaluate_lab_threshold(processed, lab_results, 'LIPID_TRIG', 'Triglycerides', 
+                                   'quick-trigly', ranges['Triglycerides'])
+        self._evaluate_lab_threshold(processed, lab_results, 'LIPID_HDL', 'HDL Cholesterol', 
+                                   'quick-HDL', ranges['HDLCholesterol'])
+        self._evaluate_lab_threshold(processed, lab_results, 'LIPID_LDL', 'LDL Chol Calc (NIH)', 
+                                   'quick-LDL', ranges['LDLCholesterol'])
+        
+        # CALCULATE TRIGLYCERIDE TO HDL RATIO
+        triglycerides = self._get_lab_value(lab_results, ['LIPID_TRIG', 'Triglycerides'])
+        hdl = self._get_lab_value(lab_results, ['LIPID_HDL', 'HDL Cholesterol'])
+        
+        if triglycerides and hdl:
+            trig_hdl_ratio = round(triglycerides / hdl, 2)
+            processed['quick-trig-HDL'] = trig_hdl_ratio
+            
+            # Triglyceride to HDL ratio > 2 indicates insulin resistance
+            if trig_hdl_ratio > 2.0:
+                processed['quick-trig-HDL-elevated'] = True
+                processed['insulin-resistance-indicator'] = True
+        
+        # CHOLESTEROL THRESHOLD CONDITIONS
+        total_chol = self._get_lab_value(lab_results, ['LIPID_CHOL', 'Cholesterol, Total'])
+        ldl = self._get_lab_value(lab_results, ['LIPID_LDL', 'LDL Chol Calc (NIH)'])
+        
+        # Trigger cholesterol-row for elevated total cholesterol or LDL
+        if (total_chol and total_chol > 200) or (ldl and ldl > 100):
+            processed['cholesterol-row'] = True
+            processed['quick-CAC'] = True  # Recommend CAC score for elevated cholesterol
+            
+        # CARDIOVASCULAR SUPPLEMENT CONDITIONS
+        # MegaQuinone K2-7 for cardiovascular support
+        has_cardiovascular_risk = (
+            (total_chol and total_chol > 200) or
+            (ldl and ldl > 100) or
+            (triglycerides and triglycerides > 150) or
+            (hdl and hdl < 40)
+        )
+        if has_cardiovascular_risk:
+            processed['quick-MK2'] = True
+            processed['mk2-cardiovascular-support'] = True
+            
+        # VERY LOW TRIGLYCERIDES - PLASMALOGEN PATHWAY
+        if triglycerides and triglycerides < 50:  # Uncharacteristically low
+            processed['trig-plasmalogens-row'] = True
+            processed['trig-plasmalogens'] = True
+        
+        # ELECTROLYTES
+        self._evaluate_lab_threshold(processed, lab_results, 'CHEM_NA', 'Sodium', 
+                                   'quick-sodium', ranges['Sodium'])
+        self._evaluate_lab_threshold(processed, lab_results, 'CHEM_K', 'Potassium', 
+                                   'quick-potassium', ranges['Potassium'])
+        self._evaluate_lab_threshold(processed, lab_results, 'CHEM_CL', 'Chloride', 
+                                   'quick-chloride', ranges['Chloride'])
+        self._evaluate_lab_threshold(processed, lab_results, 'CHEM_CA', 'Calcium', 
+                                   'quick-calcium', ranges['Calcium'])
+        
+        # LIVER FUNCTION TESTS
+        self._evaluate_lab_threshold(processed, lab_results, 'LFT_ALT', 'ALT (SGPT)', 
+                                   'quick-ALT', ranges['ALT'])
+        self._evaluate_lab_threshold(processed, lab_results, 'LFT_AST', 'AST (SGOT)', 
+                                   'quick-AST', ranges['AST'])
+        self._evaluate_lab_threshold(processed, lab_results, 'LFT_ALKP', 'Alkaline Phosphatase', 
+                                   'quick-alkaline-phosphatase', ranges['AlkalinePhosphatase'])
+        self._evaluate_lab_threshold(processed, lab_results, 'LFT_ALB', 'Albumin', 
+                                   'quick-albumin', ranges['Albumin'])
+        
+        # ALBUMIN TO GLOBULIN RATIO (A/G RATIO) PROCESSING
+        albumin = self._get_lab_value(lab_results, ['LFT_ALB', 'Albumin'])
+        total_protein = self._get_lab_value(lab_results, ['LFT_TP', 'Total Protein'])
+        
+        if albumin and total_protein:
+            globulin = total_protein - albumin
+            if globulin > 0:
+                ag_ratio = round(albumin / globulin, 2)
+                processed['quick-AG-ratio'] = ag_ratio
+                
+                # A/G Ratio evaluation 
+                if ag_ratio >= 1.5:  # Optimal A/G ratio
+                    processed['quick-AG-15'] = True
+                    processed['ag-ratio-optimal'] = True
+                    processed['ag-ratio-low'] = False
+                else:  # Low A/G ratio <1.5
+                    processed['quick-AG-15'] = False
+                    processed['ag-ratio-low'] = True
+                    processed['ag-ratio-optimal'] = False
+                    
+                    # Very low A/G ratio requires more aggressive intervention
+                    if ag_ratio < 1.2:
+                        processed['ag-ratio-very-low'] = True
+                    else:
+                        processed['ag-ratio-very-low'] = False
+        
+        # URIC ACID COMPREHENSIVE PROCESSING
+        uric_acid = self._get_lab_value(lab_results, ['INFLAM_URIC', 'Uric Acid'])
+        if uric_acid is not None:
+            processed['quick-uric-acid'] = uric_acid
+            
+            # Uric acid threshold conditions
+            if uric_acid <= 6.5:  # Optimal uric acid
+                processed['UricAcid65'] = True
+                processed['uric-acid-elevated'] = False
+            else:  # Elevated uric acid >6.5 mg/dL
+                processed['UricAcid65'] = False
+                processed['uric-acid-elevated'] = True
+                
+                # Sub-condition for very high uric acid
+                if uric_acid > 8.0:
+                    processed['uric-acid-very-high'] = True
+                else:
+                    processed['uric-acid-very-high'] = False
+            
+            # Gout risk assessment - uric acid >6.5 + history of gout or joint pain
+            gout_history = (hhq_responses and (
+                hhq_responses.get('hh_gout', False) or
+                hhq_responses.get('hh_joint_pain', False) or
+                hhq_responses.get('hh_arthritis', False)
+            ))
+            
+            if uric_acid > 6.5 and gout_history:
+                processed['UAAcid-Gout'] = True
+            else:
+                processed['UAAcid-Gout'] = False
+        
+        # ALCOHOL INTERACTION CONDITIONS
+        # Check for alcohol consumption from HHQ  
+        alcohol_consumption = False
+        if hhq_responses:
+            alcohol_consumption = (
+                hhq_responses.get('hh_alcohol_consumption', False) or
+                hhq_responses.get('hh_drinks_alcohol', False) or
+                hhq_responses.get('hh_alcohol_4days', False) or
+                hhq_responses.get('hh_1to3_alcohol_week', False) or
+                hhq_responses.get('hh_alcohol_daily', False)
+            )
+        
+        # A/G Ratio + Alcohol interaction
+        # Low A/G ratio with alcohol consumption = compound liver/protein synthesis issue
+        if (albumin and total_protein and 
+            alcohol_consumption and 
+            processed.get('ag-ratio-low', False)):
+            processed['quick-AG-ETOH'] = True
+        else:
+            processed['quick-AG-ETOH'] = False
+        
+        # Uric Acid + Alcohol interaction  
+        # Elevated uric acid with alcohol consumption = compound inflammation/gout risk
+        if (uric_acid and uric_acid > 6.5 and alcohol_consumption):
+            processed['quick-uric-acid-ETOH'] = True
+        else:
+            processed['quick-uric-acid-ETOH'] = False
+        
+        # THYROID PANEL
+        self._evaluate_lab_threshold(processed, lab_results, 'THY_TSH', 'TSH', 
+                                   'quick-TSH', ranges['TSH'])
+        self._evaluate_lab_threshold(processed, lab_results, 'THY_T3F', 'Triiodothyronine (T3), Free', 
+                                   'quick-T3', ranges['T3'])
+        self._evaluate_lab_threshold(processed, lab_results, 'THY_T4F', 'T4, Free (Direct)', 
+                                   'quick-T4', ranges['T4'])
+        
+        # VITAMINS & MINERALS
+        self._evaluate_lab_threshold(processed, lab_results, 'VIT_D25', 'Vitamin D, 25-Hydroxy', 
+                                   'quick-VitD', ranges['VitaminD'])
+        self._evaluate_lab_threshold(processed, lab_results, 'VIT_B12', 'Vitamin B12', 
+                                   'quick-B12', ranges['VitB12'])
+        self._evaluate_lab_threshold(processed, lab_results, 'VIT_E', 'Vitamin E (Alpha Tocopherol)', 
+                                   'quick-vitE', ranges['VitaminE'])
+        
+        # Add vitamin E-specific processing
+        vit_e = self._get_lab_value(lab_results, ['VIT_E', 'Vitamin E (Alpha Tocopherol)'])
+        if vit_e:
+            processed['quick-vitE'] = f"{vit_e} mg/L"  # Display format with units
+            
+            # Sub-condition: VitE12 (levels >= 12 are optimal)
+            if vit_e >= 12.0:
+                processed['VitE12'] = True
+                
+            # Sub-condition: quick-vitE-row (levels < 12 need supplementation)  
+            elif vit_e < 12.0:
+                processed['quick-vitE-row'] = True
+                
+            # Sub-condition: quick-vitE-row-elevated (very high levels > 20)
+            if vit_e > 20.0:
+                processed['quick-vitE-row-elevated'] = True
+        
+        self._evaluate_lab_threshold(processed, lab_results, 'MIN_ZN', 'Zinc, Plasma or Serum', 
+                                   'quick-zinc', ranges['Zinc'])
+        self._evaluate_lab_threshold(processed, lab_results, 'MIN_CU', 'Copper, Serum or Plasma', 
+                                   'quick-copper', ranges['Copper'])
+        self._evaluate_lab_threshold(processed, lab_results, 'MIN_SE', 'Selenium, Serum/Plasma', 
+                                   'quick-selenium', ranges['Selenium'])
+        self._evaluate_lab_threshold(processed, lab_results, 'MIN_MG_RBC', 'Magnesium, RBC', 
+                                   'quick-MagRBC', ranges['Magnesium'])
+        
+        # CALCULATE COPPER TO ZINC RATIO
+        copper = self._get_lab_value(lab_results, ['MIN_CU', 'Copper, Serum or Plasma'])
+        zinc = self._get_lab_value(lab_results, ['MIN_ZN', 'Zinc, Plasma or Serum'])
+        
+        if copper and zinc:
+            cz_ratio = round(copper / zinc, 2)
+            processed['quick-CZratio-14'] = cz_ratio
+            
+            # Trigger elevated condition if ratio > 1.4
+            if cz_ratio > 1.4:
+                processed['quick-CZratio-14-elevated'] = True
+                
+                # Enhanced treatment for significantly elevated ratios (>1.8) or additional risk factors
+                if cz_ratio > 1.8:
+                    processed['zinc-liposomalC'] = True
+            else:
+                processed['quick-CZratio-14-optimal'] = True
+        
+        # HORMONES (Gender-specific)
+        if gender == 'female':
+            self._evaluate_lab_threshold(processed, lab_results, 'FHt_E2', 'Estradiol', 
+                                       'quick-estradiol', ranges['Estradiol'])
+            self._evaluate_lab_threshold(processed, lab_results, 'FHt_PROG', 'Progesterone', 
+                                       'quick-progesterone', ranges['Progesterone'])
+            self._evaluate_lab_threshold(processed, lab_results, 'FHt_TEST', 'Testosterone', 
+                                       'quick-testosterone', ranges['Testosterone'])
+        elif gender == 'male':
+            self._evaluate_lab_threshold(processed, lab_results, 'MHt_TEST_TOT', 'Testosterone', 
+                                       'quick-testosterone', ranges['Testosterone'])
+            self._evaluate_lab_threshold(processed, lab_results, 'MHt_TEST_FREE', 'Free Testosterone', 
+                                       'quick-free-testosterone', ranges['FreeTestosterone'])
+            self._evaluate_lab_threshold(processed, lab_results, 'MHt_PSA', 'PSA', 
+                                       'quick-PSA', ranges['PSA'])
+        
+        # OMEGA FATTY ACIDS
+        self._evaluate_lab_threshold(processed, lab_results, 'OMEGA_CHECK', 'OmegaCheck(TM)', 
+                                   'OmegaCheck', ranges['OmegaCheck'])
+        self._evaluate_lab_threshold(processed, lab_results, 'OMEGA_6_3_RATIO', 'Omega-6/Omega-3 Ratio', 
+                                   'lab-omega-6-3-ratio', ranges['Omega63Ratio'])
+        self._evaluate_lab_threshold(processed, lab_results, 'OMEGA_AA_EPA', 'Arachidonic Acid/EPA Ratio', 
+                                   'AAEPA', ranges['AAEPARatio'])
+        self._evaluate_lab_threshold(processed, lab_results, 'OMEGA_AA', 'Arachidonic Acid', 
+                                   'AA', ranges['ArachidonicAcid'])
+        
+        # METABOLIC MARKERS
+        self._evaluate_lab_threshold(processed, lab_results, 'METAB_INS', 'Insulin', 
+                                   'quick-insulin', ranges['Insulin'])
+        self._evaluate_lab_threshold(processed, lab_results, 'METAB_HBA1C', 'Hemoglobin A1c', 
+                                   'quick-HbA1c', ranges['HbA1c'])
+        
+        # Add comprehensive blood sugar/metabolic processing
+        glucose = self._get_lab_value(lab_results, ['CHEM_GLU', 'Glucose'])
+        insulin = self._get_lab_value(lab_results, ['METAB_INS', 'Insulin'])
+        hba1c = self._get_lab_value(lab_results, ['METAB_HBA1C', 'Hemoglobin A1c'])
+        homa_ir = None  # Initialize to avoid UnboundLocalError
+        
+        # Process glucose levels
+        if glucose:
+            processed['quick-glucose'] = glucose
+            if glucose >= 100:  # Above optimal fasting glucose
+                processed['quick-glucose-elevated'] = True
+                processed['glucose-elevated'] = True
+            
+        # Process fasting insulin levels  
+        if insulin:
+            processed['quick-fasting-insulin'] = insulin
+            if insulin >= 7:  # Above optimal fasting insulin
+                processed['quick-fasting-insulin-elevated'] = True
+                processed['insulin-elevated'] = True
+                
+        # Calculate and process HOMA-IR
+        if glucose and insulin:
+            homa_ir = round((insulin * glucose) / 405, 2)
+            processed['quick-homa-IR'] = homa_ir
+            processed['HOMA_IR'] = homa_ir  # Alternative name
+            
+            if homa_ir >= 1.2:  # Above optimal HOMA-IR
+                processed['quick-homa-IR-elevated'] = True
+                processed['HOMA-IR-elevated'] = True
+                
+        # Process A1c levels with APO E4 considerations
+        if hba1c:
+            processed['quick-a1c'] = hba1c
+            
+            # Check for APO E4 status for stricter A1c goals
+            apo_e = lab_results.get('APO1') or lab_results.get('APO E Genotyping Result')
+            has_apo_e4 = apo_e and 'E4' in str(apo_e)
+            has_double_e4 = apo_e and 'E4/E4' in str(apo_e)
+            
+            # A1c threshold conditions
+            if hba1c > 6.0:
+                processed['quick-A1c>6'] = True
+                processed['quick-diabetes-risk'] = True
+            elif hba1c > 5.6:
+                processed['quick-A1c>56'] = True
+                processed['quick-diabetes-risk'] = True
+            else:
+                processed['quick-A1c<56'] = True
+                
+            # APO E4-specific A1c goals
+            if has_double_e4 and hba1c > 5.3:
+                processed['quick-A1c-E4E4-elevated'] = True
+            elif has_apo_e4 and hba1c > 5.6:
+                processed['quick-A1c-E4-elevated'] = True
+                
+            # Supplement recommendations for elevated metabolic markers
+            if (hba1c > 5.6 or 
+                (glucose and glucose > 100) or 
+                (insulin and insulin > 7) or 
+                (homa_ir and homa_ir > 1.2)):
+                processed['lab-a1c-L2b'] = True
+        
+        return processed
+    
+    def _evaluate_lab_threshold(self, processed: Dict, lab_results: Dict, lab_key: str, 
+                               lab_display_name: str, control_name: str, thresholds: Dict) -> None:
+        """
+        Intelligent threshold evaluation for a single lab value.
+        Creates multiple content controls based on value ranges.
+        """
+        # Try multiple possible keys for this lab
+        possible_keys = [lab_key, lab_display_name]
+        value = self._get_lab_value(lab_results, possible_keys)
+        
+        if value is None:
+            return
+            
+        # Store the raw value for template replacement
+        processed[control_name] = value
+        
+        # Evaluate against thresholds to create conditional content controls
+        if 'critical_high' in thresholds and value >= thresholds['critical_high']:
+            processed[f"{control_name}-critical-high"] = True
+            processed[f"{control_name}-elevated"] = True
+        elif 'high' in thresholds and value >= thresholds['high']:
+            processed[f"{control_name}-high"] = True
+            processed[f"{control_name}-elevated"] = True
+        elif 'optimal_max' in thresholds and value > thresholds['optimal_max']:
+            processed[f"{control_name}-above-optimal"] = True
+        elif 'optimal_min' in thresholds and value >= thresholds['optimal_min']:
+            processed[f"{control_name}-optimal"] = True
+        elif 'low' in thresholds and value <= thresholds['low']:
+            processed[f"{control_name}-low"] = True
+        elif 'critical_low' in thresholds and value <= thresholds['critical_low']:
+            processed[f"{control_name}-critical-low"] = True
+            processed[f"{control_name}-low"] = True
+        
+        # Create range-specific controls for vitamins
+        if control_name == 'quick-VitD':
+            # MUTUALLY EXCLUSIVE vitamin D conditions
+            if value >= 60:
+                processed['D-60+'] = True
+                processed['D-55-59'] = False
+                processed['D-50-55'] = False
+                processed['D-50-59'] = False  # Add missing template condition
+                processed['D-40-49'] = False
+                processed['D-30-39'] = False
+                processed['D-less-30'] = False
+                # Set parent conditions - optimal range
+                processed['D-optimal'] = True
+                processed['quick-VitD-row'] = False
+                processed['quick-vitD-simple'] = True
+                processed['quick-VitD-row-takingD'] = False
+            elif value >= 55:
+                processed['D-60+'] = False
+                processed['D-55-59'] = True
+                processed['D-50-55'] = False
+                processed['D-50-59'] = False  # Add missing template condition
+                processed['D-40-49'] = False
+                processed['D-30-39'] = False
+                processed['D-less-30'] = False
+                # Set parent conditions - close to optimal
+                processed['D-optimal'] = False
+                processed['quick-VitD-row'] = False
+                processed['quick-vitD-simple'] = True
+                processed['quick-VitD-row-takingD'] = False
+            elif value >= 50:
+                processed['D-60+'] = False
+                processed['D-55-59'] = False
+                processed['D-50-55'] = True
+                processed['D-50-59'] = False  # Add missing template condition
+                processed['D-40-49'] = False
+                processed['D-30-39'] = False
+                processed['D-less-30'] = False
+                # Set parent conditions - close to optimal
+                processed['D-optimal'] = False
+                processed['quick-VitD-row'] = False
+                processed['quick-vitD-simple'] = True
+                processed['quick-VitD-row-takingD'] = False
+            elif value >= 40:
+                processed['D-60+'] = False
+                processed['D-55-59'] = False
+                processed['D-50-55'] = False
+                processed['D-50-59'] = False  # Add missing template condition
+                processed['D-40-49'] = True
+                processed['D-30-39'] = False
+                processed['D-less-30'] = False
+                # Set parent conditions - suboptimal, needs supplementation
+                processed['D-optimal'] = False
+                processed['quick-VitD-row'] = True
+                processed['quick-vitD-simple'] = False
+                processed['quick-VitD-row-takingD'] = False
+            elif value >= 30:
+                processed['D-60+'] = False
+                processed['D-55-59'] = False
+                processed['D-50-55'] = False
+                processed['D-50-59'] = False  # Add missing template condition
+                processed['D-40-49'] = False
+                processed['D-30-39'] = True
+                processed['D-less-30'] = False
+                # Set parent conditions - suboptimal, needs supplementation
+                processed['D-optimal'] = False
+                processed['quick-VitD-row'] = True
+                processed['quick-vitD-simple'] = False
+                processed['quick-VitD-row-takingD'] = False
+            else:
+                processed['D-60+'] = False
+                processed['D-55-59'] = False
+                processed['D-50-55'] = False
+                processed['D-50-59'] = False  # Add missing template condition
+                processed['D-40-49'] = False
+                processed['D-30-39'] = False
+                processed['D-less-30'] = True
+                # Set parent conditions - very low, needs supplementation
+                processed['D-optimal'] = False
+                processed['quick-VitD-row'] = True
+                processed['quick-vitD-simple'] = False
+                processed['quick-VitD-row-takingD'] = False
+        
+        elif control_name == 'quick-vitE':
+            if value >= 12:
+                processed['VitE12'] = True
+            elif value >= 8:
+                processed['quick-vitE-row'] = True
+            else:
+                processed['quick-vitE-row-elevated'] = True
+        
+        elif control_name == 'quick-MagRBC':
+            # Special handling for Magnesium RBC - trigger low if below optimal minimum
+            if value < thresholds.get('optimal_min', 5.2):  # Below 5.2 mg/dL
+                processed['quick-MagRBC-low'] = True
+            else:  # 5.2 mg/dL or above
+                processed['quick-MagRBC-optimal'] = True
+                
+            # Add specific quick-MagRBC-52 condition for values around the 5.2 threshold
+            if 5.0 <= value <= 5.2:  # Borderline low range around 5.2 threshold
+                processed['quick-MagRBC-52'] = True
+        
+        elif control_name == 'quick-selenium':
+            # Special handling for Selenium - trigger low if below optimal minimum
+            if value < thresholds.get('optimal_min', 125):  # Below 125 ug/L
+                processed['quick-selenium-low'] = True
+                
+                # Specific sub-condition for very low selenium requiring CLEAR WAY COFACTORS
+                if value < 110:  # Very low selenium
+                    processed['quick-selen-110'] = True
+            else:  # 125 ug/L or above
+                processed['quick-selenium-optimal'] = True
+                processed['Selenium125'] = True  # Alternative name for optimal condition
+    
+    def _get_comprehensive_lab_ranges(self, gender: str) -> Dict[str, Dict[str, float]]:
+        """
+        Comprehensive lab ranges for intelligent threshold evaluation.
+        Gender-specific where appropriate.
+        """
+        base_ranges = {
+            'CRP': {'optimal_max': 1.0, 'high': 3.0, 'critical_high': 10.0},
+            'Homocysteine': {'optimal_max': 7.0, 'high': 10.4, 'critical_high': 15.0},
+            'UricAcid': {'optimal_max': 6.5, 'high': 8.0, 'critical_high': 10.0},
+            'AGRatio': {'optimal_min': 1.5, 'low': 1.2, 'critical_low': 1.0},
+            'TotalProtein': {'low': 6.0, 'optimal_min': 6.5, 'optimal_max': 8.5, 'high': 9.0},
+            'WBC': {'low': 3.5, 'optimal_min': 4.0, 'optimal_max': 10.0, 'high': 12.0},
+            'RBC': {'low': 4.0, 'optimal_min': 4.2, 'optimal_max': 5.5, 'high': 6.0},
+            'Hemoglobin': {'low': 12.0, 'optimal_min': 13.0, 'optimal_max': 16.0, 'high': 18.0},
+            'Hematocrit': {'low': 36.0, 'optimal_min': 37.0, 'optimal_max': 48.0, 'high': 52.0},
+            'MCV': {'low': 80, 'optimal_min': 82, 'optimal_max': 98, 'high': 100},
+            'Platelets': {'low': 150, 'optimal_min': 200, 'optimal_max': 400, 'high': 500},
+            'DDimer': {'optimal_max': 500, 'high': 1000, 'critical_high': 2000},
+            'Glucose': {'low': 70, 'optimal_min': 80, 'optimal_max': 99, 'high': 125},
+            'BUN': {'low': 7, 'optimal_min': 10, 'optimal_max': 20, 'high': 25},
+            'Creatinine': {'optimal_min': 0.6, 'optimal_max': 1.2, 'high': 1.5},
+            'eGFR': {'low': 60, 'optimal_min': 90},
+            'Sodium': {'low': 135, 'optimal_min': 138, 'optimal_max': 145, 'high': 148},
+            'Potassium': {'low': 3.5, 'optimal_min': 3.8, 'optimal_max': 5.0, 'high': 5.5},
+            'Chloride': {'low': 98, 'optimal_min': 101, 'optimal_max': 107, 'high': 110},
+            'Calcium': {'low': 8.5, 'optimal_min': 9.0, 'optimal_max': 10.5, 'high': 11.0},
+            'ALT': {'optimal_max': 25, 'high': 40, 'critical_high': 80},
+            'AST': {'optimal_max': 25, 'high': 40, 'critical_high': 80},
+            'AlkalinePhosphatase': {'low': 44, 'optimal_min': 50, 'optimal_max': 120, 'high': 150},
+            'Albumin': {'low': 3.5, 'optimal_min': 4.0, 'optimal_max': 5.0, 'high': 5.5},
+            'TSH': {'optimal_min': 0.5, 'optimal_max': 2.5, 'high': 4.0, 'critical_high': 10.0},
+            'T3': {'low': 2.3, 'optimal_min': 3.0, 'optimal_max': 4.2, 'high': 4.8},
+            'T4': {'low': 0.8, 'optimal_min': 1.0, 'optimal_max': 1.8, 'high': 2.2},
+            'VitaminD': {'critical_low': 20, 'low': 30, 'optimal_min': 50, 'optimal_max': 80, 'high': 100},
+            'VitB12': {'low': 300, 'optimal_min': 500, 'optimal_max': 1000, 'high': 1500},
+            'VitaminE': {'low': 5.5, 'optimal_min': 8.0, 'optimal_max': 20.0, 'high': 25.0},
+            'Zinc': {'low': 60, 'optimal_min': 80, 'optimal_max': 120, 'high': 150},
+            'Copper': {'low': 70, 'optimal_min': 80, 'optimal_max': 140, 'high': 200},
+            'Selenium': {'low': 70, 'optimal_min': 125, 'optimal_max': 200, 'high': 300},
+            'Magnesium': {'low': 4.2, 'optimal_min': 5.2, 'optimal_max': 6.5, 'high': 7.0},
+            'OmegaCheck': {'optimal_min': 5.4, 'high': 8.0},
+            'Omega63Ratio': {'optimal_max': 4.0, 'high': 6.0, 'critical_high': 10.0},
+            'AAEPARatio': {'optimal_max': 8.0, 'high': 12.0, 'critical_high': 20.0},
+            'ArachidonicAcid': {'optimal_max': 10.0, 'high': 15.0},
+            'Insulin': {'optimal_max': 10.0, 'high': 15.0, 'critical_high': 25.0},
+            'HbA1c': {'optimal_max': 5.7, 'high': 6.4, 'critical_high': 8.0},
+            'TotalCholesterol': {'optimal_max': 200, 'high': 240, 'critical_high': 300},
+            'Triglycerides': {'optimal_max': 150, 'high': 200, 'critical_high': 500},
+            'HDLCholesterol': {'low': 40, 'optimal_min': 50, 'optimal_max': 80, 'high': 100},
+            'LDLCholesterol': {'optimal_max': 100, 'high': 130, 'critical_high': 190},
+            # CBC Ranges
+            'RBC': {'optimal_min': 4.2, 'optimal_max': 5.4},
+            'Hemoglobin': {'optimal_min': 13.0, 'optimal_max': 17.0},
+            'Hematocrit': {'optimal_min': 37, 'optimal_max': 50},
+            'MCV': {'optimal_min': 80, 'optimal_max': 100, 'high': 100},
+            'DDimer': {'optimal_min': 0, 'optimal_max': 500},
+            'WBC': {'optimal_min': 3.5, 'optimal_max': 11.0},
+            'Platelets': {'optimal_min': 150, 'optimal_max': 450},
+            
+            # Electrolyte Ranges
+            'Sodium': {'optimal_min': 135, 'optimal_max': 145},
+            'Potassium': {'optimal_min': 3.5, 'optimal_max': 5.1},
+            'Chloride': {'optimal_min': 98, 'optimal_max': 107},
+            'Calcium': {'optimal_min': 8.5, 'optimal_max': 10.5},
+            
+            # Kidney Function Ranges
+            'eGFR': {'optimal_min': 60, 'optimal_max': 120},
+            'Creatinine': {'optimal_min': 0.6, 'optimal_max': 1.3},
+            
+            # Liver Function Ranges
+            'ALT': {'optimal_min': 0, 'optimal_max': 40},
+            'AST': {'optimal_min': 0, 'optimal_max': 40},
+            'AlkPhos': {'optimal_min': 40, 'optimal_max': 120},
+        }
+        
+        # Gender-specific adjustments
+        if gender == 'female':
+            base_ranges.update({
+                'Testosterone': {'low': 15, 'optimal_min': 25, 'optimal_max': 85, 'high': 100},
+                'Estradiol': {'low': 30, 'optimal_min': 50, 'optimal_max': 300, 'high': 400},
+                'Progesterone': {'low': 5, 'optimal_min': 10, 'optimal_max': 25, 'high': 35}
+            })
+        elif gender == 'male':
+            base_ranges.update({
+                'Testosterone': {'low': 300, 'optimal_min': 450, 'optimal_max': 900, 'high': 1200},
+                'FreeTestosterone': {'low': 9, 'optimal_min': 15, 'optimal_max': 30, 'high': 40},
+                'PSA': {'optimal_max': 2.5, 'high': 4.0, 'critical_high': 10.0}
+            })
+        
+        return base_ranges
+    
+    def _process_genetics_comprehensive(self, lab_results: Dict[str, Any]) -> Dict[str, Any]:
+        """Process genetic markers comprehensively."""
+        processed = {}
+        
+        # APO E Processing
+        apo_e = self._get_lab_string_value(lab_results, ['APO1', 'APO E Genotyping Result'])
+        genome_type = lab_results.get('genome-type', '')  # Also check for genome-type field
+        
+        # Use genome-type if available, otherwise use APO1
+        apo_genotype = genome_type or apo_e or ''
+        
+        if apo_genotype:
+            apo_str = str(apo_genotype).upper()
+            processed['quick-ApoE'] = apo_str
+            processed['genome-type'] = apo_genotype  # Store for template replacement
+            
+            # Set template conditions - MUTUALLY EXCLUSIVE
+            if 'E4' in apo_str:
+                # Has E4 variant
+                processed['quick-E4'] = True
+                processed['quick-nonE4'] = False
+                processed['quick-apo-e4-genetics'] = True
+                
+                # Specific E4 variants
+                if 'E4/E4' in apo_str:
+                    processed['quick-E4E4'] = True
+                    processed['quick-E4E3'] = False
+                elif 'E4/E3' in apo_str or 'E3/E4' in apo_str:
+                    processed['quick-E4E3'] = True
+                    processed['quick-E4E4'] = False
+                else:
+                    # Other E4 combinations (E4/E2, etc.)
+                    processed['quick-E4E3'] = False
+                    processed['quick-E4E4'] = False
+            else:
+                # No E4 variant
+                processed['quick-E4'] = False
+                processed['quick-nonE4'] = True
+                processed['quick-E4E3'] = False
+                processed['quick-E4E4'] = False
+                processed['quick-apo-e4-genetics'] = False
+            
+            # Legacy specific genotype conditions
+            if 'E2/E2' in apo_str:
+                processed['quick-ApoE-E2E2'] = True
+            elif 'E2/E3' in apo_str:
+                processed['quick-ApoE-E2E3'] = True  
+            elif 'E2/E4' in apo_str:
+                processed['quick-ApoE-E2E4'] = True
+            elif 'E3/E3' in apo_str:
+                processed['quick-ApoE-E3E3'] = True
+            elif 'E3/E4' in apo_str:
+                processed['quick-ApoE-E3E4'] = True
+            elif 'E4/E4' in apo_str:
+                processed['quick-ApoE-E4E4'] = True
+        else:
+            # No genetic data available
+            processed['quick-E4'] = False
+            processed['quick-nonE4'] = False
+            processed['quick-E4E3'] = False
+            processed['quick-E4E4'] = False
+            processed['quick-apo-e4-genetics'] = False
+        
+        # MTHFR Processing
+        mthfr_1 = self._get_lab_string_value(lab_results, ['MTHFR_1', 'MTHFR C677T'])
+        mthfr_2 = self._get_lab_string_value(lab_results, ['MTHFR_2', 'MTHFR A1298C'])
+        
+        if mthfr_1:
+            processed['quick-MTHFR1'] = str(mthfr_1)
+            if 'Detected' in str(mthfr_1):
+                processed['MTHFR-depression'] = True
+                processed['methylpro'] = True
+        
+        if mthfr_2:
+            processed['quick-MTHFR2'] = str(mthfr_2)
+            if 'Detected' in str(mthfr_2):
+                processed['methylpro'] = True
+        
+        return processed
+    
+    def _apply_safety_nets(self, lab_results: Dict[str, Any], hhq_responses: Dict[str, Any], 
+                          client_data: Dict[str, Any]) -> Dict[str, Any]:
+        """
+        Safety nets to ensure critical content controls are always evaluated.
+        This prevents any lab values from being missed in roadmap generation.
         """
         processed = {}
         
-        # Pregnenolone Protocols
-        pregnenolone = self._get_lab_value(labs, ['NEURO_PREG', 'Pregnenolone'])
-        if pregnenolone:
-            if pregnenolone >= 150 and pregnenolone <= 200:
-                processed['quick-pregnenolone-101'] = True  # Optimal range
-            elif pregnenolone < 150:
-                processed['quick-prog-50-100'] = True  # Needs supplementation
-                if pregnenolone < 100:
-                    processed['quick-prog-50'] = True  # Higher dose needed
-            processed['quick-pregnenolone-lab-value'] = str(pregnenolone)
+        # Ensure all vitamin D ranges are covered
+        vit_d = self._get_lab_value(lab_results, ['VIT_D25', 'Vitamin D, 25-Hydroxy'])
+        if vit_d:
+            # Always trigger at least one vitamin D section
+            if not any(key.startswith('D-') for key in processed.keys()):
+                if vit_d >= 60:
+                    processed['D-60+'] = True
+                elif vit_d >= 55:
+                    processed['D-55-59'] = True
+                # else:
+                #     processed['quick-VitD-row'] = True  # COMMENTED OUT - causes parent condition conflicts
         
-        # DHEA-S Advanced Protocols  
-        dheas = self._get_lab_value(labs, ['NEURO_DHEAS', 'DHEA-Sulfate'])
-        vit_d = self._get_lab_value(labs, ['VIT_D25', 'Vitamin D'])
-        
-        if dheas:
-            processed['quick-dhea-lab-value'] = str(dheas)
+        # Ensure HHQ-based conditions are captured
+        if hhq_responses.get('hh_bariatric_surgery', False):
+            processed['BariSurg'] = True
             
-            # Gender-specific DHEA ranges
-            gender = hhq.get('gender', '').lower()
-            if gender == 'male':
-                if dheas >= 200 and dheas <= 250:
-                    processed['quick-dhea-151'] = True  # Optimal for men
-                elif dheas < 150:
-                    processed['quick-dhea-150'] = True  # Low, needs supplementation
-                elif dheas >= 200 and dheas <= 249:
-                    processed['quick-dhea-200-249'] = True  # Good range
-            else:  # Female
-                if dheas >= 150 and dheas <= 200:
-                    processed['quick-dhea-151'] = True  # Optimal for women
-                elif dheas < 150:
-                    processed['quick-dhea-150'] = True  # Low, needs supplementation
+        if hhq_responses.get('hh_depression', False):
+            processed['MTHFR-depression'] = True
+            processed['quick-depression-mood-disorder'] = True
+        
+        # Ensure gender-specific processing
+        gender = client_data.get('gender', '').lower()
+        if gender in ['male', 'female']:
+            processed[f'gender-{gender}'] = True
+        
+        return processed
+    
+    def _process_cbc_and_coagulation_insights(self, lab_results: Dict[str, Any], hhq_responses: Dict[str, Any], ranges: Dict) -> Dict[str, Any]:
+        """Process CBC, coagulation, and other lab insights for the Other Insights section."""
+        processed = {}
+        
+        # CBC and Anemia Assessment
+        rbc = self._get_lab_value(lab_results, ['CBC_RBC', 'RBC'])
+        hemoglobin = self._get_lab_value(lab_results, ['CBC_HGB', 'Hemoglobin', 'HGB'])
+        hematocrit = self._get_lab_value(lab_results, ['CBC_HCT', 'Hematocrit', 'HCT'])
+        platelets = self._get_lab_value(lab_results, ['CBC_PLT', 'Platelets', 'PLT'])
+        mcv = self._get_lab_value(lab_results, ['CBC_MCV', 'MCV'])
+        
+        # Anemia risk assessment
+        anemia_indicators = []
+        if rbc and rbc < 4.2:
+            anemia_indicators.append('low RBC')
+        if hemoglobin and hemoglobin < 13.0:
+            anemia_indicators.append('low hemoglobin')
+        if hematocrit and hematocrit < 37:
+            anemia_indicators.append('low hematocrit')
+            
+        if anemia_indicators:
+            processed['quick-anemia'] = True
+            
+        # Macrocytosis assessment
+        if mcv and mcv > 100:
+            processed['quick-macrocytosis'] = True
+            
+        # D-dimer and coagulation risk
+        d_dimer = self._get_lab_value(lab_results, ['DDimer', 'D_Dimer', 'D-Dimer'])
+        if d_dimer and d_dimer > 500:
+            processed['Coags'] = True
+            processed['quick-D-Dimer'] = d_dimer
+            
+        # Platelet assessment and medication interactions
+        if platelets and platelets < 150:
+            processed['quick-platelets-low'] = True
+            
+            # Check for platelet-affecting medications in HHQ
+            if hhq_responses:
+                medications = str(hhq_responses.get('medications', '')).lower()
+                platelet_meds = ['nsaid', 'ibuprofen', 'naproxen', 'aleve', 'meloxicam', 
+                               'celebrex', 'aspirin', 'acid reducer', 'omeprazole', 
+                               'seizure medication']
+                
+                if any(med in medications for med in platelet_meds):
+                    processed['platelet-medication-interaction'] = True
+        
+        # Immune system markers
+        wbc = self._get_lab_value(lab_results, ['CBC_WBC', 'WBC'])
+        neutrophils = self._get_lab_value(lab_results, ['CBC_NEUT_ABS', 'Neutrophils_Abs', 'ABS_NEUT'])
+        lymphocytes = self._get_lab_value(lab_results, ['CBC_LYMPH_ABS', 'Lymphocytes_Abs', 'ABS_LYMPH'])
+        
+        # Immune system status assessment
+        immune_elevated = False
+        immune_suppressed = False
+        
+        if wbc:
+            if wbc > 11.0:
+                immune_elevated = True
+            elif wbc < 3.5:
+                immune_suppressed = True
+                
+        if neutrophils:
+            if neutrophils > 7.0:
+                immune_elevated = True
+            elif neutrophils < 1.5:
+                immune_suppressed = True
+                
+        if lymphocytes:
+            if lymphocytes > 4.0:
+                immune_elevated = True
+            elif lymphocytes < 1.0:
+                immune_suppressed = True
+                
+        if immune_elevated:
+            processed['quick-immune-elevated'] = True
+        if immune_suppressed:
+            processed['quick-immune-suppressed'] = True
+            
+        # Electrolyte assessment
+        sodium = self._get_lab_value(lab_results, ['Sodium', 'Na'])
+        potassium = self._get_lab_value(lab_results, ['Potassium', 'K'])
+        chloride = self._get_lab_value(lab_results, ['Chloride', 'Cl'])
+        calcium = self._get_lab_value(lab_results, ['Calcium', 'Ca'])
+        
+        electrolyte_abnormal = False
+        if sodium and (sodium < 135 or sodium > 145):
+            electrolyte_abnormal = True
+        if potassium and (potassium < 3.5 or potassium > 5.1):
+            electrolyte_abnormal = True
+        if chloride and (chloride < 98 or chloride > 107):
+            electrolyte_abnormal = True
+        if calcium and (calcium < 8.5 or calcium > 10.5):
+            electrolyte_abnormal = True
+            
+        if electrolyte_abnormal:
+            processed['quick-lytes'] = True
+            
+        # Kidney function assessment
+        egfr = self._get_lab_value(lab_results, ['eGFR', 'GFR'])
+        creatinine = self._get_lab_value(lab_results, ['Creatinine', 'CREAT'])
+        
+        if egfr and egfr < 60:
+            processed['kidney-fn'] = True
+            if egfr < 30:
+                processed['kidney-fn-30'] = True
+        elif creatinine and creatinine > 1.3:
+            processed['kidney-fn'] = True
+            
+        # Liver function tests
+        alt = self._get_lab_value(lab_results, ['ALT', 'SGPT'])
+        ast = self._get_lab_value(lab_results, ['AST', 'SGOT'])
+        alk_phos = self._get_lab_value(lab_results, ['AlkPhos', 'ALP', 'Alkaline_Phosphatase'])
+        
+        liver_elevated = False
+        if alt and alt > 40:
+            liver_elevated = True
+        if ast and ast > 40:
+            liver_elevated = True
+        if alk_phos and alk_phos > 120:
+            liver_elevated = True
+            
+        if liver_elevated:
+            processed['ALT-alcohol'] = True
+            # Check if alcohol use is mentioned in HHQ
+            if hhq_responses:
+                alcohol_use = str(hhq_responses.get('alcohol_use', '')).lower()
+                if any(term in alcohol_use for term in ['drink', 'alcohol', 'wine', 'beer', 'spirits']):
+                    processed['ALT-low'] = True
                     
-            # DHEA + Cardiovascular Disease compound
-            if dheas < 150:
-                processed['quick-dhea-asvd'] = True  # Low DHEA = higher CAD risk
-                
-            # DHEA + Prostate Cancer History
-            if hhq.get('hh_prostate_cancer', False) and dheas < 150:
-                processed['quick-dhea-lupron'] = True  # Special consideration needed
+        # FIB-4 score calculation (simplified)
+        if alt and ast and platelets:
+            # This is a simplified version - actual FIB-4 requires age
+            fib4_score = (40 * ast) / (platelets * (alt ** 0.5))  # Using age=40 as default
+            if fib4_score > 1.5:
+                processed['FIB-4-elevated'] = True
+                processed['FIB-4-score'] = round(fib4_score, 2)
         
-        # Cortisol Support Protocols
-        cortisol = self._get_lab_value(labs, ['SPEC_CORTISOL', 'Cortisol'])
-        if cortisol:
-            processed['quick-cortisol-lab-value'] = str(cortisol)
-            if cortisol >= 15:
-                processed['cortisol-5'] = True  # Optimal range
-            else:
-                processed['quick-cortisol-15'] = True  # Low, needs support
-                
-        # Thyroid Advanced Protocols
-        tsh = self._get_lab_value(labs, ['THY_TSH', 'TSH'])
-        free_t3 = self._get_lab_value(labs, ['THY_T3F', 'Free T3'])
-        reverse_t3 = self._get_lab_value(labs, ['THY_RT3', 'Reverse T3'])
+        return processed
+
+    def _process_bmi_and_weight_insights(self, client_data: Dict[str, Any], hhq_responses: Dict[str, Any]) -> Dict[str, Any]:
+        """Process BMI and weight-related insights for the Body Weight section."""
+        processed = {}
         
-        # Complex thyroid function assessment
-        if tsh and free_t3 and reverse_t3:
-            if tsh > 2.5 and free_t3 < 3.2 and reverse_t3 > 20:
-                processed['TSH-T3-rT3'] = True  # Complex thyroid dysfunction
-                processed['quick-reverse-t3-elevated'] = True
-                
-        # Reverse T3 specific protocols
-        if reverse_t3:
-            if reverse_t3 > 20:
-                processed['quick-reverse-t3-elevated'] = True
-                processed['reverse-t3-free-t3-value'] = str(reverse_t3)
-                
-        # Autoimmune thyroid considerations
-        if hhq.get('hh_hashimotos', False) or hhq.get('hh_thyroid_autoimmune', False):
-            processed['quick-hashimotos-autoimmune'] = True
+        # Calculate BMI if height and weight are available
+        height_cm = None
+        weight_kg = None
+        
+        # Try to get height and weight from HHQ responses first (new primary source)
+        if hhq_responses:
+            # Check for height from HHQ
+            height_str = str(hhq_responses.get('hh-height', '')).lower().strip()
+            if height_str:
+                if 'cm' in height_str:
+                    try:
+                        height_cm = float(height_str.replace('cm', '').strip())
+                    except:
+                        pass
+                elif 'ft' in height_str or 'feet' in height_str or '"' in height_str or "'" in height_str:
+                    # Convert feet/inches to cm
+                    try:
+                        # Handle formats like "5'10", "5 ft 10 in", "5'10\"", etc.
+                        import re
+                        feet_inches = re.findall(r'(\d+)', height_str)
+                        if len(feet_inches) >= 2:
+                            feet = int(feet_inches[0])
+                            inches = int(feet_inches[1])
+                            height_cm = (feet * 12 + inches) * 2.54
+                        elif len(feet_inches) == 1:
+                            feet = int(feet_inches[0])
+                            height_cm = feet * 12 * 2.54
+                    except:
+                        pass
+                else:
+                    # Try to parse as plain number (assume inches if >36, cm if <=36)
+                    try:
+                        num = float(height_str)
+                        if num > 36:  # Likely inches
+                            height_cm = num * 2.54
+                        else:  # Likely already cm or invalid
+                            height_cm = num if num > 120 else None  # Reasonable height range
+                    except:
+                        pass
             
-        # Vitamin Support Protocols
-        vit_e = self._get_lab_value(labs, ['VIT_E', 'Vitamin E'])
-        if vit_e:
-            if vit_e < 5.5:
-                processed['quick-vitE'] = True  # Low vitamin E
+            # Check for weight from HHQ
+            weight_str = str(hhq_responses.get('hh-weight', '')).lower().strip()
+            if weight_str:
+                if 'kg' in weight_str:
+                    try:
+                        weight_kg = float(weight_str.replace('kg', '').strip())
+                    except:
+                        pass
+                elif 'lb' in weight_str or 'lbs' in weight_str or 'pound' in weight_str:
+                    try:
+                        weight_lbs = float(weight_str.replace('lbs', '').replace('lb', '').replace('pounds', '').strip())
+                        weight_kg = weight_lbs / 2.205
+                    except:
+                        pass
+                else:
+                    # Try to parse as plain number (assume lbs if >50, kg if <=50)
+                    try:
+                        num = float(weight_str)
+                        if num > 50:  # Likely pounds
+                            weight_kg = num / 2.205
+                        else:  # Likely already kg or invalid
+                            weight_kg = num if num > 20 else None  # Reasonable weight range
+                    except:
+                        pass
+        
+        # Fall back to legacy client_data fields if HHQ values not available
+        if not height_cm and 'height' in client_data:
+            try:
+                height_cm = float(client_data['height'])
+            except:
+                pass
                 
-        # Male Hormone Advanced Protocols
-        if hhq.get('gender', '').lower() == 'male':
-            test_total = self._get_lab_value(labs, ['MHt_TEST_TOT', 'Testosterone'])
-            test_free = self._get_lab_value(labs, ['MHt_TEST_FREE', 'Free Testosterone'])
-            shbg = self._get_lab_value(labs, ['MHt_SHBG', 'SHBG'])
+        if not weight_kg and 'weight' in client_data:
+            try:
+                weight_kg = float(client_data['weight'])
+            except:
+                pass
+        
+        # Calculate BMI if we have both height and weight
+        bmi = None
+        if height_cm and weight_kg and height_cm > 0:
+            height_m = height_cm / 100
+            bmi = weight_kg / (height_m * height_m)
+            processed['quick-bmi'] = round(bmi, 1)
             
-            if test_total:
-                processed['mh1-tt-lab-value'] = str(test_total)
-            if test_free:
-                processed['mh1-free-t-lab-value'] = str(test_free)
-            if shbg:
-                processed['mh1-shbg-lab-value'] = str(shbg)
-                if shbg > 45:
-                    processed['quick-male-hormones-shbg'] = True  # Elevated SHBG
+            # BMI-based recommendations
+            if bmi >= 20 and bmi < 25:
+                processed['quick-bmi20'] = True
+            elif bmi >= 25:
+                processed['quick-BMI-OSA'] = True  # Recommend sleep study
+                
+            # Additional BMI categories
+            if bmi < 18.5:
+                processed['quick-bmi-underweight'] = True
+            elif bmi >= 30:
+                processed['quick-bmi-obese'] = True
+                
+        return processed
+
+    def _process_risk_profile_insights(self, hhq_responses: Dict[str, Any]) -> Dict[str, Any]:
+        """Process risk profile analysis for the Other Insights section."""
+        processed = {}
+        
+        if not hhq_responses:
+            return processed
+            
+        # Initialize risk factor mapper
+        risk_mapper = RiskFactorMapper()
+        
+        # Calculate risk scores
+        risk_scores = risk_mapper.calculate_risk_scores(hhq_responses)
+        risk_percentages = risk_mapper.calculate_risk_percentages(risk_scores)
+        risk_details = risk_mapper.get_risk_factor_details(hhq_responses)
+        
+        # Only generate risk profile if there are actual risk factors
+        total_risk = sum(risk_scores.values())
+        if total_risk > 0:
+            processed['risk-profile-generated'] = True
+            
+            # Calculate percentages 
+            for category, percentage in risk_percentages.items():
+                processed[f'risk-{category}-percentage'] = round(percentage, 1)
+                
+            # Get details for each category
+            for category, factors_list in risk_details.items():
+                if factors_list:
+                    processed[f'risk-{category}-details'] = ', '.join(factors_list)
+                    processed[f'risk-{category}-factors'] = ', '.join(factors_list)
                     
-            # Sleep + hormone optimization compound
-            if (hhq.get('hh_cant_stay_asleep', False) and 
-                test_free and test_free < 12):
-                processed['quick-sleep-hormones'] = True
+            # Set high risk flags (>10% of total risk or >1.0 raw score)
+            for category, score in risk_scores.items():
+                if score >= 1.0 or risk_percentages[category] >= 10.0:
+                    processed[f'risk-{category}-high'] = True
+                    
+            # Get top 3 risk categories for recommendations
+            top_risks = risk_mapper.get_top_risk_factors(risk_percentages, 3)
+            for i, (category, percentage) in enumerate(top_risks, 1):
+                processed[f'top-risk-category-{i}'] = category.title()
+                processed[f'top-risk-percentage-{i}'] = round(percentage, 1)
                 
-            # ZMA and prostate health protocols
-            if test_free and test_free < 12:
-                processed['zma-testosterone-support'] = True
-                processed['quick-men-prostate-health'] = True
-                
-        # Female Hormone Advanced Protocols  
-        if hhq.get('gender', '').lower() == 'female':
-            estradiol = self._get_lab_value(labs, ['FHt_E2', 'Estradiol'])
-            progesterone = self._get_lab_value(labs, ['FHt_PROG', 'Progesterone'])
-            fsh = self._get_lab_value(labs, ['FHt_FSH', 'FSH'])
-            
-            if fsh:
-                processed['lab-fsh-result-value'] = str(fsh)
-            if estradiol:
-                processed['lab-progesterone-female-value'] = str(estradiol)  # Note: template uses this for E2
-            if progesterone:
-                processed['lab-testosterone-female-value'] = str(progesterone)  # Note: template mixing
-                
-            # ReCODE PM Probiotic protocol
-            if (hhq.get('hh_digestive_issues', False) or 
-                hhq.get('hh_chronic_constipation', False)):
-                processed['recode-pm-daily-probiotic'] = True
-                
-            # ATP Fuel optimization
-            if hhq.get('hh_chronic_fatigue', False):
-                processed['atp-fuel-supplement'] = True
-                
-        # Advanced Supplement Protocols
+            if len(top_risks) > 0:
+                processed['risk-profile-recommendations'] = True
         
-        # MK-7 (Mesaquinone) for cardiovascular support
-        if hhq.get('hh_heart_disease', False) or hhq.get('hh_high_blood_pressure', False):
-            processed['mk2-cardiovascular-support'] = True
-            processed['quick-mk2-protocol'] = True
-            
-        # Statin interactions
-        if hhq.get('hh_takes_statin', False):
-            processed['statin-takes-statin'] = True
-            processed['quick-takes-statin'] = True
-            
-        # Triglyceride/Plasmalogen assessment
-        triglycerides = self._get_lab_value(labs, ['LIPID_TRIG', 'Triglycerides'])
-        if triglycerides and triglycerides < 70:
-            processed['trig-plasmalogens'] = True  # Extremely low triglycerides
-            processed['prodrome-scan'] = True  # Consider Prodrome scan
-            
-        # CAC Score protocols
-        if hhq.get('hh_cac_score_done', False):
-            cac_score = hhq.get('hh_cac_score_value', 0)
-            if cac_score == 0:
-                processed['quick-CAC'] = True  # No calcification
-            elif cac_score > 100:
-                processed['cac-score-high'] = True  # Significant calcification
-                
+        # Trigger autoimmune section for inflammatory conditions (always evaluate)
+        autoimmune_triggered = (
+            risk_scores.get('inflammatory', 0) >= 1.0 or 
+            any(hhq_responses.get(condition, False) for condition in [
+                'hh-autoimmune-disease', 'hh-arthritis', 'hh-inflammatory-bowel',
+                'hh-crohns-disease', 'hh-ulcerative-colitis', 'hh-celiac-disease',
+                'hh-chronic-allergies', 'hh-hashimotos', 'hh-lupus', 'hh-multiple-sclerosis'
+            ])
+        )
+        processed['autoimmune-disease-section'] = autoimmune_triggered
+        
+        # Trigger chronic headaches section for headache/migraine conditions
+        headaches_triggered = any(hhq_responses.get(condition, False) for condition in [
+            'hh-chronic-headaches', 'hh-migraines', 'hh-frequent-headaches', 
+            'hh-headaches', 'hh-migraine-headaches', 'hh-vascular-headaches',
+            'hh-tension-headaches', 'hh-cluster-headaches'
+        ])
+        processed['quick-headaches'] = headaches_triggered
+        
+        # Trigger multiple allergies section for allergy/immune conditions
+        allergies_triggered = any(hhq_responses.get(condition, False) for condition in [
+            'hh-chronic-allergies', 'hh-multiple-allergies', 'hh-environmental-allergies',
+            'hh-food-allergies', 'hh-chemical-sensitivities', 'hh-multiple-chemical-sensitivity',
+            'hh-histamine-intolerance', 'hh-chronic-rashes', 'hh-allergic-reactions',
+            'hh-seasonal-allergies', 'hh-sinus-congestion', 'hh-chronic-sinusitis'
+        ])
+        processed['quick-multiple-allergies'] = allergies_triggered
+        
+        # Trigger gallbladder section for gallbladder removal history
+        gallbladder_triggered = any(hhq_responses.get(condition, False) for condition in [
+            'hh-gallbladder-removal', 'hh-gallbladder-surgery', 'hh-cholecystectomy',
+            'hh-gallbladder-disease', 'hh-bile-duct-issues', 'hh-gallstones'
+        ])
+        processed['quick-gallbladder-header'] = gallbladder_triggered
+        
+        # Trigger Parkinson's section for Parkinson's disease
+        parkinsons_triggered = any(hhq_responses.get(condition, False) for condition in [
+            'hh-parkinsons', 'hh-parkinsons-disease', 'hh-parkinson-disease',
+            'hh-movement-disorder', 'hh-tremor', 'hh-bradykinesia'
+        ])
+        processed['quick-parkinsons'] = parkinsons_triggered
+        
+        # Trigger GI health section for gastrointestinal conditions
+        gi_health_triggered = any(hhq_responses.get(condition, False) for condition in [
+            'hh-ibs', 'hh-irritable-bowel', 'hh-acid-reflux', 'hh-gerd', 
+            'hh-leaky-gut', 'hh-digestive-issues', 'hh-constipation', 'hh-diarrhea',
+            'hh-bloating', 'hh-gas', 'hh-food-sensitivities', 'hh-food-allergies',
+            'hh-inflammatory-bowel', 'hh-crohns', 'hh-ulcerative-colitis',
+            'hh-celiac', 'hh-gluten-sensitivity', 'hh-microbiome-issues',
+            'hh-sibo', 'hh-candida', 'hh-stomach-pain', 'hh-nausea',
+            'hh-surgical-weight-loss', 'hh-bariatric-surgery'
+        ])
+        processed['quick-GI-health'] = gi_health_triggered
+        
+        # Trigger constipation section for constipation-related conditions
+        constipation_triggered = any(hhq_responses.get(condition, False) for condition in [
+            'hh-constipation', 'hh-chronic-constipation', 'hh-bowel-problems',
+            'hh-irregular-bowel', 'hh-hard-stools', 'hh-infrequent-bowel',
+            'hh-bowel-dysfunction', 'hh-elimination-issues'
+        ])
+        processed['quick-constipation'] = constipation_triggered
+        
+        # Trigger HSV section for herpes simplex virus conditions
+        hsv_triggered = any(hhq_responses.get(condition, False) for condition in [
+            'hh-hsv', 'hh-herpes', 'hh-cold-sores', 'hh-herpes-simplex',
+            'hh-hsv1', 'hh-hsv2', 'hh-viral-outbreaks', 'hh-chronic-viral-infections',
+            'hh-recurrent-cold-sores', 'hh-oral-herpes', 'hh-genital-herpes',
+            'hh-viral-encephalitis', 'hh-frequent-cold-sores'
+        ])
+        processed['quick-HSV'] = hsv_triggered
+        
+        # Trigger EBV section for Epstein Barr Virus conditions
+        ebv_triggered = any(hhq_responses.get(condition, False) for condition in [
+            'hh-ebv', 'hh-epstein-barr', 'hh-epstein-barr-virus', 'hh-mono',
+            'hh-mononucleosis', 'hh-chronic-fatigue', 'hh-ebv-reactivation',
+            'hh-chronic-ebv', 'hh-swollen-lymph-nodes', 'hh-chronic-sore-throat',
+            'hh-low-grade-fever', 'hh-chronic-infections', 'hh-immune-suppression',
+            'hh-viral-syndrome', 'hh-chronic-viral-infection', 'hh-reactivated-ebv'
+        ])
+        processed['quick-EBV'] = ebv_triggered
+        
+        # Trigger toxicity section for toxicity-related conditions and general health optimization
+        toxicity_triggered = any(hhq_responses.get(condition, False) for condition in [
+            'hh-chemical-exposure', 'hh-heavy-metals', 'hh-mold-exposure', 'hh-environmental-toxins',
+            'hh-pesticide-exposure', 'hh-lead-exposure', 'hh-mercury-exposure', 'hh-arsenic-exposure',
+            'hh-cadmium-exposure', 'hh-aluminum-exposure', 'hh-chemical-sensitivity',
+            'hh-multiple-chemical-sensitivity', 'hh-toxic-exposure', 'hh-occupational-exposure',
+            'hh-dental-amalgams', 'hh-gallbladder-removal', 'hh-gallbladder-surgery',
+            'hh-gallbladder-problems', 'hh-bile-dysfunction', 'hh-detox-problems',
+            'hh-liver-problems', 'hh-chronic-fatigue', 'hh-brain-fog', 'hh-memory-problems'
+        ]) or True  # Show for everyone as part of general health optimization
+        processed['toxicity-real'] = toxicity_triggered
+        
+        # Trigger quick-GDX section for gallbladder-related conditions
+        gdx_triggered = any(hhq_responses.get(condition, False) for condition in [
+            'hh-gallbladder-removal', 'hh-gallbladder-surgery', 'hh-cholecystectomy',
+            'hh-gallbladder-problems', 'hh-gall-stones', 'hh-gallstones',
+            'hh-bile-dysfunction', 'hh-bile-problems', 'hh-gallbladder-disease'
+        ])
+        processed['quick-GDX'] = gdx_triggered
+        
+        # Trigger quick-GBDx section for gallbladder-related conditions
+        gbdx_triggered = any(hhq_responses.get(condition, False) for condition in [
+            'hh-gallbladder-removal', 'hh-gallbladder-surgery', 'hh-cholecystectomy',
+            'hh-gallbladder-problems', 'hh-gall-stones', 'hh-gallstones',
+            'hh-bile-dysfunction', 'hh-bile-problems', 'hh-gallbladder-disease'
+        ])
+        processed['quick-GBDx'] = gbdx_triggered
+        
         return processed
 
 # Usage example
@@ -2019,80 +3261,21 @@ if __name__ == "__main__":
     # Example usage
     generator = RoadmapGenerator()
     
-    sample_client_data = {
-        'name': 'Connie B',
-        'gender': 'female',
-        'dob': '1960-01-01',
-        'labs_date': 'May 30, 2025'
+    # Sample client data
+    client_data = {
+        'name': 'John Doe',
+        'gender': 'male',
+        'dob': '1980-01-01'
     }
     
-    sample_lab_results = {
-        'CBC_WBC': 7.6,
-        'CBC_RBC': 4.5,
-        'CBC_HGB': 15.0,
-        'CBC_HCT': 45.0,
-        'CBC_MCV': 80.0,
-        'CBC_PLT': 450000,
-        'CBC_NEUT_ABS': 2.0,
-        'CBC_LYMPH_ABS': 1.5,
-        'CHEM_GLU': 100,
-        'CHEM_BUN': 20,
-        'CHEM_CREAT': 1.2,
-        'CHEM_EGFR': 120,
-        'CHEM_NA': 140,
-        'CHEM_K': 5.0,
-        'CHEM_CL': 105,
-        'CHEM_CA': 8.5,
-        'LFT_ALB': 4.0,
-        'LFT_ALT': 25,
-        'LFT_AST': 20,
-        'LFT_ALKP': 120,
-        'LFT_TBILI': 0.5,
-        'LIPID_CHOL': 200,
-        'LIPID_TRIG': 120,
-        'LIPID_HDL': 60,
-        'LIPID_LDL': 120,
-        'FHt_FSH': 76.1,
-        'FHt_E2': 30,
-        'FHt_PROG': 0.5,
-        'FHt_TEST': 5.0,
-        'MHt_TEST_TOT': 5.0,
-        'MHt_TEST_FREE': 0.5,
-        'MHt_PSA': 2.0,
-        'THY_TSH': 2.5,
-        'THY_T3F': 0.5,
-        'THY_T4F': 1.0,
-        'THY_TGAB': 0.5,
-        'NEURO_PREG': 0.5,
-        'NEURO_DHEAS': 0.5,
-        'VIT_D25': 73.2,
-        'VIT_B12': 500,
-        'VIT_E': 15.0,
-        'MIN_ZN': 100,
-        'MIN_CU': 15,
-        'MIN_SE': 1.5,
-        'MIN_MG_RBC': 5.2,
-        'INFLAM_CRP': 2.0,
-        'INFLAM_URIC': 5.0,
-        'INFLAM_HOMOCYS': 10,
-        'METAB_INS': 10,
-        'METAB_HBA1C': 5.5,
-        'METAB_GLUT': 222,
-        'OMEGA_CHECK': 100,
-        'OMEGA_6_3_RATIO': 4.9,
-        'OMEGA_3_TOT': 100,
-        'OMEGA_6_TOT': 100,
-        'OMEGA_AA': 0.5,
-        'OMEGA_AA_EPA': 0.5,
-        'APO1': 'E2/E4',
-        'APO2': 'E2/E4',
-        'MTHFR_1': 'Not Detected',
-        'MTHFR_2': 'Not Detected'
+    # Sample lab results
+    lab_results = {
+        'APO1': 'E3/E4',
+        'METAB_GLUT': 250,
+        'VIT_D25': 45,
+        'INFLAM_CRP': 2.5
     }
     
-    try:
-        roadmap = generator.generate_roadmap(sample_client_data, sample_lab_results)
-        print("Roadmap generated successfully!")
-        print(f"Length: {len(roadmap)} characters")
-    except Exception as e:
-        print(f"Error generating roadmap: {str(e)}") 
+    # Generate roadmap
+    roadmap = generator.generate_roadmap(client_data, lab_results)
+    print(roadmap[:500] + "...") 

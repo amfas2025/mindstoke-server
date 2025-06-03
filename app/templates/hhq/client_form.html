@@ -212,10 +212,27 @@
                             
                             {% for field in form %}
                                 {% if field.name in current_section_fields %}
-                                    <div class="form-check">
-                                        {{ field(class="form-check-input", id=field.name) }}
-                                        {{ field.label(class="form-check-label", for=field.name) }}
-                                    </div>
+                                    {% if field.__class__.__name__ == 'StringField' %}
+                                        <!-- Text input field for height/weight -->
+                                        <div class="mb-4">
+                                            {{ field.label(class="form-label fw-bold text-light") }}
+                                            {{ field(class="form-control", placeholder=field.description) }}
+                                            {% if field.description %}
+                                                <div class="form-text text-muted">{{ field.description }}</div>
+                                            {% endif %}
+                                            {% if field.errors %}
+                                                {% for error in field.errors %}
+                                                    <div class="text-danger">{{ error }}</div>
+                                                {% endfor %}
+                                            {% endif %}
+                                        </div>
+                                    {% else %}
+                                        <!-- Checkbox field for yes/no questions -->
+                                        <div class="form-check">
+                                            {{ field(class="form-check-input", id=field.name) }}
+                                            {{ field.label(class="form-check-label", for=field.name) }}
+                                        </div>
+                                    {% endif %}
                                 {% endif %}
                             {% endfor %}
                             
