@@ -11,6 +11,11 @@ from reportlab.lib.colors import HexColor
 from reportlab.lib import colors
 from risk_factor_mapping import RiskFactorMapper
 
+# Import configuration classes
+from config.lab_mappings import LAB_MAPPINGS
+from config.lab_ranges import LabRanges
+from config.assets import AssetConfig
+
 class RoadmapGenerator:
     """
     Roadmap generation engine for Mind Stoke platform.
@@ -25,120 +30,9 @@ class RoadmapGenerator:
         self.template_path = template_path
         self.template_content = self._load_template()
         
-        # Visual assets configuration
-        self.assets_base_path = "/Users/jstoker/Documents/mindstoke-server/app/static/images/roadmap"
-        self.visual_assets = {
-            'logos': {
-                'main_logo': os.path.join(self.assets_base_path, 'logos', 'main_logo.png'),
-                'amfas_logo': os.path.join(self.assets_base_path, 'logos', 'amfas_logo.png'),
-            },
-            'supplements': {
-                'vitamin_d': os.path.join(self.assets_base_path, 'supplements', 'vitamin_d.png'),
-                'omega3': os.path.join(self.assets_base_path, 'supplements', 'omega3.png'),
-                'magnesium': os.path.join(self.assets_base_path, 'supplements', 'magnesium.png'),
-                'b_complex': os.path.join(self.assets_base_path, 'supplements', 'b_complex.png'),
-            },
-            'icons': {
-                'brain': os.path.join(self.assets_base_path, 'icons', 'brain.png'),
-                'heart': os.path.join(self.assets_base_path, 'icons', 'heart.png'),
-                'supplement': os.path.join(self.assets_base_path, 'icons', 'supplement.png'),
-                'lab': os.path.join(self.assets_base_path, 'icons', 'lab.png'),
-            },
-            'branding': {
-                'header_bg': os.path.join(self.assets_base_path, 'branding', 'header_bg.png'),
-                'footer_bg': os.path.join(self.assets_base_path, 'branding', 'footer_bg.png'),
-            }
-        }
-        
-        # Lab value mappings from extraction logs
-        self.lab_mappings = {
-            # Basic labs
-            'CBC_WBC': 'WBC',
-            'CBC_RBC': 'RBC', 
-            'CBC_HGB': 'Hemoglobin',
-            'CBC_HCT': 'Hematocrit',
-            'CBC_MCV': 'MCV',
-            'CBC_PLT': 'Platelets',
-            'CBC_NEUT_ABS': 'Neutrophils (Absolute)',
-            'CBC_LYMPH_ABS': 'Lymphs (Absolute)',
-            
-            # Chemistry panel
-            'CHEM_GLU': 'Glucose',
-            'CHEM_BUN': 'BUN',
-            'CHEM_CREAT': 'Creatinine',
-            'CHEM_EGFR': 'eGFR',
-            'CHEM_NA': 'Sodium',
-            'CHEM_K': 'Potassium',
-            'CHEM_CL': 'Chloride',
-            'CHEM_CA': 'Calcium',
-            
-            # Liver function
-            'LFT_ALB': 'Albumin',
-            'LFT_ALT': 'ALT (SGPT)',
-            'LFT_AST': 'AST (SGOT)',
-            'LFT_ALKP': 'Alkaline Phosphatase',
-            'LFT_TBILI': 'Bilirubin, Total',
-            
-            # Lipids
-            'LIPID_CHOL': 'Cholesterol, Total',
-            'LIPID_TRIG': 'Triglycerides',
-            'LIPID_HDL': 'HDL Cholesterol',
-            'LIPID_LDL': 'LDL Chol Calc (NIH)',
-            
-            # Hormones - Female
-            'FHt_FSH': 'FSH',
-            'FHt_E2': 'Estradiol',
-            'FHt_PROG': 'Progesterone',
-            'FHt_TEST': 'Testosterone',
-            
-            # Hormones - Male  
-            'MHt_TEST_TOT': 'Testosterone',
-            'MHt_TEST_FREE': 'Free Testosterone',
-            'MHt_PSA': 'PSA',
-            
-            # Thyroid
-            'THY_TSH': 'TSH',
-            'THY_T3F': 'Triiodothyronine (T3), Free',
-            'THY_T4F': 'T4, Free (Direct)',
-            'THY_TGAB': 'Thyroglobulin Antibody',
-            
-            # Neurological hormones
-            'NEURO_PREG': 'Pregnenolone, MS',
-            'NEURO_DHEAS': 'DHEA-Sulfate',
-            
-            # Vitamins & minerals
-            'VIT_D25': 'Vitamin D, 25-Hydroxy',
-            'VIT_B12': 'Vitamin B12',
-            'VIT_E': 'Vitamin E (Alpha Tocopherol)',
-            'MIN_ZN': 'Zinc, Plasma or Serum',
-            'MIN_CU': 'Copper, Serum or Plasma',
-            'MIN_SE': 'Selenium, Serum/Plasma',
-            'MIN_MG_RBC': 'Magnesium, RBC',
-            
-            # Inflammatory markers
-            'INFLAM_CRP': 'C-Reactive Protein, Cardiac',
-            'INFLAM_URIC': 'Uric Acid',
-            'INFLAM_HOMOCYS': 'Homocyst(e)ine',
-            
-            # Metabolic
-            'METAB_INS': 'Insulin',
-            'METAB_HBA1C': 'Hemoglobin A1c',
-            'METAB_GLUT': 'Total Glutathione',
-            
-            # Omega fatty acids
-            'OMEGA_CHECK': 'OmegaCheck(TM)',
-            'OMEGA_6_3_RATIO': 'Omega-6/Omega-3 Ratio',
-            'OMEGA_3_TOT': 'Omega-3 total',
-            'OMEGA_6_TOT': 'Omega-6 total',
-            'OMEGA_AA': 'Arachidonic Acid',
-            'OMEGA_AA_EPA': 'Arachidonic Acid/EPA Ratio',
-            
-            # Genetics
-            'APO1': 'APO E Genotyping Result',
-            'APO2': 'APO E Genotyping Result',  # Same field, split for processing
-            'MTHFR_1': 'MTHFR C677T',
-            'MTHFR_2': 'MTHFR A1298C'
-        }
+        # Initialize configuration objects
+        self.asset_config = AssetConfig()
+        self.lab_mappings = LAB_MAPPINGS
         
     def _load_template(self) -> str:
         """Load the roadmap template file."""
@@ -689,7 +583,7 @@ disease."""
         # Add A MIND header/logo section
         if self._image_exists('logos', 'main_logo'):
             try:
-                logo = RLImage(self.visual_assets['logos']['main_logo'], width=1.5*inch, height=0.75*inch)
+                logo = RLImage(self.asset_config.get_asset_path('logos', 'main_logo'), width=1.5*inch, height=0.75*inch)
                 logo.hAlign = 'LEFT'
                 story.append(logo)
             except:
@@ -1982,24 +1876,11 @@ METHYLPRO. The dosing is 1 capsule/day. We also recommend METHYLPRO B-COMPLEX + 
     
     def _image_exists(self, category: str, image_name: str) -> bool:
         """Check if an image file exists."""
-        if category in self.visual_assets and image_name in self.visual_assets[category]:
-            return os.path.exists(self.visual_assets[category][image_name])
-        return False
+        return self.asset_config.asset_exists(category, image_name)
     
     def _get_supplement_image(self, supplement_name: str) -> Optional[str]:
         """Get the image path for a supplement based on its name."""
-        supp_lower = supplement_name.lower()
-        
-        if 'vitamin d' in supp_lower and self._image_exists('supplements', 'vitamin_d'):
-            return self.visual_assets['supplements']['vitamin_d']
-        elif 'omega' in supp_lower and self._image_exists('supplements', 'omega3'):
-            return self.visual_assets['supplements']['omega3']
-        elif 'magnesium' in supp_lower and self._image_exists('supplements', 'magnesium'):
-            return self.visual_assets['supplements']['magnesium']
-        elif 'b-complex' in supp_lower or 'methylated' in supp_lower and self._image_exists('supplements', 'b_complex'):
-            return self.visual_assets['supplements']['b_complex']
-        
-        return None
+        return self.asset_config.get_supplement_image(supplement_name)
     
     def _get_key_lab_findings(self, lab_results: Dict[str, Any]) -> List[str]:
         """Extract key lab findings for summary."""
@@ -2654,94 +2535,10 @@ METHYLPRO. The dosing is 1 capsule/day. We also recommend METHYLPRO B-COMPLEX + 
     
     def _get_comprehensive_lab_ranges(self, gender: str) -> Dict[str, Dict[str, float]]:
         """
-        Comprehensive lab ranges for intelligent threshold evaluation.
-        Gender-specific where appropriate.
+        Get comprehensive lab ranges for intelligent threshold evaluation.
+        Delegates to LabRanges configuration class.
         """
-        base_ranges = {
-            'CRP': {'optimal_max': 1.0, 'high': 3.0, 'critical_high': 10.0},
-            'Homocysteine': {'optimal_max': 7.0, 'high': 10.4, 'critical_high': 15.0},
-            'UricAcid': {'optimal_max': 6.5, 'high': 8.0, 'critical_high': 10.0},
-            'AGRatio': {'optimal_min': 1.5, 'low': 1.2, 'critical_low': 1.0},
-            'TotalProtein': {'low': 6.0, 'optimal_min': 6.5, 'optimal_max': 8.5, 'high': 9.0},
-            'WBC': {'low': 3.5, 'optimal_min': 4.0, 'optimal_max': 10.0, 'high': 12.0},
-            'RBC': {'low': 4.0, 'optimal_min': 4.2, 'optimal_max': 5.5, 'high': 6.0},
-            'Hemoglobin': {'low': 12.0, 'optimal_min': 13.0, 'optimal_max': 16.0, 'high': 18.0},
-            'Hematocrit': {'low': 36.0, 'optimal_min': 37.0, 'optimal_max': 48.0, 'high': 52.0},
-            'MCV': {'low': 80, 'optimal_min': 82, 'optimal_max': 98, 'high': 100},
-            'Platelets': {'low': 150, 'optimal_min': 200, 'optimal_max': 400, 'high': 500},
-            'DDimer': {'optimal_max': 500, 'high': 1000, 'critical_high': 2000},
-            'Glucose': {'low': 70, 'optimal_min': 80, 'optimal_max': 99, 'high': 125},
-            'BUN': {'low': 7, 'optimal_min': 10, 'optimal_max': 20, 'high': 25},
-            'Creatinine': {'optimal_min': 0.6, 'optimal_max': 1.2, 'high': 1.5},
-            'eGFR': {'low': 60, 'optimal_min': 90},
-            'Sodium': {'low': 135, 'optimal_min': 138, 'optimal_max': 145, 'high': 148},
-            'Potassium': {'low': 3.5, 'optimal_min': 3.8, 'optimal_max': 5.0, 'high': 5.5},
-            'Chloride': {'low': 98, 'optimal_min': 101, 'optimal_max': 107, 'high': 110},
-            'Calcium': {'low': 8.5, 'optimal_min': 9.0, 'optimal_max': 10.5, 'high': 11.0},
-            'ALT': {'optimal_max': 25, 'high': 40, 'critical_high': 80},
-            'AST': {'optimal_max': 25, 'high': 40, 'critical_high': 80},
-            'AlkalinePhosphatase': {'low': 44, 'optimal_min': 50, 'optimal_max': 120, 'high': 150},
-            'Albumin': {'low': 3.5, 'optimal_min': 4.0, 'optimal_max': 5.0, 'high': 5.5},
-            'TSH': {'optimal_min': 0.5, 'optimal_max': 2.5, 'high': 4.0, 'critical_high': 10.0},
-            'T3': {'low': 2.3, 'optimal_min': 3.0, 'optimal_max': 4.2, 'high': 4.8},
-            'T4': {'low': 0.8, 'optimal_min': 1.0, 'optimal_max': 1.8, 'high': 2.2},
-            'VitaminD': {'critical_low': 20, 'low': 30, 'optimal_min': 50, 'optimal_max': 80, 'high': 100},
-            'VitB12': {'low': 300, 'optimal_min': 500, 'optimal_max': 1000, 'high': 1500},
-            'VitaminE': {'low': 5.5, 'optimal_min': 8.0, 'optimal_max': 20.0, 'high': 25.0},
-            'Zinc': {'low': 60, 'optimal_min': 80, 'optimal_max': 120, 'high': 150},
-            'Copper': {'low': 70, 'optimal_min': 80, 'optimal_max': 140, 'high': 200},
-            'Selenium': {'low': 70, 'optimal_min': 125, 'optimal_max': 200, 'high': 300},
-            'Magnesium': {'low': 4.2, 'optimal_min': 5.2, 'optimal_max': 6.5, 'high': 7.0},
-            'OmegaCheck': {'optimal_min': 5.4, 'high': 8.0},
-            'Omega63Ratio': {'optimal_max': 4.0, 'high': 6.0, 'critical_high': 10.0},
-            'AAEPARatio': {'optimal_max': 8.0, 'high': 12.0, 'critical_high': 20.0},
-            'ArachidonicAcid': {'optimal_max': 10.0, 'high': 15.0},
-            'Insulin': {'optimal_max': 10.0, 'high': 15.0, 'critical_high': 25.0},
-            'HbA1c': {'optimal_max': 5.7, 'high': 6.4, 'critical_high': 8.0},
-            'TotalCholesterol': {'optimal_max': 200, 'high': 240, 'critical_high': 300},
-            'Triglycerides': {'optimal_max': 150, 'high': 200, 'critical_high': 500},
-            'HDLCholesterol': {'low': 40, 'optimal_min': 50, 'optimal_max': 80, 'high': 100},
-            'LDLCholesterol': {'optimal_max': 100, 'high': 130, 'critical_high': 190},
-            # CBC Ranges
-            'RBC': {'optimal_min': 4.2, 'optimal_max': 5.4},
-            'Hemoglobin': {'optimal_min': 13.0, 'optimal_max': 17.0},
-            'Hematocrit': {'optimal_min': 37, 'optimal_max': 50},
-            'MCV': {'optimal_min': 80, 'optimal_max': 100, 'high': 100},
-            'DDimer': {'optimal_min': 0, 'optimal_max': 500},
-            'WBC': {'optimal_min': 3.5, 'optimal_max': 11.0},
-            'Platelets': {'optimal_min': 150, 'optimal_max': 450},
-            
-            # Electrolyte Ranges
-            'Sodium': {'optimal_min': 135, 'optimal_max': 145},
-            'Potassium': {'optimal_min': 3.5, 'optimal_max': 5.1},
-            'Chloride': {'optimal_min': 98, 'optimal_max': 107},
-            'Calcium': {'optimal_min': 8.5, 'optimal_max': 10.5},
-            
-            # Kidney Function Ranges
-            'eGFR': {'optimal_min': 60, 'optimal_max': 120},
-            'Creatinine': {'optimal_min': 0.6, 'optimal_max': 1.3},
-            
-            # Liver Function Ranges
-            'ALT': {'optimal_min': 0, 'optimal_max': 40},
-            'AST': {'optimal_min': 0, 'optimal_max': 40},
-            'AlkPhos': {'optimal_min': 40, 'optimal_max': 120},
-        }
-        
-        # Gender-specific adjustments
-        if gender == 'female':
-            base_ranges.update({
-                'Testosterone': {'low': 15, 'optimal_min': 25, 'optimal_max': 85, 'high': 100},
-                'Estradiol': {'low': 30, 'optimal_min': 50, 'optimal_max': 300, 'high': 400},
-                'Progesterone': {'low': 5, 'optimal_min': 10, 'optimal_max': 25, 'high': 35}
-            })
-        elif gender == 'male':
-            base_ranges.update({
-                'Testosterone': {'low': 300, 'optimal_min': 450, 'optimal_max': 900, 'high': 1200},
-                'FreeTestosterone': {'low': 9, 'optimal_min': 15, 'optimal_max': 30, 'high': 40},
-                'PSA': {'optimal_max': 2.5, 'high': 4.0, 'critical_high': 10.0}
-            })
-        
-        return base_ranges
+        return LabRanges.get_comprehensive_ranges(gender)
     
     def _process_genetics_comprehensive(self, lab_results: Dict[str, Any]) -> Dict[str, Any]:
         """Process genetic markers comprehensively."""
