@@ -69,4 +69,6 @@ debug_*.txt
 out.pdf
 
 # Temporary files
-*.swp 
+*.swp
+*.tmp
+*.temp 
