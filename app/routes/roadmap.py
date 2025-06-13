@@ -57,17 +57,22 @@ def generate(client_id):
         lab_data = {}
         if lab_results:
             for result in lab_results:
-                # Map common lab names to armgasys variables
-                lab_name = result.get('test_name', '')
+                # Prefer the already-mapped Armgasys variable from Supabase
+                armgasys_var = result.get('armgasys_variable', '')
                 value = result.get('value', '')
-                
-                # Convert string values to float where possible
+
+                # Convert string values to float where possible, but keep genetics strings
                 try:
-                    numeric_value = float(value) if value and value.replace('.', '').replace('-', '').isdigit() else value
+                    numeric_value = float(value) if value and str(value).replace('.', '').replace('-', '').isdigit() else value
                 except (ValueError, TypeError):
                     numeric_value = value
-                
-                # Map lab names to armgasys variables
+
+                if armgasys_var:
+                    lab_data[armgasys_var.upper()] = numeric_value
+                    continue  # Skip manual mapping if we used the pre-mapped variable
+
+                # Fallback: Map common lab names to Armgasys variables if armgasys_variable missing
+                lab_name = result.get('test_name', '')
                 lab_mapping = {
                     'WBC': 'CBC_WBC',
                     'RBC': 'CBC_RBC',
@@ -122,13 +127,16 @@ def generate(client_id):
                     'Omega-6 total': 'OMEGA_6_TOT',
                     'Arachidonic Acid': 'OMEGA_AA',
                     'Arachidonic Acid/EPA Ratio': 'OMEGA_AA_EPA',
+                    'APO E Genot E2/E4': 'APO1',  # Fall back mapping for specific test name variant
                     'APO E Genotyping Result': 'APO1',
                     'MTHFR C677T': 'MTHFR_1',
                     'MTHFR A1298C': 'MTHFR_2'
                 }
-                
                 mapped_name = lab_mapping.get(lab_name, lab_name)
-                lab_data[mapped_name] = numeric_value
+                lab_data[mapped_name.upper()] = numeric_value
+        
+        # Normalize keys to uppercase for consistency
+        lab_data = {k.upper(): v for k, v in lab_data.items()}
         
         # Initialize roadmap generator and process content controls
         current_app.logger.info("About to create RoadmapGenerator")
@@ -273,15 +281,22 @@ def debug_roadmap(client_id):
         lab_data = {}
         if lab_results:
             for result in lab_results:
-                lab_name = result.get('test_name', '')
+                # Prefer the already-mapped Armgasys variable from Supabase
+                armgasys_var = result.get('armgasys_variable', '')
                 value = result.get('value', '')
-                
+
+                # Convert string values to float where possible, but keep genetics strings
                 try:
-                    numeric_value = float(value) if value and value.replace('.', '').replace('-', '').isdigit() else value
+                    numeric_value = float(value) if value and str(value).replace('.', '').replace('-', '').isdigit() else value
                 except (ValueError, TypeError):
                     numeric_value = value
-                
-                # Use the same mapping as in generate route
+
+                if armgasys_var:
+                    lab_data[armgasys_var.upper()] = numeric_value
+                    continue  # Skip manual mapping if we used the pre-mapped variable
+
+                # Fallback: Map common lab names to Armgasys variables if armgasys_variable missing
+                lab_name = result.get('test_name', '')
                 lab_mapping = {
                     'WBC': 'CBC_WBC',
                     'RBC': 'CBC_RBC',
@@ -336,13 +351,16 @@ def debug_roadmap(client_id):
                     'Omega-6 total': 'OMEGA_6_TOT',
                     'Arachidonic Acid': 'OMEGA_AA',
                     'Arachidonic Acid/EPA Ratio': 'OMEGA_AA_EPA',
+                    'APO E Genot E2/E4': 'APO1',  # Fall back mapping for specific test name variant
                     'APO E Genotyping Result': 'APO1',
                     'MTHFR C677T': 'MTHFR_1',
                     'MTHFR A1298C': 'MTHFR_2'
                 }
-                
                 mapped_name = lab_mapping.get(lab_name, lab_name)
-                lab_data[mapped_name] = numeric_value
+                lab_data[mapped_name.upper()] = numeric_value
+        
+        # Normalize keys to uppercase for consistency
+        lab_data = {k.upper(): v for k, v in lab_data.items()}
         
         # Initialize roadmap generator
         generator = RoadmapGenerator()

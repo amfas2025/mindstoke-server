@@ -9,6 +9,7 @@ import logging
 import uuid
 import json
 from .lab_mapping import get_all_mapped_results
+import httpx
 
 # Load environment variables
 load_dotenv()
@@ -52,10 +53,28 @@ def get_supabase_client():
     
     # Create a new client if pool is empty or all clients are invalid
     try:
-        # Simple client creation for version 1.0.3
-        return supabase_create_client(SUPABASE_URL, SUPABASE_KEY)
+        # Create client with default configuration
+        client = supabase_create_client(SUPABASE_URL, SUPABASE_KEY)
+        
+        # Add headers to the underlying session
+        if hasattr(client, 'postgrest'):
+            client.postgrest.session.headers.update({
+                "apikey": SUPABASE_KEY,
+                "Authorization": f"Bearer {SUPABASE_KEY}",
+                "Content-Type": "application/json",
+                "Accept": "application/json",
+                "Prefer": "return=representation"
+            })
+        
+        # Add the client to the pool
+        if not supabase_pool:
+            supabase_pool = []
+        supabase_pool.append(client)
+        
+        return client
+        
     except Exception as e:
-        logger.error("Failed to create Supabase client: %s", str(e))
+        logger.error("Failed to create new Supabase client: %s", str(e))
         raise
 
 def return_supabase_client(client):
@@ -86,13 +105,48 @@ def retry_on_failure(max_retries=3, delay=1):
 
 @retry_on_failure()
 def fetch_clients():
-    """Fetch all clients with retry logic."""
+    """Fetch all clients from Supabase."""
     client = get_supabase_client()
     try:
-        result = client.table("clients").select("*").order("created_at", desc=True).execute()
-        return result.data
+        logger.info("Attempting to fetch clients from Supabase...")
+        
+        # Use explicit headers
+        headers = {
+            "apikey": SUPABASE_KEY,
+            "Authorization": f"Bearer {SUPABASE_KEY}",
+            "Content-Type": "application/json",
+            "Accept": "application/json"
+        }
+        
+        # Try direct REST query
+        url = f"{SUPABASE_URL}/rest/v1/clients"
+        logger.info(f"Querying URL: {url}")
+        
+        response = httpx.get(
+            url,
+            headers=headers,
+            params={
+                "select": "*",
+                "order": "created_at.desc"
+            },
+            timeout=30
+        )
+        
+        if response.status_code == 200:
+            data = response.json()
+            logger.info(f"Successfully fetched {len(data)} clients")
+            return data
+        else:
+            logger.error(f"Error response from Supabase: {response.status_code}")
+            logger.error(f"Response headers: {response.headers}")
+            logger.error(f"Response body: {response.text}")
+            return []
+            
     except Exception as e:
-        logger.error("Error fetching clients from Supabase: %s", str(e))
+        logger.error(f"Error fetching clients from Supabase: {str(e)}")
+        if hasattr(e, 'response'):
+            logger.error(f"Response status: {e.response.status_code}")
+            logger.error(f"Response body: {e.response.text}")
         return []
     finally:
         return_supabase_client(client)
@@ -190,10 +244,49 @@ def fetch_client_by_id(client_id):
     """Fetch client by ID with retry logic."""
     client = get_supabase_client()
     try:
-        result = client.table("clients").select("*").eq("id", client_id).single().execute()
-        return result.data if result.data else None
+        logger.info(f"Attempting to fetch client with ID: {client_id}")
+        
+        # Use explicit headers
+        headers = {
+            "apikey": SUPABASE_KEY,
+            "Authorization": f"Bearer {SUPABASE_KEY}",
+            "Content-Type": "application/json",
+            "Accept": "application/json"
+        }
+        
+        # Try direct REST query first
+        url = f"{SUPABASE_URL}/rest/v1/clients"
+        logger.info(f"Querying URL: {url}")
+        
+        response = httpx.get(
+            url,
+            headers=headers,
+            params={
+                "id": f"eq.{client_id}",
+                "select": "*"
+            },
+            timeout=30
+        )
+        
+        if response.status_code == 200:
+            data = response.json()
+            if data and len(data) > 0:
+                logger.info(f"Successfully found client {client_id}")
+                return data[0]
+            else:
+                logger.warning(f"No client found with ID {client_id}")
+                return None
+        else:
+            logger.error(f"Error response from Supabase: {response.status_code}")
+            logger.error(f"Response headers: {response.headers}")
+            logger.error(f"Response body: {response.text}")
+            return None
+            
     except Exception as e:
-        print(f"Error fetching client by id from Supabase: {e}")
+        logger.error(f"Error fetching client by id from Supabase: {str(e)}")
+        if hasattr(e, 'response'):
+            logger.error(f"Response status: {e.response.status_code}")
+            logger.error(f"Response body: {e.response.text}")
         return None
     finally:
         return_supabase_client(client)
@@ -414,53 +507,56 @@ def upsert_hhq_answers_partial(client_id, answers_dict, attempt_id):
 
 @retry_on_failure()
 def save_lab_results(client_id, lab_results):
-    """Save extracted lab results to Supabase with Armgasys mapping."""
+    """Save lab results to Supabase."""
     client = get_supabase_client()
     try:
-        # Get client information for gender-specific mapping
-        client_data = client.table('clients').select('sex').eq('id', client_id).execute()
-        client_gender = "unknown"
-        if client_data.data and len(client_data.data) > 0:
-            client_gender = client_data.data[0].get('sex', 'unknown')
+        logger.info(f"Attempting to save lab results for client {client_id}")
         
-        # Map lab results to Armgasys variables
-        mapped_results = get_all_mapped_results(lab_results, client_gender)
-        
-        if not mapped_results:
-            print("No lab results could be mapped to Armgasys variables")
-            return []
-        
-        # Delete any existing lab results for this client to avoid duplicates
-        print(f"Deleting existing lab results for client {client_id}")
-        client.table('lab_results').delete().eq('client_id', client_id).execute()
-        
-        # Prepare entries for insertion
+        # Format the data for Supabase
+        current_time = datetime.utcnow().isoformat()
         lab_entries = []
-        current_time = datetime.now().isoformat()
         
-        for mapped_result in mapped_results:
-            lab_entry = {
+        for test_name, result in lab_results.items():
+            # Handle both dictionary and string result formats
+            if isinstance(result, dict):
+                value = result.get('value', '')
+                unit = result.get('unit', '')
+                reference_range = result.get('reference_range', '')
+            else:
+                value = str(result)
+                unit = ''
+                reference_range = ''
+            
+            entry = {
                 'client_id': client_id,
-                'original_test_name': mapped_result['original_test_name'],
-                'original_value': mapped_result['original_value'],
-                'unit': mapped_result['unit'],
-                'reference_range': mapped_result['reference_range'],
-                'armgasys_variable_name': mapped_result['armgasys_variable_name'],
-                'armgasys_value': mapped_result['armgasys_value'],
-                'date_collected': current_time,
+                'test_name': test_name,
+                'value': value,
+                'unit': unit,
+                'reference_range': reference_range,
                 'uploaded_at': current_time
             }
-            lab_entries.append(lab_entry)
+            lab_entries.append(entry)
         
-        # Insert lab results
+        if not lab_entries:
+            logger.warning(f"No lab entries to save for client {client_id}")
+            return None
+            
+        # Insert into the lab_results table
         result = client.table('lab_results').insert(lab_entries).execute()
-        print(f"Saved {len(lab_entries)} lab results for client {client_id}")
-        print(f"Mapped {len(set(entry['armgasys_variable_name'] for entry in lab_entries))} unique Armgasys variables")
-        return result.data
         
+        if result.data:
+            logger.info(f"Successfully saved {len(lab_entries)} lab results for client {client_id}")
+            return result.data
+        else:
+            logger.error(f"No data returned when saving lab results for client {client_id}")
+            return None
+            
     except Exception as e:
-        print(f"Error saving lab results: {str(e)}")
-        raise e
+        logger.error(f"Error saving lab results to Supabase: {str(e)}")
+        if hasattr(e, 'response'):
+            logger.error(f"Response status: {e.response.status_code}")
+            logger.error(f"Response body: {e.response.text}")
+        raise
     finally:
         return_supabase_client(client)
 

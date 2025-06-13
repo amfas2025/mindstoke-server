@@ -20,16 +20,23 @@ def format_mt(dt_str):
 @bp.route('/', methods=['GET', 'POST'])
 @login_required
 def index():
-    search_query = request.form.get('search', '') if request.method == 'POST' else request.args.get('search', '')
-    all_clients = fetch_clients()
-    
-    if search_query:
-        clients = [c for c in all_clients if search_query.lower() in (
-            f"{c['first_name']} {c['last_name']} {c['email']}".lower())]
-    else:
-        clients = all_clients
+    try:
+        search_query = request.form.get('search', '') if request.method == 'POST' else request.args.get('search', '')
+        print("Attempting to fetch clients...")
+        all_clients = fetch_clients()
+        print(f"Successfully fetched {len(all_clients)} clients")
         
-    return render_template('clients/index.html', clients=clients, search_query=search_query)
+        if search_query:
+            clients = [c for c in all_clients if search_query.lower() in (
+                f"{c.get('first_name', '')} {c.get('last_name', '')} {c.get('email', '')}".lower())]
+        else:
+            clients = all_clients
+            
+        return render_template('clients/index.html', clients=clients, search_query=search_query)
+    except Exception as e:
+        print(f"Error in clients index route: {str(e)}")
+        flash(f"Error loading clients: {str(e)}", 'danger')
+        return render_template('clients/index.html', clients=[], search_query=search_query)
 
 @bp.route('/new', methods=['GET', 'POST'])
 @login_required
@@ -59,18 +66,29 @@ def new():
 @bp.route('/<id>')
 @login_required
 def view(id):
-    clients = fetch_clients()
-    client = next((c for c in clients if str(c['id']) == str(id)), None)
-    if not client:
-        flash('Client not found', 'danger')
+    try:
+        # First get the client
+        client = fetch_client_by_id(id)
+        if not client:
+            flash('Client not found', 'danger')
+            return redirect(url_for('clients.index'))
+            
+        # Fetch HHQ responses for this client from Supabase
+        hhq_responses = fetch_hhq_responses_for_client(client['id'])
+        client['hhq_responses'] = hhq_responses
+        
+        # Fetch lab results for this client from Supabase
+        lab_results = fetch_lab_results_for_client(client['id'])
+        client['lab_results'] = lab_results
+        
+        # Log what we found
+        print(f"Found {len(hhq_responses)} HHQ responses and {len(lab_results)} lab results for client {id}")
+        
+        return render_template('clients/view.html', client=client)
+    except Exception as e:
+        print(f"Error in client view: {str(e)}")
+        flash(f"Error loading client data: {str(e)}", 'danger')
         return redirect(url_for('clients.index'))
-    # Fetch HHQ responses for this client from Supabase
-    client['hhq_responses'] = fetch_hhq_responses_for_client(client['id'])
-    # Fetch lab results for this client from Supabase
-    client['lab_results'] = fetch_lab_results_for_client(client['id'])
-    # Add empty reports list for template compatibility
-    client['reports'] = []
-    return render_template('clients/view.html', client=client)
 
 @bp.route('/<id>/edit', methods=['GET', 'POST'])
 @login_required
